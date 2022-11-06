@@ -1,23 +1,18 @@
 import bodyParser from "body-parser";
 import express from "express";
+import testRouter from "./routes/test";
 
 const app = express();
 
-app.use(bodyParser.urlencoded());
+const testRoutest = testRouter;
 
-app.use("/", (req, res, next) => {
-    console.log("hello this is middleware");
-    next();
-});
-
-app.use((req, res, next) => {
-    console.log("another middleware");
-    next();
-});
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res, next) => {
     res.send("Hi This is my First Express Server");
 });
+
+app.use(testRouter);
 
 app.listen("8000", () => {
     console.log(`
