@@ -2,13 +2,14 @@ import express from "express";
 
 const app = express();
 
-app.use((req, res, next) => {
+app.use('/', (req, res, next) => {
     console.log("hello this is middleware");
     next()
 });
 
 app.use((req, res, next) => {
     console.log("another middleware")
+    next()
 })
 
 app.get("/", (req, res, next) => {
