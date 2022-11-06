@@ -1,16 +1,19 @@
+import bodyParser from "body-parser";
 import express from "express";
 
 const app = express();
 
-app.use('/', (req, res, next) => {
+app.use(bodyParser.urlencoded());
+
+app.use("/", (req, res, next) => {
     console.log("hello this is middleware");
-    next()
+    next();
 });
 
 app.use((req, res, next) => {
-    console.log("another middleware")
-    next()
-})
+    console.log("another middleware");
+    next();
+});
 
 app.get("/", (req, res, next) => {
     res.send("Hi This is my First Express Server");
