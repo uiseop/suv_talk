@@ -9,6 +9,12 @@ const Navigation = () => {
                     <Item>
                         <NavLink to={"/"}>Home</NavLink>
                     </Item>
+                    <Item>
+                        <NavLink to={"/add-product"}>등록하기</NavLink>
+                    </Item>
+                    <Item>
+                        <NavLink to={"/chettings"}>채팅</NavLink>
+                    </Item>
                 </ItemLists>
             </Nav>
         </Header>

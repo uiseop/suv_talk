@@ -1,18 +1,29 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import styled from "styled-components";
 import Navigation from "./Components/Navigation";
+import AddItem from "./Pages/AddItem";
 import Error from "./Pages/Error";
+import Items from "./Pages/Items";
 import Login from "./Pages/Login";
 
 const Router = () => {
     return (
         <BrowserRouter>
             <Navigation />
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/*" element={<Error />} />
-            </Routes>
+            <Main>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/" element={<Items />} />
+                    <Route path="/add-product" element={<AddItem />} />
+                    <Route path="/*" element={<Error />} />
+                </Routes>
+            </Main>
         </BrowserRouter>
     );
 };
+
+const Main = styled.main`
+    padding: 1rem;
+`;
 
 export default Router;

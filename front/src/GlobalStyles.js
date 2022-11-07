@@ -9,12 +9,12 @@ const GlobalStyles = createGlobalStyle`
     }
 	body {
 	        font-family : apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell , 'Helvetica Neue', sans-serif;
-            display: flex;
-            justify-content: center;
             max-width: 700px;
             margin: 0 auto;
-	        overflow-x : hidden;
 	}
+    main {
+        padding: 1rem;
+    }
 `;
 
 export default GlobalStyles;
