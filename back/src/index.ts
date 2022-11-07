@@ -12,7 +12,11 @@ app.get("/", (req, res, next) => {
     res.send("Hi This is my First Express Server");
 });
 
-app.use(testRouter);
+app.use("/test", testRouter);
+
+app.use((req, res, next) => {
+    res.status(404).send("<h1>Page not Fount 404 Error</h1>");
+});
 
 app.listen("8000", () => {
     console.log(`

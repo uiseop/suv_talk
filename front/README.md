@@ -1,46 +1,7 @@
-# Getting Started with Create React App
+# React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## React에서 라우팅
 
-## Available Scripts
+<a href='https://github.com/uiseop/suv_talk/issues/2'>이슈 탭</a>에서 정리했듯이 React에는 내장 라우팅을 처리할 수 있는 기능이 제공되지 않는다. 때문에 나는 react-router 라이브러리를 사용했으며, 해당 라이브러리를 사용해서 현재 사용자가 보고 있는 페이지의 주소를 확인할 수 있다.
 
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+또한 해당 라이브러리에서는 새로고침을 방지하기 위해 `a태그`를 사용하지 않고 `Link` 컴포넌트를 제공해주는데, 흥미로운 점은 `NavLink` 컴포넌트를 제공해주는 점! 이 컴포넌트를 사용하면 굳이 현재 주소와 href의 주소와 일치하는지, 일치함에 따른 props를 넘겨주는 번거로운 작업이 줄었다!
