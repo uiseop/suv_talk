@@ -2,11 +2,11 @@ import bodyParser from "body-parser";
 import express from "express";
 import sequelize from "../util/database";
 import Product from "./models/product";
+import User from "./models/user";
 import testRouter from "./routes/test";
+import userRouter from "./routes/user";
 
 const app = express();
-
-const testRoutest = testRouter;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -15,13 +15,14 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/test", testRouter);
+app.use("/user", userRouter);
 
 app.use((req, res, next) => {
     res.status(404).send("<h1>Page not Fount 404 Error</h1>");
 });
 
-
-Product.sync()
+Product.sync();
+User.sync();
 sequelize
     .sync()
     .then((res) => {
