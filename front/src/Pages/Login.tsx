@@ -6,7 +6,7 @@ import {
     Input,
     useToast,
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
 import { useCookies } from "react-cookie";
@@ -34,7 +34,29 @@ const Login = () => {
     }, []);
 
     const onSubmit: SubmitHandler<IFormValues> = (data) => {
-        return axios
+        const onSuccessHandler = (res: AxiosResponse) => {
+            return res;
+        };
+        const retry = (errorConfig: AxiosRequestConfig) => {
+            return new Promise((res) => {
+                setTimeout(() => {
+                    console.log("재시도 중 입니다...");
+                    res(axios.request(errorConfig));
+                }, 500);
+            });
+        };
+        const onFailHandler = (error: AxiosError) => {
+            if (error.config) {
+                return retry(error.config);
+            }
+            return Promise.reject(error);
+        };
+
+        const myInterceptor = axios.interceptors.response.use(
+            onSuccessHandler,
+            onFailHandler
+        );
+        axios
             .post("/user/join", {
                 uid: data.uid,
             })
@@ -51,7 +73,15 @@ const Login = () => {
             })
             .catch((err) => {
                 console.log(err);
+                toast({
+                    title: `로그인에 실패했습니다!`,
+                    description: `다시 시도해 주세요!`,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
             });
+        axios.interceptors.response.eject(myInterceptor);
     };
 
     return (
