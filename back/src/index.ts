@@ -1,5 +1,6 @@
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import cors, { CorsOptions } from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import sequelize from "../util/database";
 import Product from "./models/product";
@@ -9,17 +10,25 @@ import userRouter from "./routes/user";
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+const corsOptions: CorsOptions = {
+    origin: "http://localhost:3000",
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.get("/", (req: Request, res: Response, next: NextFunction) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.cookies["access-token"]) {
         req.isAuthenticated = true;
+    } else {
+        req.isAuthenticated = false;
     }
     next();
 });
 
-app.get("/", (req: Request, res, next) => {
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
     console.log(req.isAuthenticated, "haha");
     res.send("Hi This is my First Express Server");
 });
@@ -27,24 +36,28 @@ app.get("/", (req: Request, res, next) => {
 app.use("/test", testRouter);
 app.use("/user", userRouter);
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).send("<h1>Page not Fount 404 Error</h1>");
 });
 
-Product.sync();
-User.sync();
-sequelize
-    .sync()
-    .then((res) => {
-        // console.log(res)
-        app.listen("8000", () => {
-            console.log(`
-            #############################################
-                🛡️ Server listening on port: 8000 🛡️
-            #############################################      
-            `);
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+    res.status(500).json({ error });
+});
+
+Promise.all([Product.sync(), User.sync()]).then(() => {
+    sequelize
+        .sync()
+        .then((res) => {
+            // console.log(res)
+            app.listen("8000", () => {
+                console.log(`
+                #############################################
+                    🛡️ Server listening on port: 8000 🛡️
+                #############################################      
+                `);
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+});
