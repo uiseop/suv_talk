@@ -1,5 +1,6 @@
 import bodyParser from "body-parser";
-import express from "express";
+import cookieParser from "cookie-parser";
+import express, { NextFunction, Request, Response } from "express";
 import sequelize from "../util/database";
 import Product from "./models/product";
 import User from "./models/user";
@@ -9,8 +10,17 @@ import userRouter from "./routes/user";
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-app.get("/", (req, res, next) => {
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+    if (req.cookies["access-token"]) {
+        req.isAuthenticated = true;
+    }
+    next();
+});
+
+app.get("/", (req: Request, res, next) => {
+    console.log(req.isAuthenticated, "haha");
     res.send("Hi This is my First Express Server");
 });
 

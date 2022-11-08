@@ -16,6 +16,11 @@ const Navigation = () => {
                         <NavLink to={"/chettings"}>채팅</NavLink>
                     </Item>
                 </ItemLists>
+                <ItemLists>
+                    <Item>
+                        <NavLink to={"/login"}>로그인</NavLink>
+                    </Item>
+                </ItemLists>
             </Nav>
         </Header>
     );
@@ -31,6 +36,7 @@ const Header = styled.header`
 const Nav = styled.nav`
     height: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
 `;
 

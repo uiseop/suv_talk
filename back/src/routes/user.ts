@@ -10,7 +10,7 @@ userRouter.post("/join", async (req, res, next) => {
         console.log(
             "이미 동일한 아이디가 존재합니다. 존재하는 아이디로 로그인을 합니다"
         );
-        res.cookie("access-token", user.id).json({
+        res.cookie("access-token", user.uid).json({
             message: "기존 아이디로 로그인 되었습니다 확인점요",
         });
     } else {
