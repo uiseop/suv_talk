@@ -1,15 +1,19 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 
 const Chat = () => {
+    const [input, setInput] = useState("");
     const inputRef = useRef<HTMLTextAreaElement>(null);
-    const resize = (e: React.KeyboardEvent) => {
+
+    const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setInput(e.currentTarget.value);
         if (inputRef.current && inputRef.current.style.height !== "85px") {
             inputRef.current.style.height = "1px";
             inputRef.current.style.height =
                 12 + e.currentTarget.scrollHeight + "px";
         }
     };
+
     return (
         <ChatWrapper>
             <ChatHeader>
@@ -18,7 +22,7 @@ const Chat = () => {
             </ChatHeader>
             <ChatInner></ChatInner>
             <ChatInputWrapper>
-                <ChatInput ref={inputRef} onKeyDown={resize} />
+                <ChatInput ref={inputRef} onChange={onChangeHandler} />
             </ChatInputWrapper>
         </ChatWrapper>
     );
@@ -93,6 +97,7 @@ const ChatInputWrapper = styled.div`
     background-color: #fff;
     min-height: 45px;
     display: flex;
+    flex-direction: column;
     padding: 1rem;
 `;
 
@@ -109,6 +114,16 @@ const ChatInput = styled.textarea`
     box-shadow: none;
 
     resize: none; /*remove the resize handle on the bottom right*/
+`;
+
+const ChatOptionWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+const ChatEnterBtn = styled.button<{ isEpty: boolean }>`
+    padding: 12px 15px;
 `;
 
 export default Chat;
