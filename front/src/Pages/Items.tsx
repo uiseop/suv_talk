@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Button, Card, Grid } from "../Common/Common";
+import Title from "../Components/Title";
 
 const Items = () => {
     const prouducts: { title: string }[] = [
@@ -11,6 +12,7 @@ const Items = () => {
     ];
     return (
         <>
+            <Title>목록</Title>
             {prouducts.length > 0 ? (
                 <Wrapper>
                     {prouducts.map((product) => (

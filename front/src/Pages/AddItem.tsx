@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import styled from "styled-components";
 import { Button } from "../Common/Common";
+import Title from "../Components/Title";
 
 const AddItem = () => {
     const submitHandler = useCallback((e: React.FormEvent<HTMLFormElement>) => {
@@ -8,13 +9,16 @@ const AddItem = () => {
     }, []);
 
     return (
-        <ProductForm onSubmit={submitHandler}>
-            <div>
-                <Label>Title</Label>
-                <Input />
-            </div>
-            <Button type="submit">Add Product</Button>
-        </ProductForm>
+        <>
+            <Title>추가하기</Title>
+            <ProductForm onSubmit={submitHandler}>
+                <div>
+                    <Label>Title</Label>
+                    <Input />
+                </div>
+                <Button type="submit">Add Product</Button>
+            </ProductForm>
+        </>
     );
 };
 
