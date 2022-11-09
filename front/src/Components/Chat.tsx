@@ -1,13 +1,25 @@
+import { useRef } from "react";
 import styled from "styled-components";
 
 const Chat = () => {
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const resize = (e: React.KeyboardEvent) => {
+        if (inputRef.current && inputRef.current.style.height !== "85px") {
+            inputRef.current.style.height = "1px";
+            inputRef.current.style.height =
+                12 + e.currentTarget.scrollHeight + "px";
+        }
+    };
     return (
         <ChatWrapper>
             <ChatHeader>
+                <ChatTitle>웹 개발자</ChatTitle>
                 <CloseBtn />
             </ChatHeader>
             <ChatInner></ChatInner>
-            <ChatInputWrapper></ChatInputWrapper>
+            <ChatInputWrapper>
+                <ChatInput ref={inputRef} onKeyDown={resize} />
+            </ChatInputWrapper>
         </ChatWrapper>
     );
 };
@@ -22,14 +34,20 @@ const ChatWrapper = styled.div`
     bottom: 0;
     left: 0;
     right: 0;
+    border: 1px solid #807676;
 `;
 
 const ChatHeader = styled.nav`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin: 0 15px;
     height: 60px;
+`;
+
+const ChatTitle = styled.strong`
+    color: #8d7a7a;
+    font-weight: bold;
 `;
 
 const CloseBtn = styled.button`
@@ -72,8 +90,25 @@ const ChatInner = styled.div`
 `;
 
 const ChatInputWrapper = styled.div`
-    background-color: #cecece;
-    height: 45px;
+    background-color: #fff;
+    min-height: 45px;
+    display: flex;
+    padding: 1rem;
+`;
+
+const ChatInput = styled.textarea`
+    max-height: 80px;
+    width: 100%;
+    font-size: 13px;
+    border: none;
+    overflow: visible;
+    outline: none;
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+
+    resize: none; /*remove the resize handle on the bottom right*/
 `;
 
 export default Chat;
