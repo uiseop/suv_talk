@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import cors, { CorsOptions } from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import sequelize from "../util/database";
+import Chat from "./models/chat";
+import Message from "./models/message";
 import Product from "./models/product";
 import User from "./models/user";
 import testRouter from "./routes/test";
@@ -44,20 +46,22 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ error });
 });
 
-Promise.all([Product.sync(), User.sync()]).then(() => {
-    sequelize
-        .sync()
-        .then((res) => {
-            // console.log(res)
-            app.listen("8000", () => {
-                console.log(`
+Promise.all([Product.sync(), User.sync(), Chat.sync(), Message.sync()]).then(
+    () => {
+        sequelize
+            .sync({ force: true })
+            .then((res) => {
+                // console.log(res)
+                app.listen("8000", () => {
+                    console.log(`
                 #############################################
                     🛡️ Server listening on port: 8000 🛡️
                 #############################################      
                 `);
+                });
+            })
+            .catch((err) => {
+                console.log(err);
             });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
+    }
+);

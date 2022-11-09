@@ -15,6 +15,11 @@ const GlobalStyles = createGlobalStyle`
     main {
         padding: 1rem;
     }
+    #root {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
 `;
 
 export default GlobalStyles;

@@ -1,8 +1,17 @@
 import styled from "styled-components";
 
-const ChatList = () => {
+const ChatList = ({
+    setIsChat,
+}: {
+    setIsChat?: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+    const onClickHandler = () => {
+        if (setIsChat) {
+            setIsChat((cur) => !cur);
+        }
+    };
     return (
-        <ChatWrapper>
+        <ChatWrapper onClick={onClickHandler}>
             <ImageWrapper></ImageWrapper>
             <ChatDescWrapper>
                 <h2>채팅 타이틀</h2>
@@ -11,8 +20,6 @@ const ChatList = () => {
         </ChatWrapper>
     );
 };
-
-
 
 const ChatWrapper = styled.li`
     display: flex;

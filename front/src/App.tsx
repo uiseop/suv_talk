@@ -1,5 +1,6 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { CookiesProvider } from "react-cookie";
+import GlobalStyles from "./GlobalStyles";
 import Router from "./Router";
 
 const colors = {
@@ -15,6 +16,7 @@ const theme = extendTheme({ colors });
 const App = () => {
     return (
         <>
+            <GlobalStyles />
             <CookiesProvider>
                 <ChakraProvider theme={theme}>
                     <Router />

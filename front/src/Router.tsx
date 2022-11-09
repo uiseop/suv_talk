@@ -26,6 +26,9 @@ const Router = () => {
 
 const Main = styled.main`
     padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 `;
 
 export default Router;
