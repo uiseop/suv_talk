@@ -34,54 +34,62 @@ const Login = () => {
     }, []);
 
     const onSubmit: SubmitHandler<IFormValues> = (data) => {
-        const onSuccessHandler = (res: AxiosResponse) => {
-            return res;
-        };
-        const retry = (errorConfig: AxiosRequestConfig) => {
-            return new Promise((res) => {
-                setTimeout(() => {
-                    console.log("재시도 중 입니다...");
-                    res(axios.request(errorConfig));
-                }, 500);
-            });
-        };
-        const onFailHandler = (error: AxiosError) => {
-            if (error.config) {
-                return retry(error.config);
-            }
-            return Promise.reject(error);
-        };
+        return new Promise<void>((resolve) => {
+            setTimeout(() => {
+                const onSuccessHandler = (res: AxiosResponse) => {
+                    return res;
+                };
+                const retry = (errorConfig: AxiosRequestConfig) => {
+                    return new Promise((res) => {
+                        setTimeout(() => {
+                            console.log("재시도 중 입니다...");
+                            res(axios.request(errorConfig));
+                        }, 500);
+                    });
+                };
+                const onFailHandler = (error: AxiosError) => {
+                    if (error.response?.status === 400) {
+                        return Promise.reject(error);
+                    }
+                    if (error.config) {
+                        return retry(error.config);
+                    }
+                    return Promise.reject(error);
+                };
 
-        const myInterceptor = axios.interceptors.response.use(
-            onSuccessHandler,
-            onFailHandler
-        );
-        axios
-            .post("/user/join", {
-                uid: data.uid,
-            })
-            .then((res) => {
-                toast({
-                    title: `로그인이 완료되었습니다!`,
-                    description: `${data.uid}님 환영합니다!`,
-                    status: "success",
-                    duration: 3000,
-                    isClosable: true,
-                });
-                setCookie("access-token", res.data["access-token"]);
-                navigate("/", { replace: true });
-            })
-            .catch((err) => {
-                console.log(err);
-                toast({
-                    title: `로그인에 실패했습니다!`,
-                    description: `다시 시도해 주세요!`,
-                    status: "error",
-                    duration: 3000,
-                    isClosable: true,
-                });
+                const myInterceptor = axios.interceptors.response.use(
+                    onSuccessHandler,
+                    onFailHandler
+                );
+                axios
+                    .post("/user/join", {
+                        uid: data.uid,
+                    })
+                    .then((res) => {
+                        toast({
+                            title: `로그인이 완료되었습니다!`,
+                            description: `${data.uid}님 환영합니다!`,
+                            status: "success",
+                            duration: 3000,
+                            isClosable: true,
+                        });
+                        setCookie("access-token", res.data["access-token"]);
+                        navigate("/", { replace: true });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        toast({
+                            title: `로그인에 실패했습니다!`,
+                            description: `다시 시도해 주세요!`,
+                            status: "error",
+                            duration: 3000,
+                            isClosable: true,
+                        });
+                    })
+                    .finally(() => resolve());
+                axios.interceptors.response.eject(myInterceptor);
             });
-        axios.interceptors.response.eject(myInterceptor);
+        });
     };
 
     return (
