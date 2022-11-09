@@ -1,7 +1,9 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { useCookies } from "react-cookie";
 
 const Navigation = () => {
+    const [cookies, setCookie, removeCookie] = useCookies(["access-token"]);
     return (
         <Header>
             <Nav>
@@ -17,9 +19,17 @@ const Navigation = () => {
                     </Item>
                 </ItemLists>
                 <ItemLists>
-                    <Item>
-                        <NavLink to={"/login"}>로그인</NavLink>
-                    </Item>
+                    {cookies["access-token"] ? (
+                        <Item>
+                            <NavLink to={"/"}>
+                                {cookies["access-token"]}
+                            </NavLink>
+                        </Item>
+                    ) : (
+                        <Item>
+                            <NavLink to={"/login"}>로그인</NavLink>
+                        </Item>
+                    )}
                 </ItemLists>
             </Nav>
         </Header>
