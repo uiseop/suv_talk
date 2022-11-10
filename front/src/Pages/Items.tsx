@@ -1,43 +1,53 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Card, Grid } from "../Common/Common";
 import Title from "../Components/Title";
 
+interface IUsernumber {
+    createdAt: string;
+    id: number;
+    uid: string;
+    updatedAt: string;
+}
+
 const Items = () => {
-    const prouducts: { title: string }[] = [
-        { title: "콩쥐와 팥쥐" },
-        { title: "콩쥐와 팥쥐" },
-        { title: "콩쥐와 팥쥐" },
-        { title: "콩쥐와 팥쥐" },
-        { title: "콩쥐와 팥쥐" },
-    ];
+    const [users, setUsers] = useState<IUsernumber[]>([]);
+    useEffect(() => {
+        axios
+            .get("/user/all")
+            .then((res) => {
+                const { data: users } = res;
+                setUsers(users.users);
+            })
+            .catch((err) => console.log(err));
+    }, []);
+
     return (
         <>
             <Title>목록</Title>
-            {prouducts.length > 0 ? (
+            {users.length > 0 ? (
                 <Wrapper>
-                    {prouducts.map((product) => (
-                        <Article>
+                    {users.map((user) => (
+                        <Article key={user.id}>
                             <Header>
-                                <h1>{product.title}</h1>
+                                <h1>{user.uid}</h1>
                             </Header>
                             <CardImage>
-                                <img alt="A Book" />
+                                <img alt="A User" />
                             </CardImage>
                             <div>
-                                <h2>$19.99</h2>
-                                <p>
-                                    A very interesting book about so many even
-                                    more interesting things!
-                                </p>
+                                <h2>createdAt: {user.createdAt}</h2>
+                                <p>updatedAt: {user.updatedAt}</p>
                             </div>
                             <CardActions>
-                                <Button>Add to Cart</Button>
+                                <Button>채팅 시작하기</Button>
                             </CardActions>
                         </Article>
                     ))}
                 </Wrapper>
             ) : (
-                <Header>No Products Found!</Header>
+                <Header>No Users Found!</Header>
             )}
         </>
     );

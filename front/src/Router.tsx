@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
+import Chat from "./Components/Chat";
 import Navigation from "./Components/Navigation";
-import AddItem from "./Pages/AddItem";
+import AddItem from "./Pages/Addchat";
 import Chattings from "./Pages/Chattings";
 import Error from "./Pages/Error";
 import Items from "./Pages/Items";
@@ -16,7 +17,9 @@ const Router = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={<Items />} />
                     <Route path="/add-product" element={<AddItem />} />
-                    <Route path="/chattings" element={<Chattings />} />
+                    <Route path="/chattings" element={<Chattings />}>
+                        <Route path=":chatId" element={<Chat />} />
+                    </Route>
                     <Route path="/*" element={<Error />} />
                 </Routes>
             </Main>

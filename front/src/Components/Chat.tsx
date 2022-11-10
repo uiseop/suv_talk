@@ -1,29 +1,75 @@
+import axios from "axios";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Chat = () => {
     const [input, setInput] = useState("");
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const navigate = useNavigate();
+
+    const onCloseHandler = () => {
+        navigate("../");
+    };
+
+    const onClickHandler = () => {
+        inputRef.current?.focus();
+    };
 
     const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setInput(e.currentTarget.value);
-        if (inputRef.current && inputRef.current.style.height !== "85px") {
+        if (inputRef.current) {
             inputRef.current.style.height = "1px";
+        }
+        if (inputRef.current && parseInt(inputRef.current.style.height) < 80) {
             inputRef.current.style.height =
                 12 + e.currentTarget.scrollHeight + "px";
         }
+    };
+
+    const onEnterHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.nativeEvent.isComposing) {
+            return;
+        }
+        if (e.key === "Enter" && e.shiftKey) {
+            return;
+        } else if (e.key === "Enter") {
+            alert("heelo!! 이제 메시지를 보내면 돼");
+            onSubmitHandler(e);
+        }
+    };
+
+    const onSubmitHandler = (e: React.FormEvent) => {
+        e.preventDefault();
+        axios.post("/");
     };
 
     return (
         <ChatWrapper>
             <ChatHeader>
                 <ChatTitle>웹 개발자</ChatTitle>
-                <CloseBtn />
+                <CloseBtn onClick={onCloseHandler} />
             </ChatHeader>
             <ChatInner></ChatInner>
-            <ChatInputWrapper>
-                <ChatInput ref={inputRef} onChange={onChangeHandler} />
-            </ChatInputWrapper>
+            <ChatFormWrapper
+                onClick={onClickHandler}
+                onSubmit={onSubmitHandler}
+            >
+                <ChatInput
+                    ref={inputRef}
+                    defaultValue={input}
+                    onChange={onChangeHandler}
+                    onKeyDown={onEnterHandler}
+                />
+                <ChatOptionWrapper>
+                    <ChatEnterBtn
+                        type="submit"
+                        disabled={input === "" ? true : false}
+                    >
+                        전송
+                    </ChatEnterBtn>
+                </ChatOptionWrapper>
+            </ChatFormWrapper>
         </ChatWrapper>
     );
 };
@@ -93,7 +139,7 @@ const ChatInner = styled.div`
     flex: 1;
 `;
 
-const ChatInputWrapper = styled.div`
+const ChatFormWrapper = styled.form`
     background-color: #fff;
     min-height: 45px;
     display: flex;
@@ -118,12 +164,15 @@ const ChatInput = styled.textarea`
 
 const ChatOptionWrapper = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 `;
 
-const ChatEnterBtn = styled.button<{ isEpty: boolean }>`
+const ChatEnterBtn = styled.button<{ disabled: boolean }>`
     padding: 12px 15px;
+    font-size: 13px;
+    color: ${(props) => (props.disabled ? "grey" : "black")};
+    cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
 export default Chat;

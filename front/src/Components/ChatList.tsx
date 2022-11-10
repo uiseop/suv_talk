@@ -1,20 +1,24 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const ChatList = ({
-    setIsChat,
-}: {
-    setIsChat?: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+interface IChat {
+    createdAt: string;
+    id: number;
+    room_name: string;
+    updatedAt: string;
+}
+
+const ChatList = ({ chat }: { chat: IChat }) => {
+    const navigate = useNavigate();
+
     const onClickHandler = () => {
-        if (setIsChat) {
-            setIsChat((cur) => !cur);
-        }
+        navigate(`./${chat.id}`);
     };
     return (
         <ChatWrapper onClick={onClickHandler}>
             <ImageWrapper></ImageWrapper>
             <ChatDescWrapper>
-                <h2>채팅 타이틀</h2>
+                <h2>{chat.room_name}</h2>
                 <p>채팅채팅</p>
             </ChatDescWrapper>
         </ChatWrapper>
