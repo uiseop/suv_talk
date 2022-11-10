@@ -18,7 +18,7 @@ const Chattings = () => {
 
     useEffect(() => {
         axios
-            .get("/user/chat")
+            .get("chat")
             .then((res) => {
                 const { data: response } = res;
                 // console.log(response, "haha");
@@ -35,7 +35,7 @@ const Chattings = () => {
             <ChatsWrapper>
                 {chattings.length > 0 ? (
                     chattings.map((chatting) => {
-                        return <ChatList chat={chatting} />;
+                        return <ChatList chat={chatting} key={chatting.id} />;
                     })
                 ) : (
                     <Header>존재하는 채팅방이 없습니다</Header>

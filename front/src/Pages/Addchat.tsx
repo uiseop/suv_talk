@@ -22,10 +22,9 @@ const AddItem = () => {
             setIsFetching(true);
             e.preventDefault();
             axios
-                .post("user/chat", { room_name: input })
+                .post("chat", { room_name: input })
                 .then((res) => {
                     const chat: IChat = res.data.response;
-                    console.log(res.data.response, "haha");
                     navigate(`/chattings/${chat.id}`, {
                         state: chat,
                     });

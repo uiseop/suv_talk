@@ -6,6 +6,7 @@ import sequelize from "../util/database";
 import Chat from "./models/chat";
 import Message from "./models/message";
 import User from "./models/user";
+import chatRouter from "./routes/chat";
 import testRouter from "./routes/test";
 import userRouter from "./routes/user";
 
@@ -36,6 +37,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 app.use("/test", testRouter);
 app.use("/user", userRouter);
+app.use("/chat", chatRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).send("<h1>Page not Fount 404 Error</h1>");

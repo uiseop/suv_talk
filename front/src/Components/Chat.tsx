@@ -1,12 +1,31 @@
 import axios from "axios";
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
+interface IChat {
+    createdAt: string;
+    id: number;
+    room_name: string;
+    updatedAt: string;
+}
 
 const Chat = () => {
     const [input, setInput] = useState("");
+    const [roomName, setRoomName] = useState("");
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const { state }: { state: IChat } = location;
+
+    useEffect(() => {
+        if (state) {
+            setRoomName(state.room_name);
+        } else {
+            // axios.get()
+        }
+    }, []);
 
     const onCloseHandler = () => {
         navigate("../");
