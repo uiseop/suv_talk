@@ -59,6 +59,7 @@ userRouter.get("/all", (req: Request, res, next) => {
 
 userRouter.post("/chat", (req: Request, res, next) => {
     console.log(req.isAuthenticated);
+    return res.status(400).json({ message: "오류 발생!!" });
     if (req.isAuthenticated) {
         console.log(req.body);
         const { room_name } = req.body;

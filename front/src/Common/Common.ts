@@ -11,7 +11,7 @@ const Card = css`
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ disabled: boolean }>`
     font: inherit;
     border: 1px solid #00695c;
     color: #00695c;

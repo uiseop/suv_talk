@@ -14,10 +14,12 @@ interface IChat {
 
 const AddItem = () => {
     const [input, setInput] = useState("");
+    const [isFetching, setIsFetching] = useState(false);
     const navigate = useNavigate();
 
     const submitHandler = useCallback(
         (e: React.FormEvent<HTMLFormElement>) => {
+            setIsFetching(true);
             e.preventDefault();
             axios
                 .post("user/chat", { room_name: input })
@@ -28,7 +30,13 @@ const AddItem = () => {
                         state: chat,
                     });
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => {
+                    alert(`${input}의 방을 생성하는데 실패하였습니다.`);
+                    console.log(err);
+                })
+                .finally(() => {
+                    setIsFetching(false);
+                });
         },
         [input]
     );
@@ -43,9 +51,11 @@ const AddItem = () => {
             <ProductForm onSubmit={submitHandler}>
                 <div>
                     <Label>채팅방 제목</Label>
-                    <Input onChange={onChangeHandler} defaultValue={input} />
+                    <Input onChange={onChangeHandler} defaultValue={input} required />
                 </div>
-                <Button type="submit">방 추가하기</Button>
+                <Button type="submit" disabled={isFetching}>
+                    {isFetching ? "채팅방 생성중.." : "방 생성하기"}
+                </Button>
             </ProductForm>
         </>
     );

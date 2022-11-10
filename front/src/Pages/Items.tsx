@@ -41,7 +41,7 @@ const Items = () => {
                                 <p>updatedAt: {user.updatedAt}</p>
                             </div>
                             <CardActions>
-                                <Button>채팅 시작하기</Button>
+                                <Button disabled={false}>채팅 시작하기</Button>
                             </CardActions>
                         </Article>
                     ))}
