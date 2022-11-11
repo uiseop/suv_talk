@@ -2,6 +2,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { createContext } from "react";
 import { CookiesProvider } from "react-cookie";
 import GlobalStyles from "./GlobalStyles";
+import useUser from "./hooks/useUser";
 import Router from "./Router";
 
 const colors = {
@@ -15,18 +16,23 @@ const colors = {
 const theme = extendTheme({ colors });
 
 const UserContext = createContext({
-    uid: null,
+    state: "",
+    handleLogIn: (username: string) => {},
+    handleLogOut: () => {},
 });
 
 const App = () => {
+    const props = useUser();
     return (
         <>
-            <GlobalStyles />
-            <CookiesProvider>
-                <ChakraProvider theme={theme}>
-                    <Router />
-                </ChakraProvider>
-            </CookiesProvider>
+            <UserContext.Provider value={props}>
+                <GlobalStyles />
+                <CookiesProvider>
+                    <ChakraProvider theme={theme}>
+                        <Router />
+                    </ChakraProvider>
+                </CookiesProvider>
+            </UserContext.Provider>
         </>
     );
 };
