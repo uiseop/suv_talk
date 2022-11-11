@@ -1,6 +1,7 @@
 import { useCallback, useReducer } from "react";
+import { deleteCookie, getCookie } from "../utils/cookie";
 
-const initialState = "";
+const initialState = getCookie("access-token");
 
 enum UserActionType {
     LOGIN = "LOGIN",
@@ -18,6 +19,7 @@ const reducer = (state: UserState, action: UserAction): string => {
         case UserActionType.LOGIN:
             return action.username;
         case UserActionType.LOGOUT:
+            deleteCookie("access-token");
             return "";
         default:
             throw new Error("Invaid action tpye");
