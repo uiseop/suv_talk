@@ -8,6 +8,7 @@ userRouter.post("/join", async (req, res, next) => {
     try {
         const { uid } = req.body;
         let user = await User.findOne({ where: { uid } });
+        res.cookie("access-token", uid);
         if (user) {
             console.log(
                 "이미 동일한 아이디가 존재합니다. 존재하는 아이디로 로그인을 합니다"
@@ -56,7 +57,5 @@ userRouter.get("/all", (req: Request, res, next) => {
             .json({ message: "You don't have authentication" });
     }
 });
-
-
 
 export default userRouter;
