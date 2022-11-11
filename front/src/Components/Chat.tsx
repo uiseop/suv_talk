@@ -17,15 +17,21 @@ const Chat = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { state }: { state: IChat } = location;
+    const { state, pathname }: { state: IChat; pathname: string } = location;
+    const chatId = pathname.split("/")[2];
 
     useEffect(() => {
         if (state) {
             setRoomName(state.room_name);
         } else {
-            // axios.get()
+            axios
+                .get(`/chat/${chatId}`)
+                .then((res) => {
+                    setRoomName(res.data.response.room_name);
+                })
+                .catch((err) => console.log(err));
         }
-    }, []);
+    }, [location]);
 
     const onCloseHandler = () => {
         navigate("../");
@@ -66,7 +72,7 @@ const Chat = () => {
     return (
         <ChatWrapper>
             <ChatHeader>
-                <ChatTitle>웹 개발자</ChatTitle>
+                <ChatTitle>{roomName}</ChatTitle>
                 <CloseBtn onClick={onCloseHandler} />
             </ChatHeader>
             <ChatInner></ChatInner>

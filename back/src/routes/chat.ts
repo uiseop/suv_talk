@@ -44,6 +44,32 @@ chatRouter.get("/", (req: Request, res, next) => {
                     message: "무엇이 잘못됨",
                 });
             });
+    } else {
+        return res
+            .status(401)
+            .json({ message: "You don't have authentication" });
+    }
+});
+
+chatRouter.get("/:chatId", (req: Request, res, next) => {
+    const { chatId } = req.params;
+    if (req.isAuthenticated) {
+        Chat.findOne({ where: { id: chatId } })
+            .then((response) => {
+                console.log(response);
+                res.status(200).json({
+                    message: "조회 완료",
+                    response,
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(400).json({ message: "something wrong" });
+            });
+    } else {
+        return res
+            .status(401)
+            .json({ message: "You don't have authentication" });
     }
 });
 

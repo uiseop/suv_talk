@@ -1,4 +1,5 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { createContext } from "react";
 import { CookiesProvider } from "react-cookie";
 import GlobalStyles from "./GlobalStyles";
 import Router from "./Router";
@@ -12,6 +13,10 @@ const colors = {
 };
 
 const theme = extendTheme({ colors });
+
+const UserContext = createContext({
+    uid: null,
+});
 
 const App = () => {
     return (
