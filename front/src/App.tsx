@@ -15,8 +15,8 @@ const colors = {
 
 const theme = extendTheme({ colors });
 
-const UserContext = createContext({
-    state: "",
+export const UserContext = createContext({
+    user: "",
     handleLogIn: (username: string) => {},
     handleLogOut: () => {},
 });

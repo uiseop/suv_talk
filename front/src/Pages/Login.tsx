@@ -9,9 +9,9 @@ import {
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import { UserContext } from "../App";
 
 interface IFormValues {
     uid: string;
@@ -24,14 +24,14 @@ const Login = () => {
         formState: { errors, isSubmitting },
     } = useForm<IFormValues>();
     const toast = useToast();
-    const [cookies, setCookie, removeCookie] = useCookies(["access-token"]);
     const navigate = useNavigate();
+    const { user, handleLogIn } = useContext(UserContext);
 
     useEffect(() => {
-        if (cookies["access-token"]) {
+        if (user) {
             navigate("/", { replace: true });
         }
-    }, []);
+    }, [user]);
 
     const onSubmit: SubmitHandler<IFormValues> = (data) => {
         return new Promise<void>((resolve) => {
@@ -73,7 +73,7 @@ const Login = () => {
                             duration: 3000,
                             isClosable: true,
                         });
-                        setCookie("access-token", res.data["access-token"]);
+                        handleLogIn(res.data["access-token"]);
                         navigate("/", { replace: true });
                     })
                     .catch((err) => {

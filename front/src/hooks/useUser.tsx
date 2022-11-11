@@ -24,7 +24,7 @@ const reducer = (state: UserState, action: UserAction): string => {
     }
 };
 const useUser = () => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [user, dispatch] = useReducer(reducer, initialState);
 
     const handleLogIn = useCallback((username: string) => {
         dispatch({ type: UserActionType.LOGIN, username });
@@ -34,7 +34,7 @@ const useUser = () => {
         dispatch({ type: UserActionType.LOGOUT });
     }, []);
 
-    return { state, handleLogIn, handleLogOut };
+    return { user, handleLogIn, handleLogOut };
 };
 
 export default useUser;

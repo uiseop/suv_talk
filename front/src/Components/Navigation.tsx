@@ -1,11 +1,10 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { useCookies } from "react-cookie";
-import { getCookie } from "../utils/cookie";
+import { useContext } from "react";
+import { UserContext } from "../App";
 
 const Navigation = () => {
-    const uid = getCookie("access-token");
-    console.log(uid)
+    const { user } = useContext(UserContext);
     return (
         <Header>
             <Nav>
@@ -21,9 +20,9 @@ const Navigation = () => {
                     </Item>
                 </ItemLists>
                 <ItemLists>
-                    {uid ? (
+                    {user ? (
                         <Item>
-                            <NavLink to={"/myinfo"}>{uid}</NavLink>
+                            <NavLink to={"/myinfo"}>{user}</NavLink>
                         </Item>
                     ) : (
                         <Item>
