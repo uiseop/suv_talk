@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { ChatListsContext } from "../App";
 import ChatList from "../Components/ChatList";
 import Title from "../Components/Title";
 
@@ -14,25 +15,18 @@ interface IChat {
 
 const Chattings = () => {
     const [chattings, setChattings] = useState<IChat[]>([]);
+    const { chatLists, getChatLists } = useContext(ChatListsContext);
 
     useEffect(() => {
-        axios
-            .get("chat")
-            .then((res) => {
-                const { data: response } = res;
-                setChattings(response.response);
-            })
-            .catch((err) => {
-                console.log(err, "ㅜㅜ");
-            });
+        getChatLists();
     }, []);
 
     return (
         <>
             <Title>채팅</Title>
             <ChatsWrapper>
-                {chattings.length > 0 ? (
-                    chattings.map((chatting) => {
+                {chatLists.length > 0 ? (
+                    chatLists.map((chatting) => {
                         return <ChatList chat={chatting} key={chatting.id} />;
                     })
                 ) : (

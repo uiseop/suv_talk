@@ -34,8 +34,7 @@ chatRouter.post("/", isAuthenticated, (req: Request, res, next) => {
 });
 
 chatRouter.get("/", (req: Request, res, next) => {
-    console.log(req.body);
-    Chat.findAll()
+    Chat.findAll({ where: { UserId: req.user?.id } })
         .then((response) => {
             console.log(response);
             res.status(200).json({
@@ -65,6 +64,24 @@ chatRouter.get("/:chatId", isAuthenticated, (req: Request, res, next) => {
             console.log(err);
             res.status(400).json({ message: "something wrong" });
         });
+});
+
+chatRouter.delete("/:chatId", isAuthenticated, (req: Request, res, next) => {
+    const { chatId } = req.params;
+
+    Chat.destroy({ where: { id: chatId } })
+        .then((response) =>
+            res.status(200).json({
+                response,
+                message: "삭제 완료",
+            })
+        )
+        .catch((err) =>
+            res.status(400).json({
+                err,
+                message: "삭제 오류 발생",
+            })
+        );
 });
 
 export default chatRouter;

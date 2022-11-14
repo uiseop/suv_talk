@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Button, Card, Grid } from "../Common/Common";
 import Title from "../Components/Title";
 
-interface IUsernumber {
+interface IUser {
     createdAt: string;
     id: number;
     uid: string;
@@ -12,11 +12,12 @@ interface IUsernumber {
 }
 
 const Items = () => {
-    const [users, setUsers] = useState<IUsernumber[]>([]);
+    const [users, setUsers] = useState<IUser[]>([]);
     useEffect(() => {
         axios
             .get("/user/all")
             .then((res) => {
+                console.log(res);
                 const { data: users } = res;
                 setUsers(users.users);
             })
@@ -34,7 +35,7 @@ const Items = () => {
                                 <h1>{user.uid}</h1>
                             </Header>
                             <CardImage>
-                                <img alt="A User" />
+                                <img alt={user.id.toString()} />
                             </CardImage>
                             <div>
                                 <h2>createdAt: {user.createdAt}</h2>

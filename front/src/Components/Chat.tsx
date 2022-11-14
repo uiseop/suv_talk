@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { ChatListsContext } from "../App";
 
 interface IChat {
     createdAt: string;
@@ -17,6 +18,7 @@ const Chat = () => {
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const navigate = useNavigate();
     const location = useLocation();
+    const { deleteOneChatList } = useContext(ChatListsContext);
 
     const { state, pathname }: { state: IChat; pathname: string } = location;
     const chatId = pathname.split("/")[2];
@@ -72,10 +74,25 @@ const Chat = () => {
         axios.post("/");
     };
 
+    const onExitHandler = () => {
+        if (window.confirm("채팅방을 나가시겠습니까?")) {
+            axios
+                .delete(`/chat/${chatId}`)
+                .then((res) => {
+                    deleteOneChatList(Number(chatId));
+                })
+                .catch((err) => console.log(err));
+            onCloseHandler();
+        } else {
+            console.log("안나감");
+        }
+    };
+
     return (
         <ChatWrapper>
             <ChatHeader>
                 <ChatTitle>{roomName}</ChatTitle>
+                <ChatExit onClick={onExitHandler}>나가기</ChatExit>
                 <CloseBtn onClick={onCloseHandler} />
             </ChatHeader>
             <ChatInner></ChatInner>
@@ -201,6 +218,15 @@ const ChatEnterBtn = styled.button<{ disabled: boolean }>`
     font-size: 13px;
     color: ${(props) => (props.disabled ? "grey" : "black")};
     cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+`;
+
+const ChatExit = styled.button`
+    padding: 10px 12px;
+    color: white;
+
+    &:hover {
+        color: #ffeb3b;
+    }
 `;
 
 export default Chat;
