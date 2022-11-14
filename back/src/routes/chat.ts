@@ -1,5 +1,5 @@
 import { Request, Router } from "express";
-import { Chat } from "../models";
+import Chat from "../models/chat";
 
 const chatRouter = Router();
 
@@ -8,10 +8,10 @@ chatRouter.post("/", (req: Request, res, next) => {
     // return res.status(400).json({ message: "오류 발생!!" });
     if (req.isAuthenticated) {
         console.log(req.body);
-        const { room_name } = req.body;
+        const { room_name, user } = req.body;
         Chat.create({ room_name })
             .then((response) => {
-                console.log(response);
+                response;
                 res.status(201).json({
                     message: "채팅방이 생성되었습니다",
                     response,
@@ -54,7 +54,7 @@ chatRouter.get("/", (req: Request, res, next) => {
 chatRouter.get("/:chatId", (req: Request, res, next) => {
     const { chatId } = req.params;
     if (req.isAuthenticated) {
-        Chat.findOne({ where: { id: chatId } })
+        Chat.findOne({ where: { room_name: chatId } })
             .then((response) => {
                 console.log(response);
                 res.status(200).json({

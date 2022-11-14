@@ -1,7 +1,20 @@
-import { DataTypes } from "sequelize";
+import {
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+} from "sequelize";
 import sequelize from "../../util/database";
 
-const Message = sequelize.define("message", {
+interface MessageModel
+    extends Model<
+        InferAttributes<MessageModel>,
+        InferCreationAttributes<MessageModel>
+    > {
+    message: string;
+}
+
+const Message = sequelize.define<MessageModel>("message", {
     message: {
         type: DataTypes.STRING,
         allowNull: false,

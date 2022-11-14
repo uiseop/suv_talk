@@ -4,6 +4,7 @@ import cors, { CorsOptions } from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import sequelize from "../util/database";
 import Chat from "./models/chat";
+import ChatItem from "./models/chat_item";
 import Message from "./models/message";
 import User from "./models/user";
 import chatRouter from "./routes/chat";
@@ -47,19 +48,26 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ error });
 });
 
-Promise.all([User.sync(), Chat.sync(), Message.sync()]).then(() => {
-    sequelize
-        .sync()
-        .then((res) => {
-            app.listen("8000", () => {
-                console.log(`
+User.hasMany(Message);
+Message.belongsTo(User);
+
+User.belongsToMany(Chat, { through: ChatItem });
+Chat.belongsToMany(User, { through: ChatItem });
+
+Chat.hasMany(Message);
+Message.belongsTo(Chat);
+
+sequelize
+    .sync({ force: true })
+    .then((res) => {
+        app.listen("8000", () => {
+            console.log(`
                 #############################################
                     🛡️ Server listening on port: 8000 🛡️
                 #############################################      
                 `);
-            });
-        })
-        .catch((err) => {
-            console.log(err);
         });
-});
+    })
+    .catch((err) => {
+        console.log(err);
+    });

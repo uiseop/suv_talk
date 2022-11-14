@@ -1,11 +1,24 @@
-import { DataTypes } from "sequelize";
+import {
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+} from "sequelize";
 import sequelize from "../../util/database";
 
-const Chat = sequelize.define("chat", {
+interface ChatModel
+    extends Model<
+        InferAttributes<ChatModel>,
+        InferCreationAttributes<ChatModel>
+    > {
+    room_name: string;
+}
+
+const Chat = sequelize.define<ChatModel>("chat", {
     room_name: {
         type: DataTypes.STRING,
-        allowNull: false
-    }
+        allowNull: false,
+    },
 });
 
 export default Chat;

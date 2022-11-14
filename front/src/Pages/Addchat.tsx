@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { UserContext } from "../App";
 import { Button } from "../Common/Common";
 import Title from "../Components/Title";
 
@@ -16,13 +17,18 @@ const AddItem = () => {
     const [input, setInput] = useState("");
     const [isFetching, setIsFetching] = useState(false);
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
 
     const submitHandler = useCallback(
         (e: React.FormEvent<HTMLFormElement>) => {
             setIsFetching(true);
             e.preventDefault();
+            if (!user) {
+                setIsFetching(false);
+                return alert("로그인 후 이용해주세요");
+            }
             axios
-                .post("chat", { room_name: input })
+                .post("chat", { room_name: input, user })
                 .then((res) => {
                     const chat: IChat = res.data.response;
                     navigate(`/chattings/${chat.id}`, {
@@ -50,7 +56,11 @@ const AddItem = () => {
             <ProductForm onSubmit={submitHandler}>
                 <div>
                     <Label>채팅방 제목</Label>
-                    <Input onChange={onChangeHandler} defaultValue={input} required />
+                    <Input
+                        onChange={onChangeHandler}
+                        defaultValue={input}
+                        required
+                    />
                 </div>
                 <Button type="submit" disabled={isFetching}>
                     {isFetching ? "채팅방 생성중.." : "방 생성하기"}
