@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 interface IChat {
     createdAt: string;
+    UserId: number;
     id: number;
     room_name: string;
     updatedAt: string;
@@ -22,12 +23,14 @@ const Chat = () => {
 
     useEffect(() => {
         if (state) {
+            console.log(state);
             setRoomName(state.room_name);
         } else {
             axios
                 .get(`/chat/${chatId}`)
                 .then((res) => {
-                    setRoomName(res.data.response.room_name);
+                    const chat: IChat = res.data.chat;
+                    setRoomName(chat.room_name);
                 })
                 .catch((err) => console.log(err));
         }

@@ -17,7 +17,7 @@ chatRouter.post("/", isAuthenticated, (req: Request, res, next) => {
                 chat.createChatItem().then((chatItem) =>
                     res.status(201).json({
                         message: "채팅방이 생성되었습니다",
-                        chatItem,
+                        chat,
                     })
                 );
             })
@@ -53,12 +53,12 @@ chatRouter.get("/", (req: Request, res, next) => {
 chatRouter.get("/:chatId", isAuthenticated, (req: Request, res, next) => {
     const { chatId } = req.params;
 
-    Chat.findOne({ where: { room_name: chatId } })
-        .then((response) => {
-            console.log(response);
+    Chat.findOne({ where: { id: chatId } })
+        .then((chat) => {
+            console.log(chat);
             res.status(200).json({
-                message: "조회 완료",
-                response,
+                message: `채팅번호 ${chatId} 조회 완료`,
+                chat,
             });
         })
         .catch((err) => {

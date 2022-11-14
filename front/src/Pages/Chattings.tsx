@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Chat from "../Components/Chat";
 import ChatList from "../Components/ChatList";
 import Title from "../Components/Title";
 
