@@ -70,7 +70,7 @@ chatRouter.get("/", isAuthenticated, (req: Request, res, next) => {
 chatRouter.get("/:chatId", isAuthenticated, (req: Request, res, next) => {
     const { chatId } = req.params;
     const chat = req.chat as Chat;
-    console.log(chatId)
+    console.log(chatId);
 
     chat.getChatItems({ where: { id: chatId } })
         .then((chat) => {
@@ -103,9 +103,39 @@ chatRouter.delete("/:chatId", isAuthenticated, (req: Request, res, next) => {
         );
 });
 
+chatRouter.post("/:UserId/self", isAuthenticated, (req: Request, res, next) => {
+    const { UserId } = req.params; // 다른 유저의 uid
+    const { user, chat } = req;
+    chat?.getChatItems()
+        .then((chatItems) => {
+            const curChat = chatItems.find(async (chatItem) => {
+                const result = await chatItem.hasUser(user?.id as number);
+                return result;
+            });
+            console.log(curChat, "why??");
+            if (curChat) {
+                res.status(200).json({
+                    message: "기존의 채팅방으로 돌아갑니다",
+                    chatItem: curChat,
+                });
+            } else {
+                chat.createChatItem({ room_name: "나와의 채팅" }).then(
+                    (chatItem) => {
+                        res.status(201).json({
+                            message: "새로운 나와의 채팅이 시작됩니다",
+                            chatItem,
+                        });
+                    }
+                );
+            }
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
 chatRouter.post("/:UserId", isAuthenticated, (req: Request, res, next) => {
     const { UserId } = req.params;
-    Chat.findAll({ where: { UserId } }).then((chats) => {});
 });
 
 export default chatRouter;

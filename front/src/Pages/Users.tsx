@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { UserContext } from "../App";
 import { Button, Card, Grid } from "../Common/Common";
@@ -12,9 +13,19 @@ interface IUser {
     updatedAt: string;
 }
 
+interface IChat {
+    ChatId: number;
+    createdAt: string;
+    id: number;
+    room_name: string;
+    updatedAt: string;
+}
+
 const Items = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
+
     useEffect(() => {
         axios
             .get("/user/all")
@@ -28,9 +39,14 @@ const Items = () => {
     const onClickHandler = (otherUser: IUser) => {
         const { uid, id } = otherUser;
         if (uid === user) {
-            axios.post("/chat");
+            axios.post(`/chat/${uid}/self`).then((res) => {
+                const chat: IChat = res.data.chatItem;
+                navigate(`/chattings/${chat.id}`, {
+                    state: chat,
+                });
+            });
         } else {
-            axios.post("/chat");
+            axios.post(`/chat/${uid}`);
         }
     };
 

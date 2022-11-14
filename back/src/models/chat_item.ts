@@ -3,6 +3,7 @@ import {
     DataTypes,
     ForeignKey,
     HasManyAddAssociationMixin,
+    HasManyHasAssociationMixin,
     InferAttributes,
     InferCreationAttributes,
     Model,
@@ -18,9 +19,7 @@ class ChatItem extends Model<
     declare id: CreationOptional<number>;
     declare room_name: string;
 
-    
-    declare userId: ForeignKey<User["id"]>;
-
+    declare hasUser: HasManyHasAssociationMixin<User, number>;
     declare addUser: HasManyAddAssociationMixin<User, number>;
 }
 

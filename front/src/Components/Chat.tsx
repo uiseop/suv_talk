@@ -25,7 +25,6 @@ const Chat = () => {
 
     useEffect(() => {
         if (state) {
-            console.log(state);
             setRoomName(state.room_name);
         } else {
             axios
