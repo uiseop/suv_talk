@@ -21,7 +21,6 @@ const Chattings = () => {
             .get("chat")
             .then((res) => {
                 const { data: response } = res;
-                // console.log(response, "haha");
                 setChattings(response.response);
             })
             .catch((err) => {
