@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import isAuthenticated from "../middlewares/isAuthenticated";
+import ChatItem from "../models/chat_item";
 
 const messageRouter = Router();
 
@@ -29,7 +30,14 @@ messageRouter.get(
     (req: Request, res, next) => {
         const { chatId, page } = req.params;
         const { user, chat } = req;
-        
+        ChatItem.findByPk(chatId).then((chatItem) => {
+            chatItem?.getMessages().then((messages) => {
+                res.status(200).json({
+                    message: " 잘 온다야",
+                    messages,
+                });
+            });
+        });
     }
 );
 

@@ -25,7 +25,7 @@ const reducer = (state: ChatListState, action: ChatListAction) => {
         case ChatListActionType.GET:
             return action.chatLists;
         case ChatListActionType.DELETE:
-            return state.filter((chat) => chat.id != action.chatId);
+            return state.filter((chat) => chat.id !== action.chatId);
         default:
             throw new Error("Invalid Action Type");
     }

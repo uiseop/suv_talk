@@ -83,7 +83,6 @@ User.belongsTo(ChatItem, { constraints: true, onDelete: "CASCADE" });
 sequelize
     .sync({ force: false })
     .then((res) => {
-        console.log(User);
         app.listen("8000", () => {
             console.log(`
                 #############################################

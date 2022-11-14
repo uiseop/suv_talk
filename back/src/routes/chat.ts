@@ -61,7 +61,6 @@ chatRouter.get("/", isAuthenticated, (req: Request, res, next) => {
             });
         })
         .catch((err) => {
-            console.log("ㅜㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ");
             res.status(400).json({
                 message: "무엇이 잘못됨",
             });
@@ -71,7 +70,6 @@ chatRouter.get("/", isAuthenticated, (req: Request, res, next) => {
 chatRouter.get("/:chatId", isAuthenticated, (req: Request, res, next) => {
     const { chatId } = req.params;
     const chat = req.chat as Chat;
-    console.log(chatId);
 
     chat.getChatItems({ where: { id: chatId } })
         .then((chat) => {
@@ -113,7 +111,6 @@ chatRouter.post("/:UserId/self", isAuthenticated, (req: Request, res, next) => {
                 const result = await chatItem.hasUser(user?.id as number);
                 return result;
             });
-            console.log(curChat, "why??");
             if (curChat) {
                 res.status(200).json({
                     message: "기존의 채팅방으로 돌아갑니다",

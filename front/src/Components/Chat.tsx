@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ChatListsContext } from "../App";
+import { ChatListsContext, MessageContext } from "../App";
 
 interface IChat {
     createdAt: string;
@@ -12,8 +12,6 @@ interface IChat {
     updatedAt: string;
 }
 
-const myChat = ["hello", "my", "name", "is", "예삐"];
-
 const Chat = () => {
     const [input, setInput] = useState("");
     const [roomName, setRoomName] = useState("");
@@ -22,6 +20,7 @@ const Chat = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { deleteOneChatList } = useContext(ChatListsContext);
+    const { messages, getMessages } = useContext(MessageContext);
 
     const { state, pathname }: { state: IChat; pathname: string } = location;
     const chatId = pathname.split("/")[2];
@@ -34,13 +33,15 @@ const Chat = () => {
                 .get(`/chat/${chatId}`)
                 .then((res) => {
                     const chat: IChat[] = res.data.chat;
-                    console.log(res, "hahaha");
                     setRoomName(chat[0].room_name);
                 })
                 .catch((err) => console.log(err));
         }
         innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);
+        getMessages(Number(chatId), 0);
     }, [location]);
+
+    console.log(messages)
 
     const onCloseHandler = () => {
         navigate("../");
@@ -103,16 +104,16 @@ const Chat = () => {
                 <CloseBtn onClick={onCloseHandler} />
             </ChatHeader>
             <ChatInner ref={innerRef}>
-                {myChat.map((chat, idx) => (
-                    <Message isMine={idx % 2 === 0 ? true : false}>
-                        {chat}
-                    </Message>
-                ))}
-                {myChat.map((chat, idx) => (
-                    <Message isMine={idx % 2 === 0 ? true : false}>
-                        {chat}
-                    </Message>
-                ))}
+                {messages.length > 0
+                    ? messages.map((message) => (
+                          <Message
+                              key={message.id}
+                              isMine={message.id % 2 === 0 ? true : false}
+                          >
+                              {message.message}
+                          </Message>
+                      ))
+                    : ""}
             </ChatInner>
             <ChatFormWrapper
                 onClick={onClickHandler}

@@ -3,6 +3,7 @@ import {
     DataTypes,
     ForeignKey,
     HasManyAddAssociationMixin,
+    HasManyGetAssociationsMixin,
     HasManyHasAssociationMixin,
     InferAttributes,
     InferCreationAttributes,
@@ -23,6 +24,7 @@ class ChatItem extends Model<
     declare hasUser: HasManyHasAssociationMixin<User, number>;
     declare addUser: HasManyAddAssociationMixin<User, number>;
     declare addMessage: HasManyAddAssociationMixin<Message, number>;
+    declare getMessages: HasManyGetAssociationsMixin<Message>;
 }
 
 ChatItem.init(

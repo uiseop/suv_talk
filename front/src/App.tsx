@@ -3,6 +3,7 @@ import { createContext } from "react";
 import { CookiesProvider } from "react-cookie";
 import GlobalStyles from "./GlobalStyles";
 import useChatLists from "./hooks/useChatLists";
+import useMessages from "./hooks/useMessages";
 import useUser from "./hooks/useUser";
 import Router from "./Router";
 
@@ -15,6 +16,15 @@ const colors = {
 };
 
 const theme = extendTheme({ colors });
+
+interface IMessage {
+    ChatItemId: number;
+    UserId: number;
+    createdAt: string;
+    id: number;
+    message: string;
+    updatedAt: string;
+}
 
 interface IChat {
     createdAt: string;
@@ -35,19 +45,27 @@ export const ChatListsContext = createContext({
     deleteOneChatList: (chatId: number) => {},
 });
 
+export const MessageContext = createContext({
+    messages: [] as IMessage[],
+    getMessages: (chatId: number, page: number) => {},
+});
+
 const App = () => {
     const user = useUser();
     const chatLists = useChatLists();
+    const messages = useMessages();
     return (
         <>
             <UserContext.Provider value={user}>
                 <ChatListsContext.Provider value={chatLists}>
-                    <GlobalStyles />
-                    <CookiesProvider>
-                        <ChakraProvider theme={theme}>
-                            <Router />
-                        </ChakraProvider>
-                    </CookiesProvider>
+                    <MessageContext.Provider value={messages}>
+                        <GlobalStyles />
+                        <CookiesProvider>
+                            <ChakraProvider theme={theme}>
+                                <Router />
+                            </ChakraProvider>
+                        </CookiesProvider>
+                    </MessageContext.Provider>
                 </ChatListsContext.Provider>
             </UserContext.Provider>
         </>
