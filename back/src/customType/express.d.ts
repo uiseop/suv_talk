@@ -1,7 +1,10 @@
+import { UserModel } from "../models/user";
+
 declare global {
-    module "express" {
+    namespace Express {
         interface Request {
             isAuthenticated?: boolean;
+            user?: UserModel;
         }
     }
 }

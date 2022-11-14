@@ -6,7 +6,7 @@ import sequelize from "../util/database";
 import Chat from "./models/chat";
 import ChatItem from "./models/chat_item";
 import Message from "./models/message";
-import User from "./models/user";
+import User, { UserModel } from "./models/user";
 import chatRouter from "./routes/chat";
 import testRouter from "./routes/test";
 import userRouter from "./routes/user";
@@ -23,17 +23,23 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.cookies["access-token"]) {
-        req.isAuthenticated = true;
+    const uid = req.cookies["access-token"];
+    if (uid) {
+        User.findOne({ where: { uid } })
+            .then((user) => {
+                if (user) {
+                    console.log("haha");
+                    console.log(user);
+                    req.user = user;
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => next());
     } else {
-        req.isAuthenticated = false;
+        next();
     }
-    next();
-});
-
-app.get("/", (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.isAuthenticated, "haha");
-    res.send("Hi This is my First Express Server");
 });
 
 app.use("/test", testRouter);
@@ -58,7 +64,7 @@ Chat.hasMany(Message);
 Message.belongsTo(Chat);
 
 sequelize
-    .sync({ force: true })
+    .sync({ force: false })
     .then((res) => {
         app.listen("8000", () => {
             console.log(`

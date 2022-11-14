@@ -5,7 +5,6 @@ const chatRouter = Router();
 
 chatRouter.post("/", (req: Request, res, next) => {
     console.log(req.isAuthenticated);
-    // return res.status(400).json({ message: "오류 발생!!" });
     if (req.isAuthenticated) {
         console.log(req.body);
         const { room_name, user } = req.body;
@@ -29,26 +28,20 @@ chatRouter.post("/", (req: Request, res, next) => {
 });
 
 chatRouter.get("/", (req: Request, res, next) => {
-    if (req.isAuthenticated) {
-        console.log(req.body);
-        Chat.findAll()
-            .then((response) => {
-                console.log(response);
-                res.status(200).json({
-                    message: "채팅방 조회가 완료되엇씁니다",
-                    response,
-                });
-            })
-            .catch((err) => {
-                res.status(400).json({
-                    message: "무엇이 잘못됨",
-                });
+    console.log(req.body);
+    Chat.findAll()
+        .then((response) => {
+            console.log(response);
+            res.status(200).json({
+                message: "채팅방 조회가 완료되엇씁니다",
+                response,
             });
-    } else {
-        return res
-            .status(401)
-            .json({ message: "You don't have authentication" });
-    }
+        })
+        .catch((err) => {
+            res.status(400).json({
+                message: "무엇이 잘못됨",
+            });
+        });
 });
 
 chatRouter.get("/:chatId", (req: Request, res, next) => {

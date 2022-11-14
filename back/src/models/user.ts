@@ -6,7 +6,7 @@ import {
 } from "sequelize";
 import sequelize from "../../util/database";
 
-interface UserModel
+export interface UserModel
     extends Model<
         InferAttributes<UserModel>,
         InferCreationAttributes<UserModel>

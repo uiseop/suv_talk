@@ -30,31 +30,14 @@ userRouter.post("/join", async (req, res, next) => {
     }
 });
 
-userRouter.get("/", (req: Request, res, next) => {
-    console.log(req.isAuthenticated);
-    if (req.isAuthenticated) {
-        return res.redirect("/");
-    }
-    res.send(
-        '<form action="/user/join" method="POST"><div class="form-control"><label for="uid">uid</label><input type="text" name="uid" id="uid"></div><button class="btn" type="submit">Add Product</button></form> '
-    );
-});
-
 userRouter.get("/all", (req: Request, res, next) => {
-    console.log(req.isAuthenticated);
-    if (req.isAuthenticated) {
-        User.findAll()
-            .then((response) => {
-                res.status(200).json({
-                    users: response,
-                });
-            })
-            .catch((err) => console.log("some thing wrong"));
-    } else {
-        return res
-            .status(401)
-            .json({ message: "You don't have authentication" });
-    }
+    User.findAll()
+        .then((response) => {
+            res.status(200).json({
+                users: response,
+            });
+        })
+        .catch((err) => console.log("some thing wrong"));
 });
 
 export default userRouter;
