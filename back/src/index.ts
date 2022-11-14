@@ -74,8 +74,8 @@ Chat.belongsTo(User);
 Chat.hasMany(ChatItem, { constraints: true, onDelete: "CASCADE" });
 ChatItem.belongsTo(Chat);
 
-ChatItem.hasMany(Message);
-Message.belongsTo(ChatItem);
+ChatItem.hasMany(Message, { constraints: true, onDelete: "CASCADE" });
+Message.belongsTo(ChatItem , { constraints: true, onDelete: "CASCADE" });
 
 ChatItem.hasMany(User);
 User.belongsTo(ChatItem, { constraints: true, onDelete: "CASCADE" });
