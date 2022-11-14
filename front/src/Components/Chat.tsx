@@ -31,7 +31,7 @@ const Chat = () => {
                 .get(`/chat/${chatId}`)
                 .then((res) => {
                     const chat: IChat[] = res.data.chat;
-                    console.log(res, 'hahaha')
+                    console.log(res, "hahaha");
                     setRoomName(chat[0].room_name);
                 })
                 .catch((err) => console.log(err));
@@ -71,7 +71,10 @@ const Chat = () => {
 
     const onSubmitHandler = (e: React.FormEvent) => {
         e.preventDefault();
-        axios.post("/");
+        axios
+            .post(`/message/${chatId}`, { message: input })
+            .then((res) => console.log(res));
+        setInput("");
     };
 
     const onExitHandler = () => {
@@ -102,7 +105,7 @@ const Chat = () => {
             >
                 <ChatInput
                     ref={inputRef}
-                    defaultValue={input}
+                    value={input}
                     onChange={onChangeHandler}
                     onKeyDown={onEnterHandler}
                 />

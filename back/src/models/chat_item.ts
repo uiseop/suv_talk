@@ -10,6 +10,7 @@ import {
 } from "sequelize";
 import sequelize from "../../util/database";
 import Chat from "./chat";
+import Message from "./message";
 import User from "./user";
 
 class ChatItem extends Model<
@@ -21,6 +22,7 @@ class ChatItem extends Model<
 
     declare hasUser: HasManyHasAssociationMixin<User, number>;
     declare addUser: HasManyAddAssociationMixin<User, number>;
+    declare addMessage: HasManyAddAssociationMixin<Message, number>;
 }
 
 ChatItem.init(

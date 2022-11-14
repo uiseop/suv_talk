@@ -1,11 +1,13 @@
 import {
     CreationOptional,
     DataTypes,
+    ForeignKey,
     InferAttributes,
     InferCreationAttributes,
     Model,
 } from "sequelize";
 import sequelize from "../../util/database";
+import User from "./user";
 
 class Message extends Model<
     InferAttributes<Message>,
@@ -13,6 +15,8 @@ class Message extends Model<
 > {
     declare id: CreationOptional<number>;
     declare message: string;
+
+    declare userId: ForeignKey<User["id"]>;
 }
 
 Message.init(

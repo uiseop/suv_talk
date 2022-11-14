@@ -1,6 +1,7 @@
 import { Request, Router } from "express";
 import isAuthenticated from "../middlewares/isAuthenticated";
 import Chat from "../models/chat";
+import ChatItem from "../models/chat_item";
 import User from "../models/user";
 
 const chatRouter = Router();
@@ -88,7 +89,7 @@ chatRouter.get("/:chatId", isAuthenticated, (req: Request, res, next) => {
 chatRouter.delete("/:chatId", isAuthenticated, (req: Request, res, next) => {
     const { chatId } = req.params;
 
-    Chat.destroy({ where: { id: chatId } })
+    ChatItem.destroy({ where: { id: chatId } })
         .then((response) =>
             res.status(200).json({
                 response,

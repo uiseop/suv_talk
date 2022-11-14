@@ -10,6 +10,7 @@ import {
 } from "sequelize";
 import sequelize from "../../util/database";
 import Chat from "./chat";
+import Message from "./message";
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare id: CreationOptional<number>;
@@ -17,6 +18,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 
     declare createChat: HasOneCreateAssociationMixin<Chat>;
     declare getChat: HasOneGetAssociationMixin<Chat>;
+    declare createMessage: HasManyCreateAssociationMixin<Message>;
 }
 
 User.init(
