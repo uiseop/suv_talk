@@ -14,12 +14,22 @@ messageRouter.post(
                 user?.createMessage({ message: req.body.message }).then(
                     (message) => {
                         chatItem[0].addMessage(message).then(() => {
-                            res.status(200).json({ message: "잘 찾음 굿굿" });
+                            res.status(200);
                         });
                     }
                 );
             })
             .catch((err) => next(err));
+    }
+);
+
+messageRouter.get(
+    "/:chatId/:page",
+    isAuthenticated,
+    (req: Request, res, next) => {
+        const { chatId, page } = req.params;
+        const { user, chat } = req;
+        
     }
 );
 

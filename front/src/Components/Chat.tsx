@@ -12,10 +12,13 @@ interface IChat {
     updatedAt: string;
 }
 
+const myChat = ["hello", "my", "name", "is", "예삐"];
+
 const Chat = () => {
     const [input, setInput] = useState("");
     const [roomName, setRoomName] = useState("");
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const innerRef = useRef<HTMLUListElement>(null);
     const navigate = useNavigate();
     const location = useLocation();
     const { deleteOneChatList } = useContext(ChatListsContext);
@@ -36,6 +39,7 @@ const Chat = () => {
                 })
                 .catch((err) => console.log(err));
         }
+        innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);
     }, [location]);
 
     const onCloseHandler = () => {
@@ -98,7 +102,18 @@ const Chat = () => {
                 <ChatExit onClick={onExitHandler}>나가기</ChatExit>
                 <CloseBtn onClick={onCloseHandler} />
             </ChatHeader>
-            <ChatInner></ChatInner>
+            <ChatInner ref={innerRef}>
+                {myChat.map((chat, idx) => (
+                    <Message isMine={idx % 2 === 0 ? true : false}>
+                        {chat}
+                    </Message>
+                ))}
+                {myChat.map((chat, idx) => (
+                    <Message isMine={idx % 2 === 0 ? true : false}>
+                        {chat}
+                    </Message>
+                ))}
+            </ChatInner>
             <ChatFormWrapper
                 onClick={onClickHandler}
                 onSubmit={onSubmitHandler}
@@ -180,11 +195,22 @@ const CloseBtn = styled.button`
     }
 `;
 
-const ChatInner = styled.div`
+const ChatInner = styled.ul`
     display: flex;
     flex-direction: column;
     background-color: #878787;
+    overflow-y: auto;
     flex: 1;
+    gap: 4px;
+    padding: 4px 20px;
+`;
+
+const Message = styled.li<{ isMine: boolean }>`
+    color: black;
+    background-color: ${(props) => (props.isMine ? "white" : "#ffeb3b")};
+    align-self: ${(props) => (props.isMine ? "flex-end" : "flex-start")};
+    padding: 8px 12px;
+    border-radius: 16px;
 `;
 
 const ChatFormWrapper = styled.form`
