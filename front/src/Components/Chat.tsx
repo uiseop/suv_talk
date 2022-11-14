@@ -6,7 +6,7 @@ import { ChatListsContext } from "../App";
 
 interface IChat {
     createdAt: string;
-    UserId: number;
+    ChatId: number;
     id: number;
     room_name: string;
     updatedAt: string;
@@ -31,8 +31,9 @@ const Chat = () => {
             axios
                 .get(`/chat/${chatId}`)
                 .then((res) => {
-                    const chat: IChat = res.data.chat;
-                    setRoomName(chat.room_name);
+                    const chat: IChat[] = res.data.chat;
+                    console.log(res, 'hahaha')
+                    setRoomName(chat[0].room_name);
                 })
                 .catch((err) => console.log(err));
         }

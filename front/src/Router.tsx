@@ -5,7 +5,7 @@ import Navigation from "./Components/Navigation";
 import AddItem from "./Pages/Addchat";
 import Chattings from "./Pages/Chattings";
 import Error from "./Pages/Error";
-import Items from "./Pages/Items";
+import Items from "./Pages/Users";
 import Login from "./Pages/Login";
 import MyInfo from "./Pages/MyInfo";
 
@@ -21,7 +21,7 @@ const Router = () => {
                     <Route path="/chattings" element={<Chattings />}>
                         <Route path=":chatId" element={<Chat />} />
                     </Route>
-                    <Route path="/myinfo" element={<MyInfo />}/>
+                    <Route path="/myinfo" element={<MyInfo />} />
                     <Route path="/*" element={<Error />} />
                 </Routes>
             </Main>

@@ -5,44 +5,62 @@ import User from "../models/user";
 
 const chatRouter = Router();
 
-chatRouter.post("/", isAuthenticated, (req: Request, res, next) => {
-    console.log(req.body, "1234");
+chatRouter.post("/", isAuthenticated, async (req: Request, res, next) => {
     const { room_name } = req.body;
-    const user = req.user;
+    const user = req.user as User;
     try {
-        (user as User)
-            .createChat({ room_name })
-            .then((chat) => {
-                console.log(chat);
-                chat.createChatItem().then((chatItem) =>
+        const chat = await user.getChat();
+        if (chat) {
+            // 해당 유저가 만든 채팅방들이 있지
+            // 다른 사람이 만든 방에 초대된 경우는 ?
+            chat.createChatItem({ room_name })
+                .then((chatItem) => {
                     res.status(201).json({
                         message: "채팅방이 생성되었습니다",
-                        chat,
-                    })
-                );
-            })
-            .catch((err) => {
-                console.log(err);
-                res.status(400).json({ err, message: "무언가 잘못됐다." });
-            });
+                        chatItem,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.status(400).json({
+                        err,
+                        message: "무언가 잘못됐다!!",
+                    });
+                });
+        } else {
+            user.createChat()
+                .then((chat) => {
+                    chat.createChatItem({ room_name }).then((chatItem) => {
+                        res.status(201).json({
+                            message: "채팅방이 생성되었습니다",
+                            chatItem,
+                        });
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.status(400).json({
+                        err,
+                        message: "무언가 잘못됐다!!",
+                    });
+                });
+        }
     } catch (err) {
-        console.log(err, " this is what i wnat");
-        res.status(400).json({
-            err,
-        });
+        next(err);
     }
 });
 
-chatRouter.get("/", (req: Request, res, next) => {
-    Chat.findAll({ where: { UserId: req.user?.id } })
+chatRouter.get("/", isAuthenticated, (req: Request, res, next) => {
+    const chat = req.chat as Chat;
+    chat.getChatItems()
         .then((response) => {
-            console.log(response);
             res.status(200).json({
                 message: "채팅방 조회가 완료되엇씁니다",
                 response,
             });
         })
         .catch((err) => {
+            console.log("ㅜㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ");
             res.status(400).json({
                 message: "무엇이 잘못됨",
             });
@@ -51,10 +69,11 @@ chatRouter.get("/", (req: Request, res, next) => {
 
 chatRouter.get("/:chatId", isAuthenticated, (req: Request, res, next) => {
     const { chatId } = req.params;
+    const chat = req.chat as Chat;
+    console.log(chatId)
 
-    Chat.findOne({ where: { id: chatId } })
+    chat.getChatItems({ where: { id: chatId } })
         .then((chat) => {
-            console.log(chat);
             res.status(200).json({
                 message: `채팅번호 ${chatId} 조회 완료`,
                 chat,
@@ -82,6 +101,11 @@ chatRouter.delete("/:chatId", isAuthenticated, (req: Request, res, next) => {
                 message: "삭제 오류 발생",
             })
         );
+});
+
+chatRouter.post("/:UserId", isAuthenticated, (req: Request, res, next) => {
+    const { UserId } = req.params;
+    Chat.findAll({ where: { UserId } }).then((chats) => {});
 });
 
 export default chatRouter;

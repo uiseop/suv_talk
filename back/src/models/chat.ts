@@ -3,6 +3,7 @@ import {
     DataTypes,
     ForeignKey,
     HasManyCreateAssociationMixin,
+    HasManyGetAssociationsMixin,
     InferAttributes,
     InferCreationAttributes,
     Model,
@@ -13,11 +14,12 @@ import User from "./user";
 
 class Chat extends Model<InferAttributes<Chat>, InferCreationAttributes<Chat>> {
     declare id: CreationOptional<number>;
-    declare room_name: string;
 
     declare UserId: ForeignKey<User["id"]>;
+    declare chatId: ForeignKey<ChatItem["id"]>;
 
     declare createChatItem: HasManyCreateAssociationMixin<ChatItem>;
+    declare getChatItems: HasManyGetAssociationsMixin<ChatItem>;
 }
 
 Chat.init(
@@ -26,10 +28,7 @@ Chat.init(
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-        },
-        room_name: {
-            type: DataTypes.STRING,
-        },
+        }
     },
     { sequelize }
 );

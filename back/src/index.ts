@@ -29,12 +29,23 @@ app.use((req: Request, res: Response, next: NextFunction) => {
             .then((user) => {
                 if (user) {
                     req.user = user;
+                    user.getChat().then((chat) => {
+                        if (!chat) {
+                            user.createChat().then((chat) => {
+                                req.chat = chat;
+                                next();
+                            });
+                        } else {
+                            req.chat = chat;
+                            next();
+                        }
+                    });
                 }
             })
             .catch((err) => {
                 console.log(err);
-            })
-            .finally(() => next());
+                next(err);
+            });
     } else {
         next();
     }
@@ -52,20 +63,20 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({ error, message: "이건 전역 에러 메시지야" });
 });
 
-User.hasMany(Message);
+User.hasMany(Message, { constraints: true, onDelete: "CASCADE" });
 Message.belongsTo(User);
 
-User.hasMany(Chat);
+User.hasOne(Chat, { constraints: true, onDelete: "CASCADE" });
 Chat.belongsTo(User);
 
-Chat.hasMany(ChatItem);
+Chat.hasMany(ChatItem, { constraints: true, onDelete: "CASCADE" });
 ChatItem.belongsTo(Chat);
 
 ChatItem.hasMany(Message);
 Message.belongsTo(ChatItem);
 
 ChatItem.hasMany(User);
-User.belongsTo(ChatItem);
+User.belongsTo(ChatItem, { constraints: true, onDelete: "CASCADE" });
 
 sequelize
     .sync({ force: false })

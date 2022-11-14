@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { UserContext } from "../App";
 import { Button, Card, Grid } from "../Common/Common";
 import Title from "../Components/Title";
 
@@ -13,16 +14,25 @@ interface IUser {
 
 const Items = () => {
     const [users, setUsers] = useState<IUser[]>([]);
+    const { user } = useContext(UserContext);
     useEffect(() => {
         axios
             .get("/user/all")
             .then((res) => {
-                console.log(res);
                 const { data: users } = res;
                 setUsers(users.users);
             })
             .catch((err) => console.log(err));
     }, []);
+
+    const onClickHandler = (otherUser: IUser) => {
+        const { uid, id } = otherUser;
+        if (uid === user) {
+            axios.post("/chat");
+        } else {
+            axios.post("/chat");
+        }
+    };
 
     return (
         <>
@@ -42,7 +52,12 @@ const Items = () => {
                                 <p>updatedAt: {user.updatedAt}</p>
                             </div>
                             <CardActions>
-                                <Button disabled={false}>채팅 시작하기</Button>
+                                <Button
+                                    onClick={(e) => onClickHandler(user)}
+                                    disabled={false}
+                                >
+                                    채팅 시작하기
+                                </Button>
                             </CardActions>
                         </Article>
                     ))}
