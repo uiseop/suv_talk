@@ -7,6 +7,7 @@ import { Button } from "../Common/Common";
 import Title from "../Components/Title";
 
 interface IChat {
+    chatId: number;
     createdAt: string;
     id: number;
     room_name: string;
@@ -30,7 +31,7 @@ const AddItem = () => {
             axios
                 .post("chat", { room_name: input })
                 .then((res) => {
-                    const chat: IChat = res.data.response;
+                    const chat: IChat = res.data.chatItem;
                     navigate(`/chattings/${chat.id}`, {
                         state: chat,
                     });

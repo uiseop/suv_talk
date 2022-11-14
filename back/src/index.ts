@@ -68,7 +68,7 @@ ChatItem.hasMany(User);
 User.belongsTo(ChatItem);
 
 sequelize
-    .sync({ force: true })
+    .sync({ force: false })
     .then((res) => {
         console.log(User);
         app.listen("8000", () => {

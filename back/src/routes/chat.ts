@@ -12,12 +12,14 @@ chatRouter.post("/", isAuthenticated, (req: Request, res, next) => {
     try {
         (user as User)
             .createChat({ room_name })
-            .then((response) => {
-                console.log(response);
-                res.status(201).json({
-                    message: "채팅방이 생성되었습니다",
-                    response,
-                });
+            .then((chat) => {
+                console.log(chat);
+                chat.createChatItem().then((chatItem) =>
+                    res.status(201).json({
+                        message: "채팅방이 생성되었습니다",
+                        chatItem,
+                    })
+                );
             })
             .catch((err) => {
                 console.log(err);
