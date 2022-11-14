@@ -28,7 +28,7 @@ const AddItem = () => {
                 return alert("로그인 후 이용해주세요");
             }
             axios
-                .post("chat", { room_name: input, user })
+                .post("chat", { room_name: input })
                 .then((res) => {
                     const chat: IChat = res.data.response;
                     navigate(`/chattings/${chat.id}`, {

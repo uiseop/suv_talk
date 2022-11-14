@@ -1,24 +1,33 @@
 import {
+    CreationOptional,
     DataTypes,
+    HasManyCreateAssociationMixin,
     InferAttributes,
     InferCreationAttributes,
     Model,
 } from "sequelize";
 import sequelize from "../../util/database";
+import ChatItem from "./chat_item";
 
-interface ChatModel
-    extends Model<
-        InferAttributes<ChatModel>,
-        InferCreationAttributes<ChatModel>
-    > {
-    room_name: string;
+class Chat extends Model<InferAttributes<Chat>, InferCreationAttributes<Chat>> {
+    declare id: CreationOptional<number>;
+    declare room_name: string;
+
+    declare createChatItem: HasManyCreateAssociationMixin<ChatItem>;
 }
 
-const Chat = sequelize.define<ChatModel>("chat", {
-    room_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+Chat.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        room_name: {
+            type: DataTypes.STRING,
+        },
     },
-});
+    { sequelize }
+);
 
 export default Chat;

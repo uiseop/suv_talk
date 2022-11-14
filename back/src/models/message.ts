@@ -1,4 +1,5 @@
 import {
+    CreationOptional,
     DataTypes,
     InferAttributes,
     InferCreationAttributes,
@@ -6,19 +7,27 @@ import {
 } from "sequelize";
 import sequelize from "../../util/database";
 
-interface MessageModel
-    extends Model<
-        InferAttributes<MessageModel>,
-        InferCreationAttributes<MessageModel>
-    > {
-    message: string;
+class Message extends Model<
+    InferAttributes<Message>,
+    InferCreationAttributes<Message>
+> {
+    declare id: CreationOptional<number>;
+    declare message: string;
 }
 
-const Message = sequelize.define<MessageModel>("message", {
-    message: {
-        type: DataTypes.STRING,
-        allowNull: false,
+Message.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        message: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
     },
-});
+    { sequelize }
+);
 
 export default Message;

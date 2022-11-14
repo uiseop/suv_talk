@@ -5,7 +5,7 @@ const userRouter = Router();
 
 userRouter.post("/join", async (req, res, next) => {
     try {
-        const { uid } = req.body;
+        const { uid }: { uid: string } = req.body;
         let user = await User.findOne({ where: { uid } });
         res.cookie("access-token", uid);
         if (user) {

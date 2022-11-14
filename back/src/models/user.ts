@@ -1,21 +1,34 @@
 import {
     DataTypes,
+    HasManyCreateAssociationMixin,
     InferAttributes,
     InferCreationAttributes,
     Model,
+    CreationOptional,
 } from "sequelize";
 import sequelize from "../../util/database";
+import Chat from "./chat";
 
-export interface UserModel
-    extends Model<
-        InferAttributes<UserModel>,
-        InferCreationAttributes<UserModel>
-    > {
-    uid: string;
+class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+    declare id: CreationOptional<number>;
+    declare uid: string;
+
+    declare createChat: HasManyCreateAssociationMixin<Chat>;
 }
 
-const User = sequelize.define<UserModel>("user", {
-    uid: { type: DataTypes.STRING, allowNull: false },
-});
+User.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        uid: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    },
+    { sequelize }
+);
 
 export default User;

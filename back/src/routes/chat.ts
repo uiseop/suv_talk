@@ -1,24 +1,34 @@
 import { Request, Router } from "express";
 import isAuthenticated from "../middlewares/isAuthenticated";
 import Chat from "../models/chat";
+import User from "../models/user";
 
 const chatRouter = Router();
 
 chatRouter.post("/", isAuthenticated, (req: Request, res, next) => {
-    console.log(req.body);
-    const { room_name, user } = req.body;
-    Chat.create({ room_name })
-        .then((response) => {
-            response;
-            res.status(201).json({
-                message: "채팅방이 생성되었습니다",
-                response,
+    console.log(req.body, "1234");
+    const { room_name } = req.body;
+    const user = req.user;
+    try {
+        (user as User)
+            .createChat({ room_name })
+            .then((response) => {
+                console.log(response);
+                res.status(201).json({
+                    message: "채팅방이 생성되었습니다",
+                    response,
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(400).json({ err, message: "무언가 잘못됐다." });
             });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(400).json({ message: "무언가 잘못됐다." });
+    } catch (err) {
+        console.log(err, " this is what i wnat");
+        res.status(400).json({
+            err,
         });
+    }
 });
 
 chatRouter.get("/", (req: Request, res, next) => {
