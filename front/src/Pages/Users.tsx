@@ -38,8 +38,9 @@ const Items = () => {
 
     const onClickHandler = (otherUser: IUser) => {
         const { uid, id } = otherUser;
-        if (uid === user) {
+        if (uid === user.uid) {
             axios.post(`/chat/${uid}/self`).then((res) => {
+                console.log(res);
                 const chat: IChat = res.data.chatItem;
                 navigate(`/chattings/${chat.id}`, {
                     state: chat,

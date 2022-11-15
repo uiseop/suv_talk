@@ -28,7 +28,7 @@ const Login = () => {
     const { user, handleLogIn } = useContext(UserContext);
 
     useEffect(() => {
-        if (user) {
+        if (user.id) {
             navigate("/", { replace: true });
         }
     }, [user]);
@@ -73,7 +73,7 @@ const Login = () => {
                             duration: 3000,
                             isClosable: true,
                         });
-                        handleLogIn(res.data["access-token"]);
+                        handleLogIn(res.data["access-token"], res.data.id);
                         navigate("/", { replace: true });
                     })
                     .catch((err) => {

@@ -8,13 +8,13 @@ const MyInfo = () => {
     const { user, handleLogOut } = useContext(UserContext);
     const navigate = useNavigate();
     useEffect(() => {
-        if (!user) {
+        if (!user.id) {
             navigate("/");
         }
     }, [user]);
     return (
         <>
-            <Header>{user}</Header>
+            <Header>{user.uid}</Header>
             <Button onClick={handleLogOut}>로그아웃</Button>
         </>
     );

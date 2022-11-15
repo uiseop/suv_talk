@@ -52,6 +52,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+app.use((req, res, next) => {
+    console.log("hello?");
+    next();
+});
+
 app.use("/test", testRouter);
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
@@ -75,7 +80,7 @@ Chat.hasMany(ChatItem, { constraints: true, onDelete: "CASCADE" });
 ChatItem.belongsTo(Chat);
 
 ChatItem.hasMany(Message, { constraints: true, onDelete: "CASCADE" });
-Message.belongsTo(ChatItem , { constraints: true, onDelete: "CASCADE" });
+Message.belongsTo(ChatItem, { constraints: true, onDelete: "CASCADE" });
 
 ChatItem.hasMany(User);
 User.belongsTo(ChatItem, { constraints: true, onDelete: "CASCADE" });

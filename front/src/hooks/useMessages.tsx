@@ -15,7 +15,7 @@ const initialState: IMessage[] = [];
 
 enum MessagesActionType {
     GET = "GET",
-    UPDATE = "UPDATE",
+    PUSH = "PUSH",
 }
 
 type MessageAction =
@@ -24,7 +24,7 @@ type MessageAction =
           messages: IMessage[];
       }
     | {
-          type: MessagesActionType.UPDATE;
+          type: MessagesActionType.PUSH;
           message: IMessage;
       };
 
@@ -34,9 +34,10 @@ const reducer = (state: MessageState, action: MessageAction) => {
     switch (action.type) {
         case MessagesActionType.GET:
             return action.messages;
-        case MessagesActionType.UPDATE:
-            state.push(action.message);
-            return state;
+        case MessagesActionType.PUSH:
+            console.log(action.message ,' this is message')
+            const new_State = state.concat(action.message);
+            return new_State;
         default:
             throw new Error("Invalid Action Type");
     }
@@ -44,7 +45,6 @@ const reducer = (state: MessageState, action: MessageAction) => {
 
 const useMessages = () => {
     const [messages, dispatch] = useReducer(reducer, initialState);
-    const { user } = useContext(UserContext);
 
     const getMessages = useCallback((chatId: number, page: number) => {
         axios.get(`/message/${chatId}/${page}`).then((res) => {
@@ -56,7 +56,11 @@ const useMessages = () => {
         });
     }, []);
 
-    return { messages, getMessages };
+    const pushMessage = useCallback((message: IMessage) => {
+        dispatch({ type: MessagesActionType.PUSH, message });
+    }, []);
+
+    return { messages, getMessages, pushMessage };
 };
 
 export default useMessages;

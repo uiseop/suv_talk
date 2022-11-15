@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ChatListsContext, MessageContext } from "../App";
+import { ChatListsContext, MessageContext, UserContext } from "../App";
 
 interface IChat {
     createdAt: string;
@@ -20,7 +20,8 @@ const Chat = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { deleteOneChatList } = useContext(ChatListsContext);
-    const { messages, getMessages } = useContext(MessageContext);
+    const { messages, getMessages, pushMessage } = useContext(MessageContext);
+    const { user } = useContext(UserContext);
 
     const { state, pathname }: { state: IChat; pathname: string } = location;
     const chatId = pathname.split("/")[2];
@@ -40,8 +41,6 @@ const Chat = () => {
         innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);
         getMessages(Number(chatId), 0);
     }, [location]);
-
-    console.log(messages)
 
     const onCloseHandler = () => {
         navigate("../");
@@ -76,9 +75,10 @@ const Chat = () => {
 
     const onSubmitHandler = (e: React.FormEvent) => {
         e.preventDefault();
-        axios
-            .post(`/message/${chatId}`, { message: input })
-            .then((res) => console.log(res));
+        axios.post(`/message/${chatId}`, { message: input }).then((res) => {
+            const { data: message } = res;
+            pushMessage(message.message);
+        });
         setInput("");
     };
 
@@ -108,7 +108,7 @@ const Chat = () => {
                     ? messages.map((message) => (
                           <Message
                               key={message.id}
-                              isMine={message.id % 2 === 0 ? true : false}
+                              isMine={user.id == message.UserId}
                           >
                               {message.message}
                           </Message>

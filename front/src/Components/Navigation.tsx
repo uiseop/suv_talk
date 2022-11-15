@@ -20,9 +20,9 @@ const Navigation = () => {
                     </Item>
                 </ItemLists>
                 <ItemLists>
-                    {user ? (
+                    {user.id ? (
                         <Item>
-                            <NavLink to={"/myinfo"}>{user}</NavLink>
+                            <NavLink to={"/myinfo"}>{user.uid}</NavLink>
                         </Item>
                     ) : (
                         <Item>

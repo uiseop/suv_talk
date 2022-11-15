@@ -15,6 +15,7 @@ userRouter.post("/join", async (req, res, next) => {
             res.status(200).json({
                 message: "기존 아이디로 로그인 되었습니다 확인점요",
                 "access-token": user.uid,
+                id: user.id,
             });
         } else {
             user = await User.create({ uid });
@@ -22,6 +23,7 @@ userRouter.post("/join", async (req, res, next) => {
             res.status(200).json({
                 message: "새로운 아이디로 로그인 되었습니다 확인점요",
                 "access-token": user.uid,
+                id: user.id,
             });
         }
     } catch (err) {

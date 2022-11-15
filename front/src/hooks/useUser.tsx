@@ -1,26 +1,38 @@
 import { useCallback, useReducer } from "react";
 import { deleteCookie, getCookie } from "../utils/cookie";
 
-const initialState = getCookie("access-token");
+const initialState = {
+    uid: getCookie("access-token"),
+    id: null,
+};
 
 enum UserActionType {
     LOGIN = "LOGIN",
     LOGOUT = "LOGOUT",
 }
 
-type UserState = string;
+interface UserState {
+    uid: string | null;
+    id: number | null;
+};
 
 type UserAction =
-    | { type: UserActionType.LOGIN; username: string }
+    | { type: UserActionType.LOGIN; username: string; id: number }
     | { type: UserActionType.LOGOUT };
 
-const reducer = (state: UserState, action: UserAction): string => {
+const reducer = (state: UserState, action: UserAction) => {
     switch (action.type) {
         case UserActionType.LOGIN:
-            return action.username;
+            return {
+                uid: action.username,
+                id: action.id,
+            };
         case UserActionType.LOGOUT:
             deleteCookie("access-token");
-            return "";
+            return {
+                uid: null,
+                id: null,
+            };
         default:
             throw new Error("Invaid action tpye");
     }
@@ -28,8 +40,8 @@ const reducer = (state: UserState, action: UserAction): string => {
 const useUser = () => {
     const [user, dispatch] = useReducer(reducer, initialState);
 
-    const handleLogIn = useCallback((username: string) => {
-        dispatch({ type: UserActionType.LOGIN, username });
+    const handleLogIn = useCallback((username: string, id: number) => {
+        dispatch({ type: UserActionType.LOGIN, username, id });
     }, []);
 
     const handleLogOut = useCallback(() => {

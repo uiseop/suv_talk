@@ -33,9 +33,14 @@ interface IChat {
     updatedAt: string;
 }
 
+interface UserState {
+    uid: string | null;
+    id: number | null;
+};
+
 export const UserContext = createContext({
-    user: "",
-    handleLogIn: (username: string) => {},
+    user: { uid: null, id: null } as UserState,
+    handleLogIn: (username: string, id: number) => {},
     handleLogOut: () => {},
 });
 
@@ -48,6 +53,7 @@ export const ChatListsContext = createContext({
 export const MessageContext = createContext({
     messages: [] as IMessage[],
     getMessages: (chatId: number, page: number) => {},
+    pushMessage: (message: IMessage) => {},
 });
 
 const App = () => {
