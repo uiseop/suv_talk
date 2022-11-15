@@ -12,6 +12,7 @@ userRouter.post("/join", async (req, res, next) => {
             console.log(
                 "이미 동일한 아이디가 존재합니다. 존재하는 아이디로 로그인을 합니다"
             );
+            res.cookie("id", user.id)
             res.status(200).json({
                 message: "기존 아이디로 로그인 되었습니다 확인점요",
                 "access-token": user.uid,
@@ -19,6 +20,7 @@ userRouter.post("/join", async (req, res, next) => {
             });
         } else {
             user = await User.create({ uid });
+            res.cookie("id", user.id)
             console.log("새로운 아이디가 생성되었습니다");
             res.status(200).json({
                 message: "새로운 아이디로 로그인 되었습니다 확인점요",

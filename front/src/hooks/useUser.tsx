@@ -3,7 +3,7 @@ import { deleteCookie, getCookie } from "../utils/cookie";
 
 const initialState = {
     uid: getCookie("access-token"),
-    id: null,
+    id: Number(getCookie("id")),
 };
 
 enum UserActionType {
@@ -14,7 +14,7 @@ enum UserActionType {
 interface UserState {
     uid: string | null;
     id: number | null;
-};
+}
 
 type UserAction =
     | { type: UserActionType.LOGIN; username: string; id: number }
@@ -29,6 +29,7 @@ const reducer = (state: UserState, action: UserAction) => {
             };
         case UserActionType.LOGOUT:
             deleteCookie("access-token");
+            deleteCookie("id");
             return {
                 uid: null,
                 id: null,

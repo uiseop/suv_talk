@@ -42,6 +42,10 @@ const Chat = () => {
         getMessages(Number(chatId), 0);
     }, [location]);
 
+    useEffect(() => {
+        innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);
+    }, [messages]);
+
     const onCloseHandler = () => {
         navigate("../");
     };
@@ -68,7 +72,6 @@ const Chat = () => {
         if (e.key === "Enter" && e.shiftKey) {
             return;
         } else if (e.key === "Enter") {
-            alert("heelo!! 이제 메시지를 보내면 돼");
             onSubmitHandler(e);
         }
     };
@@ -212,6 +215,7 @@ const Message = styled.li<{ isMine: boolean }>`
     align-self: ${(props) => (props.isMine ? "flex-end" : "flex-start")};
     padding: 8px 12px;
     border-radius: 16px;
+    max-width: 50%;
 `;
 
 const ChatFormWrapper = styled.form`
