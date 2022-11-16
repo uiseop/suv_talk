@@ -1,11 +1,14 @@
 import {
     CreationOptional,
     DataTypes,
+    HasManyGetAssociationsMixin,
     InferAttributes,
     InferCreationAttributes,
     Model,
 } from "sequelize";
 import sequelize from "../../util/database";
+import ChatItem from "./chat_item";
+import Message from "./message";
 
 class Chat extends Model<InferAttributes<Chat>, InferCreationAttributes<Chat>> {
     declare id: CreationOptional<number>;
@@ -15,6 +18,9 @@ class Chat extends Model<InferAttributes<Chat>, InferCreationAttributes<Chat>> {
     declare createdAt: CreationOptional<Date>;
     // updatedAt can be undefined during creation
     declare updatedAt: CreationOptional<Date>;
+
+    declare getChatItems: HasManyGetAssociationsMixin<ChatItem>;
+    declare getMessages: HasManyGetAssociationsMixin<Message>;
 }
 
 Chat.init(
