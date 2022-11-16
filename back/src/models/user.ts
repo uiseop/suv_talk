@@ -1,24 +1,19 @@
 import {
     DataTypes,
-    HasManyCreateAssociationMixin,
     InferAttributes,
     InferCreationAttributes,
     Model,
     CreationOptional,
-    HasOneGetAssociationMixin,
-    HasOneCreateAssociationMixin,
+    HasManyGetAssociationsMixin,
 } from "sequelize";
 import sequelize from "../../util/database";
-import Chat from "./chat";
-import Message from "./message";
+import ChatItem from "./chat_item";
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare id: CreationOptional<number>;
-    declare uid: string;
+    declare nickname: string;
 
-    declare createChat: HasOneCreateAssociationMixin<Chat>;
-    declare getChat: HasOneGetAssociationMixin<Chat>;
-    declare createMessage: HasManyCreateAssociationMixin<Message>;
+    declare getChatItems: HasManyGetAssociationsMixin<ChatItem>;
 }
 
 User.init(
@@ -28,7 +23,7 @@ User.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        uid: {
+        nickname: {
             type: DataTypes.STRING,
             allowNull: false,
         },

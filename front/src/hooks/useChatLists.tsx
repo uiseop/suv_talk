@@ -39,6 +39,7 @@ const useChatLists = () => {
             .get("/chat")
             .then((res) => {
                 const { data: response } = res;
+                console.log(response)
                 return dispatch({
                     type: ChatListActionType.GET,
                     chatLists: response.response,

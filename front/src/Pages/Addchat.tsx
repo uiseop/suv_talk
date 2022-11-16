@@ -32,7 +32,6 @@ const AddItem = () => {
                 .post("chat", { room_name: input })
                 .then((res) => {
                     const chat: IChat = res.data.chatItem;
-                    console.log(chat, "haha");
                     navigate(`/chattings/${chat.id}`, {
                         state: chat,
                     });

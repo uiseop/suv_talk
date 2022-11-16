@@ -47,7 +47,13 @@ const Items = () => {
                 });
             });
         } else {
-            axios.post(`/chat/${uid}`);
+            axios.post(`/chat/${uid}`).then((res) => {
+                console.log(res);
+                const chat: IChat = res.data.chatItem;
+                navigate(`/chattings/${chat.id}`, {
+                    state: chat,
+                });
+            });
         }
     };
 

@@ -119,10 +119,12 @@ chatRouter.post("/:UserId/self", isAuthenticated, (req: Request, res, next) => {
             } else {
                 chat.createChatItem({ room_name: "나와의 채팅" }).then(
                     (chatItem) => {
-                        res.status(201).json({
-                            message: "새로운 나와의 채팅이 시작됩니다",
-                            chatItem,
-                        });
+                        chatItem.addUser(user).then(() =>
+                            res.status(201).json({
+                                message: "새로운 나와의 채팅이 시작됩니다",
+                                chatItem,
+                            })
+                        );
                     }
                 );
             }
@@ -134,6 +136,65 @@ chatRouter.post("/:UserId/self", isAuthenticated, (req: Request, res, next) => {
 
 chatRouter.post("/:UserId", isAuthenticated, (req: Request, res, next) => {
     const { UserId } = req.params;
+    const { user, chat } = req;
+    User.findOne({ where: { uid: UserId } }).then((chatUser) => {
+        if (chatUser) {
+            chat?.getChatItems().then((chatItems) => {
+                let flag = false;
+                console.log(`###########################
+                HELOO
+                ###########################
+                `);
+                console.log(chatItems);
+                if (chatItems.length > 0) {
+                    for (let chatItem of chatItems) {
+                        console.log(chatItem, "hahahahahha");
+                        chatItem
+                            .getUsers()
+                            .then((users) => {
+                                console.log(users);
+                                if (
+                                    users.every(
+                                        (u) => u.uid === UserId || user === u
+                                    )
+                                ) {
+                                    flag = true;
+                                    res.status(200).json({
+                                        message: `${UserId}님과의 기존 채팅방으로 돌아갑니다`,
+                                        chatItem,
+                                    });
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    }
+                } else if (!flag) {
+                    chat?.createChatItem({
+                        room_name: `${UserId}님과의 채팅`,
+                    }).then((chatItem) => {
+                        chatItem.getUsers().then((users) => {
+                            console.log(users)
+                            chatUser.getChat().then((chat) =>
+                                chat.addChatItem(chatItem).then(() => {
+                                    res.status(200).json({
+                                        message: `${UserId}님과의 새로운 채팅방으로 돌아갑니다`,
+                                        chatItem,
+                                    });
+                                })
+                            );
+                        })
+                        // chatItem.addUser(chatUser).then(() => {
+                        // });
+                    });
+                }
+            });
+        } else {
+            return res.status(400).json({
+                message: "존재하지 않는 유저",
+            });
+        }
+    });
 });
 
 export default chatRouter;

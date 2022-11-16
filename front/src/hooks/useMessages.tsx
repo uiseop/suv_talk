@@ -35,7 +35,6 @@ const reducer = (state: MessageState, action: MessageAction) => {
         case MessagesActionType.GET:
             return action.messages;
         case MessagesActionType.PUSH:
-            console.log(action.message ,' this is message')
             const new_State = state.concat(action.message);
             return new_State;
         default:
@@ -48,7 +47,6 @@ const useMessages = () => {
 
     const getMessages = useCallback((chatId: number, page: number) => {
         axios.get(`/message/${chatId}/${page}`).then((res) => {
-            console.log(res, "이것이 내가 원하는 결과다");
             dispatch({
                 type: MessagesActionType.GET,
                 messages: res.data.messages,

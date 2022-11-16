@@ -9,7 +9,6 @@ import Message from "./models/message";
 import User from "./models/user";
 import chatRouter from "./routes/chat";
 import messageRouter from "./routes/message";
-import testRouter from "./routes/test";
 import userRouter from "./routes/user";
 
 const app = express();
@@ -52,12 +51,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-app.use((req, res, next) => {
-    console.log("hello?");
-    next();
-});
-
-app.use("/test", testRouter);
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
 app.use("/message", messageRouter);

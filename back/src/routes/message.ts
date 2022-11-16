@@ -32,11 +32,10 @@ messageRouter.get(
         const { user, chat } = req;
         ChatItem.findByPk(chatId)
             .then((chatItem) => {
-                console.log(chatItem, "haha");
                 chatItem?.getMessages().then((messages) => {
                     res.status(200).json({
                         message: " 잘 온다야",
-                        messages
+                        messages,
                     });
                 });
             })

@@ -7,6 +7,7 @@ import {
     Model,
 } from "sequelize";
 import sequelize from "../../util/database";
+import Chat from "./chat";
 import User from "./user";
 
 class Message extends Model<
@@ -16,7 +17,13 @@ class Message extends Model<
     declare id: CreationOptional<number>;
     declare message: string;
 
+    // createdAt can be undefined during creation
+    declare createdAt: CreationOptional<Date>;
+    // updatedAt can be undefined during creation
+    declare updatedAt: CreationOptional<Date>;
+
     declare userId: ForeignKey<User["id"]>;
+    declare chatId: ForeignKey<Chat["id"]>;
 }
 
 Message.init(
@@ -30,6 +37,8 @@ Message.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        createdAt: DataTypes.DATE,
+        updatedAt: DataTypes.DATE,
     },
     { sequelize }
 );

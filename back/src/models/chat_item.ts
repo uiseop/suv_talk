@@ -19,12 +19,9 @@ class ChatItem extends Model<
     InferCreationAttributes<ChatItem>
 > {
     declare id: CreationOptional<number>;
-    declare room_name: string;
 
-    declare hasUser: HasManyHasAssociationMixin<User, number>;
-    declare addUser: HasManyAddAssociationMixin<User, number>;
-    declare addMessage: HasManyAddAssociationMixin<Message, number>;
-    declare getMessages: HasManyGetAssociationsMixin<Message>;
+    declare userId: ForeignKey<User["id"]>;
+    declare chatId: ForeignKey<Chat["id"]>;
 }
 
 ChatItem.init(
@@ -33,9 +30,6 @@ ChatItem.init(
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-        },
-        room_name: {
-            type: DataTypes.STRING,
         },
     },
     { sequelize }
