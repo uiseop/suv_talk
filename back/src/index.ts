@@ -23,32 +23,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    const uid = req.cookies["access-token"];
-    if (uid) {
-        User.findOne({ where: { uid } })
-            .then((user) => {
-                if (user) {
-                    req.user = user;
-                    user.getChat().then((chat) => {
-                        if (!chat) {
-                            user.createChat().then((chat) => {
-                                req.chat = chat;
-                                next();
-                            });
-                        } else {
-                            req.chat = chat;
-                            next();
-                        }
-                    });
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-                next(err);
-            });
-    } else {
-        next();
-    }
+    next()
 });
 
 app.use("/user", userRouter);
