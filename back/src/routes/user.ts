@@ -33,9 +33,20 @@ userRouter.post("/join", (req: Request, res, next) => {
         })
         .catch((err) => {
             console.log(err);
-            res.status(500).json({
-                message: "서버 일시적 오류",
+            next(err);
+        });
+});
+
+userRouter.get("/all", (req: Request, res, next) => {
+    User.findAll()
+        .then((users) => {
+            res.status(200).json({
+                message: "유저 조회 완료!",
+                users,
             });
+        })
+        .catch((err) => {
+            next(err);
         });
 });
 
