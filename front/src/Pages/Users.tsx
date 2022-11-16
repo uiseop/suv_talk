@@ -9,7 +9,7 @@ import Title from "../Components/Title";
 interface IUser {
     createdAt: string;
     id: number;
-    uid: string;
+    nickname: string;
     updatedAt: string;
 }
 
@@ -37,9 +37,9 @@ const Items = () => {
     }, []);
 
     const onClickHandler = (otherUser: IUser) => {
-        const { uid, id } = otherUser;
-        if (uid === user.uid) {
-            axios.post(`/chat/${uid}/self`).then((res) => {
+        const { nickname, id } = otherUser;
+        if (nickname === user.nickname) {
+            axios.post(`/chat/${nickname}/self`).then((res) => {
                 console.log(res);
                 const chat: IChat = res.data.chatItem;
                 navigate(`/chattings/${chat.id}`, {
@@ -47,7 +47,7 @@ const Items = () => {
                 });
             });
         } else {
-            axios.post(`/chat/${uid}`).then((res) => {
+            axios.post(`/chat/${nickname}`).then((res) => {
                 console.log(res);
                 const chat: IChat = res.data.chatItem;
                 navigate(`/chattings/${chat.id}`, {
@@ -65,7 +65,7 @@ const Items = () => {
                     {users.map((user) => (
                         <Article key={user.id}>
                             <Header>
-                                <h1>{user.uid}</h1>
+                                <h1>{user.nickname}</h1>
                             </Header>
                             <CardImage>
                                 <img alt={user.id.toString()} />

@@ -34,12 +34,12 @@ interface IChat {
 }
 
 interface UserState {
-    uid: string | null;
+    nickname: string | null;
     id: number | null;
-};
+}
 
 export const UserContext = createContext({
-    user: { uid: null, id: null } as UserState,
+    user: { nickname: null, id: null } as UserState,
     handleLogIn: (username: string, id: number) => {},
     handleLogOut: () => {},
 });

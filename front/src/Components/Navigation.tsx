@@ -22,7 +22,7 @@ const Navigation = () => {
                 <ItemLists>
                     {user.id ? (
                         <Item>
-                            <NavLink to={"/myinfo"}>{user.uid}</NavLink>
+                            <NavLink to={"/myinfo"}>{user.nickname}</NavLink>
                         </Item>
                     ) : (
                         <Item>

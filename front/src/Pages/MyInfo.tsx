@@ -14,7 +14,7 @@ const MyInfo = () => {
     }, [user]);
     return (
         <>
-            <Header>{user.uid}</Header>
+            <Header>{user.nickname}</Header>
             <Button onClick={handleLogOut}>로그아웃</Button>
         </>
     );

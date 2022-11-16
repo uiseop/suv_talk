@@ -2,7 +2,7 @@ import { useCallback, useReducer } from "react";
 import { deleteCookie, getCookie } from "../utils/cookie";
 
 const initialState = {
-    uid: getCookie("access-token"),
+    nickname: getCookie("access-token"),
     id: Number(getCookie("id")),
 };
 
@@ -12,7 +12,7 @@ enum UserActionType {
 }
 
 interface UserState {
-    uid: string | null;
+    nickname: string | null;
     id: number | null;
 }
 
@@ -24,14 +24,14 @@ const reducer = (state: UserState, action: UserAction) => {
     switch (action.type) {
         case UserActionType.LOGIN:
             return {
-                uid: action.username,
+                nickname: action.username,
                 id: action.id,
             };
         case UserActionType.LOGOUT:
             deleteCookie("access-token");
             deleteCookie("id");
             return {
-                uid: null,
+                nickname: null,
                 id: null,
             };
         default:

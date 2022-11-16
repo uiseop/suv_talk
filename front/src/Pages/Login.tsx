@@ -14,7 +14,7 @@ import { useEffect, useContext } from "react";
 import { UserContext } from "../App";
 
 interface IFormValues {
-    uid: string;
+    nickname: string;
 }
 
 const Login = () => {
@@ -63,12 +63,12 @@ const Login = () => {
                 );
                 axios
                     .post("/user/join", {
-                        uid: data.uid,
+                        nickname: data.nickname,
                     })
                     .then((res) => {
                         toast({
                             title: `로그인이 완료되었습니다!`,
-                            description: `${data.uid}님 환영합니다!`,
+                            description: `${data.nickname}님 환영합니다!`,
                             status: "success",
                             duration: 3000,
                             isClosable: true,
@@ -94,15 +94,15 @@ const Login = () => {
 
     return (
         <LoginForm onSubmit={handleSubmit(onSubmit)}>
-            <FormControl isInvalid={errors.uid?.type === "required"}>
+            <FormControl isInvalid={errors.nickname?.type === "required"}>
                 <FormLabel htmlFor="name">이름</FormLabel>
                 <Input
                     id="name"
                     placeholder="name"
-                    {...register("uid", { required: true })}
+                    {...register("nickname", { required: true })}
                 />
 
-                {errors.uid?.type === "required" && (
+                {errors.nickname?.type === "required" && (
                     <FormErrorMessage>이름은 필수입니다</FormErrorMessage>
                 )}
             </FormControl>
