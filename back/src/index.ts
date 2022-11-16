@@ -66,17 +66,14 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 User.hasMany(Message, { constraints: true, onDelete: "CASCADE" });
 Message.belongsTo(User);
 
-User.hasOne(Chat, { constraints: true, onDelete: "CASCADE" });
-Chat.belongsTo(User);
+User.hasMany(ChatItem, { constraints: true, onDelete: "CASCADE" });
+ChatItem.belongsTo(User);
+
+Chat.hasMany(Message, { constraints: true, onDelete: "CASCADE" });
+Message.belongsTo(Chat);
 
 Chat.hasMany(ChatItem, { constraints: true, onDelete: "CASCADE" });
 ChatItem.belongsTo(Chat);
-
-ChatItem.hasMany(Message, { constraints: true, onDelete: "CASCADE" });
-Message.belongsTo(ChatItem, { constraints: true, onDelete: "CASCADE" });
-
-ChatItem.hasMany(User);
-User.belongsTo(ChatItem, { constraints: true, onDelete: "CASCADE" });
 
 sequelize
     .sync({ force: false })
