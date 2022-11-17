@@ -2,28 +2,23 @@ import { dbType } from ".";
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../../util/database";
 import Chat from "./chat";
-import ChatItem from "./chat_user";
 import Message from "./message";
+import User from "./user";
 
-class User extends Model {
+class ChatUser extends Model {
     public readonly id!: number;
-    public nickname!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+
+    public userId!: number;
+    public chatId!: number;
 }
 
-User.init(
-    {
-        nickname: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    },
-    { sequelize }
-);
+ChatUser.init({}, { sequelize });
 
 export const associate = (db: dbType) => {
-    db.User.hasMany(db.ChatUser)
+    db.ChatUser.belongsTo(db.User);
+    db.ChatUser.belongsTo(db.Chat);
 };
 
-export default User;
+export default ChatUser;

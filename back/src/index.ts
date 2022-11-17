@@ -2,9 +2,9 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors, { CorsOptions } from "cors";
 import express, { NextFunction, Request, Response } from "express";
-import sequelize from "../util/database";
+import { sequelize } from "./models";
 import Chat from "./models/chat";
-import ChatItem from "./models/chat_item";
+import ChatItem from "./models/chat_user";
 import Message from "./models/message";
 import User from "./models/user";
 import chatRouter from "./routes/chat";
@@ -23,7 +23,17 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    next()
+    const { id } = req.cookies;
+    if (id) {
+        User.findByPk(id).then((user) => {
+            if (user) {
+                req.user = user;
+            }
+            next();
+        });
+    } else {
+        next();
+    }
 });
 
 app.use("/user", userRouter);
@@ -34,25 +44,18 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).send("<h1>Page not Fount 404 Error</h1>");
 });
 
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-    res.status(500).json({ error, message: "이건 전역 에러 메시지야" });
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.log(error);
+    res.status(500).json({
+        error: error.message,
+        message: "이건 전역 에러 메시지야",
+    });
 });
-
-User.hasMany(Message, { constraints: true, onDelete: "CASCADE" });
-Message.belongsTo(User);
-
-User.hasMany(ChatItem, { constraints: true, onDelete: "CASCADE" });
-ChatItem.belongsTo(User);
-
-Chat.hasMany(Message, { constraints: true, onDelete: "CASCADE" });
-Message.belongsTo(Chat);
-
-Chat.hasMany(ChatItem, { constraints: true, onDelete: "CASCADE" });
-ChatItem.belongsTo(Chat);
 
 sequelize
     .sync({ force: false })
     .then((res) => {
+        console.log(ChatItem.options);
         app.listen("8000", () => {
             console.log(`
                 #############################################

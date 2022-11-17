@@ -5,4 +5,5 @@ const sequelize = new Sequelize("suv_talk", "root", "1234", {
     host: "localhost",
 });
 
+export { sequelize };
 export default sequelize;

@@ -1,26 +1,23 @@
 import {
     CreationOptional,
     DataTypes,
+    HasManyCreateAssociationMixin,
     HasManyGetAssociationsMixin,
     InferAttributes,
     InferCreationAttributes,
     Model,
 } from "sequelize";
 import sequelize from "../../util/database";
-import ChatItem from "./chat_item";
+import ChatItem from "./chat_user";
 import Message from "./message";
+import { dbType } from '.';
 
-class Chat extends Model<InferAttributes<Chat>, InferCreationAttributes<Chat>> {
-    declare id: CreationOptional<number>;
-    declare chatName: string;
+class Chat extends Model {
+    public readonly id!: number;
+    public chatName!: string;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 
-    // createdAt can be undefined during creation
-    declare createdAt: CreationOptional<Date>;
-    // updatedAt can be undefined during creation
-    declare updatedAt: CreationOptional<Date>;
-
-    declare getChatItems: HasManyGetAssociationsMixin<ChatItem>;
-    declare getMessages: HasManyGetAssociationsMixin<Message>;
 }
 
 Chat.init(
@@ -39,5 +36,9 @@ Chat.init(
     },
     { sequelize }
 );
+
+export const associate = (db: dbType) => {
+    db.Chat.hasMany(db.ChatUser)
+}
 
 export default Chat;

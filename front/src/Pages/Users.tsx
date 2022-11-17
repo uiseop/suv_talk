@@ -37,24 +37,24 @@ const Items = () => {
     }, []);
 
     const onClickHandler = (otherUser: IUser) => {
-        const { nickname, id } = otherUser;
-        if (nickname === user.nickname) {
-            axios.post(`/chat/${nickname}/self`).then((res) => {
-                console.log(res);
-                const chat: IChat = res.data.chatItem;
-                navigate(`/chattings/${chat.id}`, {
-                    state: chat,
-                });
+        const { id } = otherUser;
+        // if (id === user.id) {
+        //     axios.post(`/chat/${id}/self`).then((res) => {
+        //         console.log(res);
+        //         const chat: IChat = res.data.chatItem;
+        //         navigate(`/chattings/${chat.id}`, {
+        //             state: chat,
+        //         });
+        //     });
+        // } else {
+        axios.post(`/chat/${id}`).then((res) => {
+            console.log(res);
+            const chat: IChat = res.data.chatItem;
+            navigate(`/chattings/${chat.id}`, {
+                state: chat,
             });
-        } else {
-            axios.post(`/chat/${nickname}`).then((res) => {
-                console.log(res);
-                const chat: IChat = res.data.chatItem;
-                navigate(`/chattings/${chat.id}`, {
-                    state: chat,
-                });
-            });
-        }
+        });
+        // }
     };
 
     return (
