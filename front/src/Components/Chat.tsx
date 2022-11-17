@@ -26,6 +26,7 @@ const Chat = () => {
     const chatId = pathname.split("/")[2];
 
     useEffect(() => {
+        console.log('useEffect is running')
         if (state) {
             setRoomName(state.chatName);
         } else {
@@ -39,7 +40,7 @@ const Chat = () => {
         }
         innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);
         getMessages(Number(chatId), 0);
-    }, [location]);
+    }, [chatId, state, getMessages]);
 
     useEffect(() => {
         innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);

@@ -1,5 +1,5 @@
 import Chat, { associate as associateChat } from "./chat";
-import Message from "./message";
+import Message, { associate as associateMessage } from "./message";
 import User, { associate as associateUser } from "./user";
 export * from "../../util/database";
 
@@ -13,3 +13,4 @@ export type dbType = typeof db;
 
 associateUser(db);
 associateChat(db);
+associateMessage(db);

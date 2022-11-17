@@ -43,6 +43,7 @@ export const associate = (db: dbType) => {
         as: "Participants",
         foreignKey: "channelId",
     });
+    db.Chat.hasMany(db.Message);
 };
 
 export default Chat;

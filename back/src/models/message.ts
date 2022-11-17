@@ -1,29 +1,13 @@
-import {
-    CreationOptional,
-    DataTypes,
-    ForeignKey,
-    InferAttributes,
-    InferCreationAttributes,
-    Model,
-} from "sequelize";
+import { dbType } from ".";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../../util/database";
-import Chat from "./chat";
-import User from "./user";
 
-class Message extends Model<
-    InferAttributes<Message>,
-    InferCreationAttributes<Message>
-> {
-    declare id: CreationOptional<number>;
-    declare message: string;
+class Message extends Model {
+    public readonly id!: number;
+    public content!: string;
 
-    // createdAt can be undefined during creation
-    declare createdAt: CreationOptional<Date>;
-    // updatedAt can be undefined during creation
-    declare updatedAt: CreationOptional<Date>;
-
-    declare userId: ForeignKey<User["id"]>;
-    declare chatId: ForeignKey<Chat["id"]>;
+    public UserId!: number;
+    public ChatId!: number;
 }
 
 Message.init(
@@ -33,7 +17,7 @@ Message.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        message: {
+        content: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -42,5 +26,10 @@ Message.init(
     },
     { sequelize }
 );
+
+export const associate = (db: dbType) => {
+    db.Message.belongsTo(db.User);
+    db.Message.belongsTo(db.Chat);
+};
 
 export default Message;

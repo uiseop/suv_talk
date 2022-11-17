@@ -38,6 +38,7 @@ export const associate = (db: dbType) => {
         as: "Channels",
         foreignKey: "participantId",
     });
+    db.User.hasMany(db.Message);
 };
 
 export default User;

@@ -50,7 +50,7 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 sequelize
-    .sync({ force: false })
+    .sync({ force: true })
     .then((res) => {
         app.listen("8000", () => {
             console.log(`
