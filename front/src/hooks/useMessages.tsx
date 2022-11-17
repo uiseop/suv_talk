@@ -3,11 +3,11 @@ import { useCallback, useContext, useReducer } from "react";
 import { UserContext } from "../App";
 
 interface IMessage {
-    ChatItemId: number;
+    ChatId: number;
     UserId: number;
+    content: string;
     createdAt: string;
     id: number;
-    message: string;
     updatedAt: string;
 }
 
@@ -46,7 +46,7 @@ const useMessages = () => {
     const [messages, dispatch] = useReducer(reducer, initialState);
 
     const getMessages = useCallback((chatId: number, page: number) => {
-        axios.get(`/message/${chatId}/${page}`).then((res) => {
+        axios.get(`/message/${chatId}`).then((res) => {
             dispatch({
                 type: MessagesActionType.GET,
                 messages: res.data.messages,

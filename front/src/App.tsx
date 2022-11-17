@@ -18,11 +18,11 @@ const colors = {
 const theme = extendTheme({ colors });
 
 interface IMessage {
-    ChatItemId: number;
+    ChatId: number;
     UserId: number;
+    content: string;
     createdAt: string;
     id: number;
-    message: string;
     updatedAt: string;
 }
 

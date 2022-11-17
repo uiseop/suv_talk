@@ -26,7 +26,7 @@ const Chat = () => {
     const chatId = pathname.split("/")[2];
 
     useEffect(() => {
-        console.log('useEffect is running')
+        console.log("useEffect is running");
         if (state) {
             setRoomName(state.chatName);
         } else {
@@ -78,8 +78,10 @@ const Chat = () => {
 
     const onSubmitHandler = (e: React.FormEvent) => {
         e.preventDefault();
-        axios.post(`/message/${chatId}`, { message: input }).then((res) => {
+        console.log(input);
+        axios.post(`/message/${chatId}`, { content: input }).then((res) => {
             const { data: message } = res;
+            console.log(message);
             pushMessage(message.message);
         });
         setInput("");
@@ -111,9 +113,9 @@ const Chat = () => {
                     ? messages.map((message) => (
                           <Message
                               key={message.id}
-                              isMine={user.id == message.UserId}
+                              isMine={user.id === message.UserId}
                           >
-                              {message.message}
+                              {message.content}
                           </Message>
                       ))
                     : ""}
