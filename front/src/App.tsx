@@ -51,9 +51,10 @@ export const ChatListsContext = createContext({
 });
 
 export const MessageContext = createContext({
-    messages: [] as IMessage[],
-    getMessages: (chatId: number, page: number) => {},
+    messages: { messages: [] as IMessage[], lastIndex: 0, limit: 10 },
+    getMessages: (chatId: number, lastIndex: number, limit: number) => {},
     pushMessage: (message: IMessage) => {},
+    updateIndex: () => {},
 });
 
 const App = () => {

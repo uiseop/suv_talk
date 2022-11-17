@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
+import { Op } from "sequelize";
 import asyncHandler from "../middlewares/asyncHandler";
 import isAuthenticated from "../middlewares/isAuthenticated";
+import Chat from "../models/chat";
 import Message from "../models/message";
 
 const messageRouter = Router();
@@ -10,9 +12,21 @@ messageRouter.get(
     isAuthenticated,
     asyncHandler(async (req: Request, res, next) => {
         const { id } = req.params;
+        const { lastIndex, limit } = req.query;
+        const where = {
+            ChatId: id,
+            id: {
+                [Op.lt]: Number(lastIndex),
+            },
+        };
+
         const me = req.user;
-        const channel = await me?.getChannels({ where: { id } });
-        console.log(channel);
+        const messages = await Message.findAll({
+            where,
+            order: [["createdAt", "ASC"]],
+            limit: Number(limit),
+        });
+        return res.json({ messages });
     })
 );
 

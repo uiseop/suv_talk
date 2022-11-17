@@ -19,28 +19,36 @@ const Chat = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { deleteOneChatList } = useContext(ChatListsContext);
-    const { messages, getMessages, pushMessage } = useContext(MessageContext);
+    const {
+        messages: { messages, lastIndex, limit },
+        getMessages,
+        pushMessage,
+        updateIndex,
+    } = useContext(MessageContext);
     const { user } = useContext(UserContext);
 
     const { state, pathname }: { state: IChat; pathname: string } = location;
     const chatId = pathname.split("/")[2];
 
+    console.log(messages, "hahahahaah");
+
     useEffect(() => {
-        console.log("useEffect is running");
+        console.log("useEffect is running", messages, lastIndex, limit);
         if (state) {
             setRoomName(state.chatName);
         } else {
             axios
                 .get(`/chat/${chatId}`)
                 .then((res) => {
-                    const chat: IChat[] = res.data.chat;
-                    setRoomName(chat[0].chatName);
+                    const chat: IChat = res.data.chat;
+                    setRoomName(chat.chatName);
                 })
                 .catch((err) => console.log(err));
         }
         innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);
-        getMessages(Number(chatId), 0);
-    }, [chatId, state, getMessages]);
+        getMessages(Number(chatId), lastIndex, limit);
+        updateIndex();
+    }, []);
 
     useEffect(() => {
         innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);

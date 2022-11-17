@@ -1,9 +1,21 @@
 import { Request, Router } from "express";
 import asyncHandler from "../middlewares/asyncHandler";
 import isAuthenticated from "../middlewares/isAuthenticated";
+import Chat from "../models/chat";
 import User from "../models/user";
 
 const chatRouter = Router();
+
+chatRouter.get(
+    "/:id",
+    isAuthenticated,
+    asyncHandler(async (req: Request, res, next) => {
+        const { id } = req.params;
+        const me = req.user;
+        const chat = await Chat.findByPk(id);
+        res.json({ chat });
+    })
+);
 
 chatRouter.post(
     "/:id",
