@@ -3,9 +3,6 @@ import cookieParser from "cookie-parser";
 import cors, { CorsOptions } from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { sequelize } from "./models";
-import Chat from "./models/chat";
-import ChatItem from "./models/chat_user";
-import Message from "./models/message";
 import User from "./models/user";
 import chatRouter from "./routes/chat";
 import messageRouter from "./routes/message";
@@ -55,7 +52,6 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 sequelize
     .sync({ force: false })
     .then((res) => {
-        console.log(ChatItem.options);
         app.listen("8000", () => {
             console.log(`
                 #############################################

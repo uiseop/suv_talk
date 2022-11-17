@@ -1,16 +1,12 @@
 import {
-    CreationOptional,
+    BelongsToManyAddAssociationMixin,
+    BelongsToManyGetAssociationsMixin,
     DataTypes,
-    HasManyCreateAssociationMixin,
-    HasManyGetAssociationsMixin,
-    InferAttributes,
-    InferCreationAttributes,
     Model,
 } from "sequelize";
 import sequelize from "../../util/database";
-import ChatItem from "./chat_user";
-import Message from "./message";
-import { dbType } from '.';
+import { dbType } from ".";
+import User from "./user";
 
 class Chat extends Model {
     public readonly id!: number;
@@ -18,6 +14,10 @@ class Chat extends Model {
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
+    public readonly Participants?: User[];
+
+    public addParticiapnt!: BelongsToManyAddAssociationMixin<User, number>;
+    public getParticipants!: BelongsToManyGetAssociationsMixin<User>;
 }
 
 Chat.init(
@@ -38,7 +38,11 @@ Chat.init(
 );
 
 export const associate = (db: dbType) => {
-    db.Chat.hasMany(db.ChatUser)
-}
+    db.Chat.belongsToMany(db.User, {
+        through: "Channel",
+        as: "Participants",
+        foreignKey: "channelId",
+    });
+};
 
 export default Chat;

@@ -36,13 +36,13 @@ const useChatLists = () => {
 
     const getChatLists = useCallback(() => {
         axios
-            .get("/chat")
+            .get("/user/chats")
             .then((res) => {
                 const { data: response } = res;
                 console.log(response)
                 return dispatch({
                     type: ChatListActionType.GET,
-                    chatLists: response.response,
+                    chatLists: response.chatItems,
                 });
             })
             .catch((err) => {
