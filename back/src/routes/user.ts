@@ -53,7 +53,6 @@ userRouter.get("/all", (req: Request, res, next) => {
 userRouter.get("/chats", (req: Request, res, next) => {
     const user = req.user;
     user!.getChannels().then((channels) => {
-        console.log(channels);
         res.json({
             chatItems: channels,
         });

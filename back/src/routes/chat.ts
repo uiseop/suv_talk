@@ -26,19 +26,31 @@ chatRouter.post(
                 },
             ],
         });
-        console.log(channels.length);
-        if (channels.length === 0) {
-            const channel = await me?.createChannel({
-                chatName: "따끈따끈한 채팅",
-            });
-            await channel?.addParticipant(user);
-            return res.status(200).json({
-                message: "새로운 채팅이 시작됩니다",
-                chat: channel,
-            });
+
+        if (channels.length > 0) {
+            const users = Array.from(new Set([me!.id, user.id])).sort(
+                (a, b) => a - b
+            );
+            for (let channel of channels) {
+                if (channel.Participants?.length !== users.length) continue;
+                const channel_users = channel.Participants?.map(
+                    (user) => user.id
+                ).sort((a, b) => a - b);
+                if (JSON.stringify(users) === JSON.stringify(channel_users)) {
+                    return res.json({
+                        message: "기존 채팅 찾음ㅋ",
+                        chat: channel,
+                    });
+                }
+            }
         }
-        return res.json({
-            message: "hello world",
+        const channel = await me?.createChannel({
+            chatName: `${me.nickname}이 만든 채팅`,
+        });
+        await channel?.addParticipant(user);
+        return res.status(200).json({
+            message: "새로운 채팅이 시작됩니다",
+            chat: channel,
         });
     })
 );
