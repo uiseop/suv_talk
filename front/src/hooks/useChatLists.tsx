@@ -9,7 +9,7 @@ enum ChatListActionType {
 interface IChat {
     createdAt: string;
     id: number;
-    room_name: string;
+    chatName: string;
     updatedAt: string;
 }
 

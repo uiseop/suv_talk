@@ -16,7 +16,7 @@ class Chat extends Model {
 
     public readonly Participants?: User[];
 
-    public addParticiapnt!: BelongsToManyAddAssociationMixin<User, number>;
+    public addParticipant!: BelongsToManyAddAssociationMixin<User, number>;
     public getParticipants!: BelongsToManyGetAssociationsMixin<User>;
 }
 

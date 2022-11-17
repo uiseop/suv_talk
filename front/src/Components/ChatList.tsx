@@ -4,7 +4,7 @@ import styled from "styled-components";
 interface IChat {
     createdAt: string;
     id: number;
-    room_name: string;
+    chatName: string;
     updatedAt: string;
 }
 
@@ -18,7 +18,7 @@ const ChatList = ({ chat }: { chat: IChat }) => {
         <ChatWrapper onClick={onClickHandler}>
             <ImageWrapper></ImageWrapper>
             <ChatDescWrapper>
-                <h2>{chat.room_name}</h2>
+                <h2>{chat.chatName}</h2>
                 <p>채팅채팅</p>
             </ChatDescWrapper>
         </ChatWrapper>

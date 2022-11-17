@@ -14,10 +14,9 @@ interface IUser {
 }
 
 interface IChat {
-    ChatId: number;
     createdAt: string;
     id: number;
-    room_name: string;
+    chatName: string;
     updatedAt: string;
 }
 
@@ -38,18 +37,9 @@ const Items = () => {
 
     const onClickHandler = (otherUser: IUser) => {
         const { id } = otherUser;
-        // if (id === user.id) {
-        //     axios.post(`/chat/${id}/self`).then((res) => {
-        //         console.log(res);
-        //         const chat: IChat = res.data.chatItem;
-        //         navigate(`/chattings/${chat.id}`, {
-        //             state: chat,
-        //         });
-        //     });
-        // } else {
         axios.post(`/chat/${id}`).then((res) => {
             console.log(res);
-            const chat: IChat = res.data.chatItem;
+            const chat: IChat = res.data.chat;
             navigate(`/chattings/${chat.id}`, {
                 state: chat,
             });

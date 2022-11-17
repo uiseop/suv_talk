@@ -9,7 +9,7 @@ import Title from "../Components/Title";
 interface IChat {
     createdAt: string;
     id: number;
-    room_name: string;
+    chatName: string;
     updatedAt: string;
 }
 

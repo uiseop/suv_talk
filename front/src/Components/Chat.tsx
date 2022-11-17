@@ -6,9 +6,8 @@ import { ChatListsContext, MessageContext, UserContext } from "../App";
 
 interface IChat {
     createdAt: string;
-    ChatId: number;
     id: number;
-    room_name: string;
+    chatName: string;
     updatedAt: string;
 }
 
@@ -28,13 +27,13 @@ const Chat = () => {
 
     useEffect(() => {
         if (state) {
-            setRoomName(state.room_name);
+            setRoomName(state.chatName);
         } else {
             axios
                 .get(`/chat/${chatId}`)
                 .then((res) => {
                     const chat: IChat[] = res.data.chat;
-                    setRoomName(chat[0].room_name);
+                    setRoomName(chat[0].chatName);
                 })
                 .catch((err) => console.log(err));
         }

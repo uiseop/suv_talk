@@ -1,6 +1,7 @@
 import { dbType } from ".";
 import {
     BelongsToManyAddAssociationMixin,
+    BelongsToManyCreateAssociationMixin,
     BelongsToManyGetAssociationsMixin,
     DataTypes,
     Model,
@@ -18,6 +19,7 @@ class User extends Model {
 
     public addChannel!: BelongsToManyAddAssociationMixin<Chat, number>;
     public getChannels!: BelongsToManyGetAssociationsMixin<Chat>;
+    public createChannel!: BelongsToManyCreateAssociationMixin<Chat>;
 }
 
 User.init(
@@ -36,7 +38,6 @@ export const associate = (db: dbType) => {
         as: "Channels",
         foreignKey: "participantId",
     });
-
 };
 
 export default User;
