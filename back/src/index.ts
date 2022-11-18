@@ -1,3 +1,5 @@
+import { Server } from "socket.io";
+import { createServer } from "http";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors, { CorsOptions } from "cors";
@@ -9,6 +11,17 @@ import messageRouter from "./routes/message";
 import userRouter from "./routes/user";
 
 const app = express();
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: "http://localhost:3000",
+    },
+});
+
+io.on("connection", (socket) => {
+    console.log("소켓 연결 완료");
+});
 
 const corsOptions: CorsOptions = {
     origin: "http://localhost:3000",
@@ -52,7 +65,7 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 sequelize
     .sync({ force: false })
     .then((res) => {
-        app.listen("8000", () => {
+        httpServer.listen("8000", () => {
             console.log(`
                 #############################################
                     🛡️ Server listening on port: 8000 🛡️

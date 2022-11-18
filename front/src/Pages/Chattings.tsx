@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { io } from "socket.io-client";
 import styled from "styled-components";
 import { ChatListsContext } from "../App";
 import ChatList from "../Components/ChatList";
@@ -14,8 +14,12 @@ interface IChat {
 }
 
 const Chattings = () => {
-    const [chattings, setChattings] = useState<IChat[]>([]);
     const { chatLists, getChatLists } = useContext(ChatListsContext);
+    const socket = io("http://localhost:8000");
+
+    // socket.on("connect", () => {
+    //     console.log(socket.id);
+    // });
 
     useEffect(() => {
         getChatLists();
