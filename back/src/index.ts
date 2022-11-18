@@ -16,12 +16,11 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
         origin: "http://localhost:3000",
+        credentials: true,
     },
 });
 
-io.on("connection", (socket) => {
-    console.log("소켓 연결 완료");
-});
+app.set("io", io);
 
 const corsOptions: CorsOptions = {
     origin: "http://localhost:3000",
@@ -76,3 +75,5 @@ sequelize
     .catch((err) => {
         console.log(err);
     });
+
+export default io;

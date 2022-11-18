@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 import styled from "styled-components";
 import { UserContext } from "../App";
 import { Button, Card, Grid } from "../Common/Common";
@@ -24,6 +25,15 @@ const Items = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
+    const socket = io("http://localhost:8000", {
+        withCredentials: true,
+    });
+
+    socket.on("signup", data => {
+        if (data.action === 'create') {
+            addUser(data.user)
+        }
+    })
 
     useEffect(() => {
         axios
@@ -45,6 +55,12 @@ const Items = () => {
             });
         });
         // }
+    };
+
+    const addUser = (user: IUser) => {
+        const updatedUsers = [...users]
+        updatedUsers.push(user)
+        setUsers(updatedUsers);
     };
 
     return (

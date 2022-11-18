@@ -1,9 +1,11 @@
 import { Request, Router } from "express";
+import io from "..";
 import User from "../models/user";
 
 const userRouter = Router();
 
 userRouter.post("/join", (req: Request, res, next) => {
+    const io = req.app.get("io");
     if (req.user) {
         return res.status(301).json({ message: "이미 로그인 되어있음" });
     }
@@ -24,6 +26,10 @@ userRouter.post("/join", (req: Request, res, next) => {
                 User.create({ nickname }).then((user) => {
                     res.cookie("id", user.id);
                     res.cookie("access-token", user.nickname);
+                    io.emit("signup", {
+                        action: "create",
+                        user
+                    });
                     return res.status(200).json({
                         "access-token": user.nickname,
                         id: user.id,
