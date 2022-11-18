@@ -23,7 +23,7 @@ messageRouter.get(
         const me = req.user;
         const messages = await Message.findAll({
             where,
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             limit: Number(limit),
         });
         return res.json({ messages });

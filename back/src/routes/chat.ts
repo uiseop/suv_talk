@@ -57,7 +57,10 @@ chatRouter.post(
             }
         }
         const channel = await me?.createChannel({
-            chatName: `${me.nickname}이 만든 채팅`,
+            chatName:
+                me.id !== user.id
+                    ? `${me.nickname}이 만든 채팅`
+                    : "나와의 채팅",
         });
         await channel?.addParticipant(user);
         return res.status(200).json({

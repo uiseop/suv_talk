@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useCallback, useReducer } from "react";
 import { deleteCookie, getCookie } from "../utils/cookie";
 
@@ -27,13 +28,12 @@ const reducer = (state: UserState, action: UserAction) => {
                 nickname: action.username,
                 id: action.id,
             };
-        case UserActionType.LOGOUT:
-            deleteCookie("access-token");
-            deleteCookie("id");
+        case UserActionType.LOGOUT: {
             return {
                 nickname: null,
                 id: null,
             };
+        }
         default:
             throw new Error("Invaid action tpye");
     }
@@ -46,7 +46,16 @@ const useUser = () => {
     }, []);
 
     const handleLogOut = useCallback(() => {
-        dispatch({ type: UserActionType.LOGOUT });
+        axios
+            .delete("/user")
+            .then(() => {
+                deleteCookie("access-token");
+                deleteCookie("id");
+                dispatch({ type: UserActionType.LOGOUT });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
 
     return { user, handleLogIn, handleLogOut };

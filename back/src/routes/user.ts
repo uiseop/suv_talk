@@ -59,4 +59,12 @@ userRouter.get("/chats", (req: Request, res, next) => {
     });
 });
 
+userRouter.delete("/", (req: Request, res, next) => {
+    res.cookie("access-token", "", { maxAge: 0 });
+    res.cookie("id", "", { maxAge: 0 });
+    res.json({
+        message: "로그아웃 완료",
+    });
+});
+
 export default userRouter;

@@ -30,8 +30,6 @@ const Chat = () => {
     const { state, pathname }: { state: IChat; pathname: string } = location;
     const chatId = pathname.split("/")[2];
 
-    console.log(messages, "hahahahaah");
-
     useEffect(() => {
         console.log("useEffect is running", messages, lastIndex, limit);
         if (state) {
