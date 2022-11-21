@@ -9,6 +9,7 @@ import User from "./models/user";
 import chatRouter from "./routes/chat";
 import messageRouter from "./routes/message";
 import userRouter from "./routes/user";
+import Chat from "./models/chat";
 
 const app = express();
 const httpServer = createServer(app);
@@ -20,12 +21,23 @@ const io = new Server(httpServer, {
     },
 });
 
-io.on("connection", (socket) => {
-    console.log(`hello my world`);
+io.on("connection", async (socket) => {
+    try {
+        const id = socket.request.headers.cookie
+            ?.split(";")
+            .map((cookie) => cookie.split("="))[0][1];
+        const user = await User.findByPk(id);
+        const channels = await user?.getChannels();
+        socket.join(channels!.map((channel) => `Room ${channel.id}`));
 
-    socket.on("disconnect", () => {
-        console.log("bye bye socket");
-    });
+        console.log(socket.rooms)
+
+        socket.on("disconnect", () => {
+            console.log("bye bye socket");
+        });
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 app.set("io", io);
