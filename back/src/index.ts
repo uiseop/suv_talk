@@ -23,14 +23,13 @@ const io = new Server(httpServer, {
 
 io.on("connection", async (socket) => {
     try {
+        console.log("initail transport", socket.conn.transport.name);
         const id = socket.request.headers.cookie
             ?.split(";")
             .map((cookie) => cookie.split("="))[0][1];
         const user = await User.findByPk(id);
         const channels = await user?.getChannels();
         socket.join(channels!.map((channel) => `Room ${channel.id}`));
-
-        console.log(socket.rooms)
 
         socket.on("disconnect", () => {
             console.log("bye bye socket");

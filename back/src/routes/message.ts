@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { Op } from "sequelize";
+import { Server } from "socket.io";
 import asyncHandler from "../middlewares/asyncHandler";
 import isAuthenticated from "../middlewares/isAuthenticated";
 import Chat from "../models/chat";
@@ -34,6 +35,7 @@ messageRouter.post(
     "/:id",
     isAuthenticated,
     asyncHandler(async (req: Request, res, next) => {
+        const io: Server = req.app.get("io");
         const { id } = req.params;
         const { content } = req.body;
         const me = req.user;
@@ -43,6 +45,12 @@ messageRouter.post(
             ChatId: Number(id),
         });
         console.log(newMessage);
+
+        io.to(`Room ${id}`).emit("receive", {
+            action: "add",
+            message: newMessage,
+        });
+
         res.json({
             message: newMessage,
         });

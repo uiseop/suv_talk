@@ -2,7 +2,12 @@ import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ChatListsContext, MessageContext, UserContext } from "../App";
+import {
+    ChatListsContext,
+    MessageContext,
+    SocketContext,
+    UserContext,
+} from "../App";
 
 interface IChat {
     createdAt: string;
@@ -26,6 +31,14 @@ const Chat = () => {
         updateIndex,
     } = useContext(MessageContext);
     const { user } = useContext(UserContext);
+    const { socket } = useContext(SocketContext);
+
+    socket?.on("receive", (data) => {
+        console.log(data, "hahaha");
+        if (data.action === "add") {
+            pushMessage(data.message);
+        }
+    });
 
     const { state, pathname }: { state: IChat; pathname: string } = location;
     const chatId = pathname.split("/")[2];
