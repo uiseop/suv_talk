@@ -20,6 +20,14 @@ const io = new Server(httpServer, {
     },
 });
 
+io.on("connection", (socket) => {
+    console.log(`hello my world`);
+
+    socket.on("disconnect", () => {
+        console.log("bye bye socket");
+    });
+});
+
 app.set("io", io);
 
 const corsOptions: CorsOptions = {
@@ -32,6 +40,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
+    const io: Server = req.app.get("io");
     const { id } = req.cookies;
     if (id) {
         User.findByPk(id).then((user) => {

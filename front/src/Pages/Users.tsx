@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import styled from "styled-components";
-import { UserContext } from "../App";
+import { SocketContext, UserContext } from "../App";
 import { Button, Card, Grid } from "../Common/Common";
 import Title from "../Components/Title";
 
@@ -23,13 +23,10 @@ interface IChat {
 
 const Items = () => {
     const [users, setUsers] = useState<IUser[]>([]);
-    const { user } = useContext(UserContext);
     const navigate = useNavigate();
-    const socket = io("http://localhost:8000", {
-        withCredentials: true,
-    });
+    const { socket } = useContext(SocketContext)
 
-    socket.on("signup", data => {
+    socket?.on("signup", data => {
         if (data.action === 'create') {
             addUser(data.user)
         }
@@ -54,7 +51,6 @@ const Items = () => {
                 state: chat,
             });
         });
-        // }
     };
 
     const addUser = (user: IUser) => {

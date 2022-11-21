@@ -1,9 +1,11 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { createContext } from "react";
 import { CookiesProvider } from "react-cookie";
+import { io, Socket } from "socket.io-client";
 import GlobalStyles from "./GlobalStyles";
 import useChatLists from "./hooks/useChatLists";
 import useMessages from "./hooks/useMessages";
+import useSocket from "./hooks/useSocket";
 import useUser from "./hooks/useUser";
 import Router from "./Router";
 
@@ -57,21 +59,30 @@ export const MessageContext = createContext({
     updateIndex: () => {},
 });
 
+export const SocketContext = createContext({
+    socket: io() as Socket | null,
+    setSocket: () => {},
+    closeSocket: () => {},
+});
+
 const App = () => {
     const user = useUser();
     const chatLists = useChatLists();
     const messages = useMessages();
+    const socket = useSocket();
     return (
         <>
             <UserContext.Provider value={user}>
                 <ChatListsContext.Provider value={chatLists}>
                     <MessageContext.Provider value={messages}>
-                        <GlobalStyles />
-                        <CookiesProvider>
-                            <ChakraProvider theme={theme}>
-                                <Router />
-                            </ChakraProvider>
-                        </CookiesProvider>
+                        <SocketContext.Provider value={socket}>
+                            <GlobalStyles />
+                            <CookiesProvider>
+                                <ChakraProvider theme={theme}>
+                                    <Router />
+                                </ChakraProvider>
+                            </CookiesProvider>
+                        </SocketContext.Provider>
                     </MessageContext.Provider>
                 </ChatListsContext.Provider>
             </UserContext.Provider>

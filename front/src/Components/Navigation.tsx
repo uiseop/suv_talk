@@ -1,10 +1,17 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { useContext } from "react";
-import { UserContext } from "../App";
+import { useContext, useEffect } from "react";
+import { SocketContext, UserContext } from "../App";
 
 const Navigation = () => {
     const { user } = useContext(UserContext);
+    const { setSocket } =
+        useContext(SocketContext);
+    useEffect(() => {
+        if (user.id && user.nickname) {
+            setSocket();
+        }
+    }, [user.id, user.nickname]);
     return (
         <Header>
             <Nav>

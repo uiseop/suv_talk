@@ -2,11 +2,18 @@ import { Button } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UserContext } from "../App";
+import { SocketContext, UserContext } from "../App";
 
 const MyInfo = () => {
     const { user, handleLogOut } = useContext(UserContext);
+    const { closeSocket } = useContext(SocketContext);
     const navigate = useNavigate();
+
+    const logoutHandler = () => {
+        handleLogOut();
+        closeSocket();
+    };
+
     useEffect(() => {
         if (!user.id) {
             navigate("/");
@@ -15,7 +22,7 @@ const MyInfo = () => {
     return (
         <>
             <Header>{user.nickname}</Header>
-            <Button onClick={handleLogOut}>로그아웃</Button>
+            <Button onClick={logoutHandler}>로그아웃</Button>
         </>
     );
 };
