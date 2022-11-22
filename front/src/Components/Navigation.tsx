@@ -5,11 +5,11 @@ import { SocketContext, UserContext } from "../App";
 
 const Navigation = () => {
     const { user } = useContext(UserContext);
-    const { setSocket } =
-        useContext(SocketContext);
+    const { setSocket } = useContext(SocketContext);
     useEffect(() => {
         if (user.id && user.nickname) {
             setSocket();
+            console.log("변하나?");
         }
     }, [user.id, user.nickname]);
     return (
@@ -18,9 +18,6 @@ const Navigation = () => {
                 <ItemLists>
                     <Item>
                         <NavLink to={"/"}>Home</NavLink>
-                    </Item>
-                    <Item>
-                        <NavLink to={"/add-product"}>등록하기</NavLink>
                     </Item>
                     <Item>
                         <NavLink to={"/chattings"}>채팅</NavLink>
@@ -45,7 +42,7 @@ const Navigation = () => {
 const Header = styled.header`
     width: 100%;
     height: 3.5rem;
-    background-color: #00695c;
+    background-color: #1877f2;
     padding: 0 1.5rem;
 `;
 

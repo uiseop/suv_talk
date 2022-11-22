@@ -4,6 +4,7 @@ import asyncHandler from "../middlewares/asyncHandler";
 import isAuthenticated from "../middlewares/isAuthenticated";
 import Chat from "../models/chat";
 import User from "../models/user";
+import io from "../../util/socket";
 
 const chatRouter = Router();
 
@@ -22,7 +23,6 @@ chatRouter.post(
     "/:id",
     isAuthenticated,
     asyncHandler(async (req: Request, res, next) => {
-        const io: Server = req.app.get("io");
         const { id } = req.params;
         const me = req.user;
         const user = await User.findByPk(id);
@@ -64,7 +64,10 @@ chatRouter.post(
                     ? `${me.nickname}이 만든 채팅`
                     : "나와의 채팅",
         });
-        
+
+        const Io = io.getIo();
+        Io.in(user.socketId as string).socketsJoin(`Room ${channel!.id}`);
+
         await channel?.addParticipant(user);
         return res.status(200).json({
             message: "새로운 채팅이 시작됩니다",

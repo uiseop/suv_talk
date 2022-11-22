@@ -109,7 +109,7 @@ const Login = () => {
 
             <Button
                 mt={4}
-                colorScheme="teal"
+                colorScheme="blue"
                 isLoading={isSubmitting}
                 type="submit"
             >

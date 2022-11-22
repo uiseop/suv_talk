@@ -9,37 +9,11 @@ import User from "./models/user";
 import chatRouter from "./routes/chat";
 import messageRouter from "./routes/message";
 import userRouter from "./routes/user";
-import Chat from "./models/chat";
+import io from "../util/socket";
+import asyncHandler from "./middlewares/asyncHandler";
+import { parse } from "cookie";
 
 const app = express();
-const httpServer = createServer(app);
-
-const io = new Server(httpServer, {
-    cors: {
-        origin: "http://localhost:3000",
-        credentials: true,
-    },
-});
-
-io.on("connection", async (socket) => {
-    try {
-        console.log("initail transport", socket.conn.transport.name);
-        const id = socket.request.headers.cookie
-            ?.split(";")
-            .map((cookie) => cookie.split("="))[0][1];
-        const user = await User.findByPk(id);
-        const channels = await user?.getChannels();
-        socket.join(channels!.map((channel) => `Room ${channel.id}`));
-
-        socket.on("disconnect", () => {
-            console.log("bye bye socket");
-        });
-    } catch (err) {
-        console.log(err);
-    }
-});
-
-app.set("io", io);
 
 const corsOptions: CorsOptions = {
     origin: "http://localhost:3000",
@@ -50,13 +24,15 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-    const io: Server = req.app.get("io");
+app.use(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.cookies;
+    const Io = io.getIo();
     if (id) {
-        User.findByPk(id).then((user) => {
+        User.findByPk(id).then(async (user) => {
             if (user) {
                 req.user = user;
+                console.log(user.nickname);
+                const channels = await user.getChannels();
             }
             next();
         });
@@ -84,6 +60,18 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 sequelize
     .sync({ force: false })
     .then((res) => {
+        const httpServer = createServer(app);
+        io.init(httpServer);
+        const Io = io.getIo();
+        Io.on("connection", async (socket) => {
+            const { id } = parse(socket.request.headers.cookie as string);
+            try {
+                const user = await User.findByPk(id);
+                await user?.update({ socketId: socket.id });
+            } catch (err) {
+                console.log(err);
+            }
+        });
         httpServer.listen("8000", () => {
             console.log(`
                 #############################################

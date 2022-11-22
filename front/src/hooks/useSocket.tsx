@@ -16,7 +16,7 @@ type SocketAction =
 const reducer = (state: SocketState, action: SocketAction) => {
     switch (action.type) {
         case SocketActionType.LOGIN:
-            return io("http://localhost:8000", {
+            return io("ws://localhost:8000", {
                 withCredentials: true,
             });
         case SocketActionType.LOGOUT:
@@ -27,6 +27,10 @@ const reducer = (state: SocketState, action: SocketAction) => {
 
 const useSocket = () => {
     const [socket, dispatch] = useReducer(reducer, initialState);
+
+    socket?.on("connect", () => {
+        console.log(socket.id);
+    });
 
     const setSocket = useCallback(() => {
         dispatch({ type: SocketActionType.LOGIN });

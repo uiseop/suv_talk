@@ -76,6 +76,7 @@ const useMessages = () => {
             axios
                 .get(`/message/${chatId}`, { params: { lastIndex, limit } })
                 .then((res) => {
+                    console.log(res)
                     dispatch({
                         type: MessagesActionType.GET,
                         messages: res.data.messages,

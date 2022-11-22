@@ -13,15 +13,15 @@ const Card = css`
 
 const Button = styled.button<{ disabled: boolean }>`
     font: inherit;
-    border: 1px solid #00695c;
-    color: #00695c;
+    border: 1px solid #1877f2;
+    color: #1877f2;
     background: white;
     border-radius: 3px;
     cursor: pointer;
 
     &:hover,
     &:active {
-        background-color: #00695c;
+        background-color: #1877f2;
         color: white;
     }
 `;

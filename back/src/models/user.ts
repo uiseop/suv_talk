@@ -12,6 +12,7 @@ import Chat from "./chat";
 class User extends Model {
     public readonly id!: number;
     public nickname!: string;
+    public socketId!: string | null;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
@@ -27,6 +28,11 @@ User.init(
         nickname: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        socketId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
         },
     },
     { sequelize }

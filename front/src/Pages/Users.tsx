@@ -1,7 +1,6 @@
 import axios from "axios";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
 import styled from "styled-components";
 import { SocketContext, UserContext } from "../App";
 import { Button, Card, Grid } from "../Common/Common";
@@ -24,13 +23,14 @@ interface IChat {
 const Items = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const navigate = useNavigate();
-    const { socket } = useContext(SocketContext)
+    const { socket } = useContext(SocketContext);
 
-    socket?.on("signup", data => {
-        if (data.action === 'create') {
-            addUser(data.user)
+    socket?.on("signup", (data) => {
+        console.log(data, '지금 다시 한번 내게 말해')
+        if (data.action === "create") {
+            addUser(data.user);
         }
-    })
+    });
 
     useEffect(() => {
         axios
@@ -54,8 +54,8 @@ const Items = () => {
     };
 
     const addUser = (user: IUser) => {
-        const updatedUsers = [...users]
-        updatedUsers.push(user)
+        const updatedUsers = [...users];
+        updatedUsers.push(user);
         setUsers(updatedUsers);
     };
 

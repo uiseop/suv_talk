@@ -1,11 +1,12 @@
 import { Server } from "socket.io";
 import { Request, Router } from "express";
 import User from "../models/user";
+import io from "../../util/socket";
 
 const userRouter = Router();
 
 userRouter.post("/join", (req: Request, res, next) => {
-    const io: Server = req.app.get("io");
+    const Io = io.getIo()
     if (req.user) {
         return res.status(301).json({ message: "이미 로그인 되어있음" });
     }
@@ -26,7 +27,7 @@ userRouter.post("/join", (req: Request, res, next) => {
                 User.create({ nickname }).then((user) => {
                     res.cookie("id", user.id);
                     res.cookie("access-token", user.nickname);
-                    io.emit("signup", {
+                    Io.emit("signup", {
                         action: "create",
                         user,
                     });

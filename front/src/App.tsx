@@ -76,7 +76,6 @@ const App = () => {
                 <ChatListsContext.Provider value={chatLists}>
                     <MessageContext.Provider value={messages}>
                         <SocketContext.Provider value={socket}>
-                            <GlobalStyles />
                             <CookiesProvider>
                                 <ChakraProvider theme={theme}>
                                     <Router />
