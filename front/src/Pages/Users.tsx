@@ -23,7 +23,7 @@ interface IChat {
 const Items = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const navigate = useNavigate();
-    const { socket } = useContext(SocketContext);
+    const socket = useContext(SocketContext);
 
     socket?.on("signup", (data) => {
         console.log(data, '지금 다시 한번 내게 말해')

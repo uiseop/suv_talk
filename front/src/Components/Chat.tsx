@@ -6,6 +6,7 @@ import {
     ChatListsContext,
     MessageContext,
     SocketContext,
+    // SocketContext,
     UserContext,
 } from "../App";
 
@@ -31,11 +32,11 @@ const Chat = () => {
         updateIndex,
     } = useContext(MessageContext);
     const { user } = useContext(UserContext);
-    const { socket } = useContext(SocketContext);
+    const socket = useContext(SocketContext);
 
     socket?.on("receive", (data) => {
         console.log("hello??");
-        console.log(data, "hahaha");
+        console.log(data);
         // if (data.action === "add") {
         //     pushMessage(data.message);
         // }
@@ -165,15 +166,10 @@ const Chat = () => {
 };
 
 const ChatWrapper = styled.div`
-    position: absolute;
     display: flex;
     flex-direction: column;
     margin: 1rem;
     background-color: #f3f0e7;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
     border: 1px solid #807676;
 `;
 
@@ -227,7 +223,7 @@ const ChatInner = styled.ul`
     flex-direction: column;
     background-color: #878787;
     overflow-y: auto;
-    flex: 1;
+    min-height: 300px;
     gap: 4px;
     padding: 4px 20px;
 `;

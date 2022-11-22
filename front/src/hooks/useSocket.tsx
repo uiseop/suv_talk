@@ -1,46 +1,16 @@
-import { useCallback, useReducer } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
-const initialState = null;
-
-enum SocketActionType {
-    LOGIN = "LOGIN",
-    LOGOUT = "LOGOUT",
-}
-type SocketState = null | Socket;
-
-type SocketAction =
-    | { type: SocketActionType.LOGIN }
-    | { type: SocketActionType.LOGOUT };
-
-const reducer = (state: SocketState, action: SocketAction) => {
-    switch (action.type) {
-        case SocketActionType.LOGIN:
-            return io("ws://localhost:8000", {
-                withCredentials: true,
-            });
-        case SocketActionType.LOGOUT:
-            state?.disconnect();
-            return initialState;
-    }
-};
-
 const useSocket = () => {
-    const [socket, dispatch] = useReducer(reducer, initialState);
+    const webSocketUrl = "ws://localhost:8000";
+    const [socket, setSocket] = useState<Socket | null>(null);
 
-    socket?.on("connect", () => {
-        console.log(socket.id);
-    });
-
-    const setSocket = useCallback(() => {
-        dispatch({ type: SocketActionType.LOGIN });
+    useEffect(() => {
+        console.log("hello?");
+        setSocket(io(webSocketUrl));
     }, []);
 
-    const closeSocket = useCallback(() => {
-        dispatch({ type: SocketActionType.LOGOUT });
-    }, []);
-
-    return { socket, setSocket, closeSocket };
+    return socket;
 };
 
 export default useSocket;

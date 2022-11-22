@@ -73,6 +73,7 @@ const Login = () => {
                             duration: 3000,
                             isClosable: true,
                         });
+                        console.log(res)
                         handleLogIn(res.data["access-token"], res.data.id);
                         navigate("/", { replace: true });
                     })

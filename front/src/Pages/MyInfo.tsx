@@ -6,12 +6,14 @@ import { SocketContext, UserContext } from "../App";
 
 const MyInfo = () => {
     const { user, handleLogOut } = useContext(UserContext);
-    const { closeSocket } = useContext(SocketContext);
+    const socket = useContext(SocketContext);
     const navigate = useNavigate();
 
     const logoutHandler = () => {
         handleLogOut();
-        closeSocket();
+        socket?.emit("SignOut", {
+            id: user.id,
+        });
     };
 
     useEffect(() => {

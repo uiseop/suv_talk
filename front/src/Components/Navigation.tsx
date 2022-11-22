@@ -5,13 +5,15 @@ import { SocketContext, UserContext } from "../App";
 
 const Navigation = () => {
     const { user } = useContext(UserContext);
-    const { setSocket } = useContext(SocketContext);
+    const socket = useContext(SocketContext);
+    console.log(socket?.id)
     useEffect(() => {
         if (user.id && user.nickname) {
-            setSocket();
+            console.log(user.id, user.nickname);
+            socket?.emit("Signin", { id: user.id });
             console.log("변하나?");
         }
-    }, [user.id, user.nickname]);
+    }, [user.id, user.nickname, socket]);
     return (
         <Header>
             <Nav>
