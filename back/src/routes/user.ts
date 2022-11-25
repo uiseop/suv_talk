@@ -50,6 +50,24 @@ userRouter.put(
 );
 
 // delete User
+userRouter.delete(
+    "/:id",
+    asyncHandler(async (req, res, next) => {
+        const { id } = req.params;
+        const { userId } = req.body;
+        console.log(id, userId)
+        if (id === userId) {
+            await User.findByIdAndDelete(userId);
+            res.status(200).json({
+                msg: "탈퇴 완료되었습니다",
+            });
+        } else {
+            res.status(401).json({
+                msg: "허용되지 않는 접근",
+            });
+        }
+    })
+);
 
 // get User
 
