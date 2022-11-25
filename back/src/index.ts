@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import helmet from "helmet";
 import morgan from "morgan";
 import userRouter from "./routes/user";
+import postRouter from "./routes/post";
 
 const app = express();
 app.use(express.json());
@@ -13,6 +14,7 @@ app.use(express.json());
 dotenv.config();
 
 app.use("/api/user", userRouter);
+app.use("/api/post", postRouter)
 
 mongoose.connect(process.env.MONGO_URL, () => {
     console.log("Connected to MongoDB");
