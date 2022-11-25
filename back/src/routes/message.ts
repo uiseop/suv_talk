@@ -26,9 +26,10 @@ messageRouter.get(
         const me = req.user;
         const messages = await Message.findAll({
             where,
-            order: [["createdAt", "DESC"]],
+            order: [["createdAt", "ASC"]],
             limit: Number(limit),
         });
+        console.log(messages);
         return res.json({ messages });
     })
 );
@@ -50,22 +51,18 @@ messageRouter.post(
         const Io = io.getIo();
 
         const chat = await Chat.findByPk(id);
-        console.log("Settign!!!!!!!!!!!!!!")
-        console.log("Settign!!!!!!!!!!!!!!")
         await chat?.setLastMessage(newMessage);
-        console.log("Settign!!!!!!!!!!!!!!")
-        console.log("Settign!!!!!!!!!!!!!!")
         const user = await chat
             ?.getParticipants()
             .then((users) => users.find((user) => user.id !== me!.id));
 
         if (user) {
-            {
-                Io.to(user!.socketId as string).emit("receive", {
-                    action: "addMessage",
-                    message: newMessage,
-                });
-            }
+            const fetches = await Io.fetchSockets();
+            console.log(fetches.length, Io.to(user!.socketId as string));
+            Io.to(user!.socketId as string).emit("receive", {
+                action: "addMessage",
+                message: newMessage,
+            });
         }
 
         res.json({

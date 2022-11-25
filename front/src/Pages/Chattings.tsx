@@ -17,7 +17,7 @@ const Chattings = () => {
         <>
             <Title>채팅</Title>
             <ChatsWrapper>
-                {chatLists.length > 10 ? (
+                {chatLists.length > 0 ? (
                     chatLists.map((chatting) => {
                         return <ChatList chat={chatting} key={chatting.id} />;
                     })

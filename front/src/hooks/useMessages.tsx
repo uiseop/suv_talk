@@ -12,7 +12,7 @@ interface IMessage {
 
 const initialState = {
     messages: [],
-    lastIndex: 10,
+    lastIndex: 0,
     limit: 10,
 };
 

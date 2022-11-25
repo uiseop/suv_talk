@@ -37,9 +37,9 @@ const Chat = () => {
     socket?.on("receive", (data) => {
         console.log("hello??");
         console.log(data);
-        // if (data.action === "add") {
-        //     pushMessage(data.message);
-        // }
+        if (data.action === "addMessage") {
+            pushMessage(data.message);
+        }
     });
 
     const { state, pathname }: { state: IChat; pathname: string } = location;
@@ -48,20 +48,18 @@ const Chat = () => {
     useEffect(() => {
         console.log("useEffect is running", messages, lastIndex, limit);
         getMessages(Number(chatId), lastIndex, limit);
-        // if (state) {
-        //     setRoomName(state.chatName);
-        // } else {
-        //     axios
-        //         .get(`/chat/${chatId}`)
-        //         .then((res) => {
-        //             const chat: IChat = res.data.chat;
-        //             setRoomName(chat.chatName);
-        //         })
-        //         .catch((err) => console.log(err));
-        // }
-        // innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);
-        // getMessages(Number(chatId), lastIndex, limit);
-        // updateIndex();
+        if (state) {
+            setRoomName(state.chatName);
+        } else {
+            axios
+                .get(`/chat/${chatId}`)
+                .then((res) => {
+                    const chat: IChat = res.data.chat;
+                    setRoomName(chat.chatName);
+                })
+                .catch((err) => console.log(err));
+        }
+        innerRef.current?.scrollBy(0, innerRef.current.scrollHeight);
     }, []);
 
     useEffect(() => {
@@ -123,6 +121,11 @@ const Chat = () => {
         }
     };
 
+    const strToDate = (d: string) => {
+        const date = new Date(d)
+        return `${date.getHours()}:${date.getMinutes()}` 
+    }
+
     return (
         <ChatWrapper>
             <ChatHeader>
@@ -137,7 +140,7 @@ const Chat = () => {
                               key={message.id}
                               isMine={user.id === message.UserId}
                           >
-                              {message.content}
+                              {message.content} {strToDate(message.createdAt)}
                           </Message>
                       ))
                     : ""}
