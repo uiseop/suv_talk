@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
 import helmet from "helmet";
@@ -22,5 +22,13 @@ mongoose.connect(process.env.MONGO_URL, () => {
         🛡️ Server listening on port: 8000 🛡️
         #############################################      
     `);
+    });
+});
+
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.log(error);
+    res.status(500).json({
+        error: error.message,
+        message: "이건 전역 에러 메시지야",
     });
 });
