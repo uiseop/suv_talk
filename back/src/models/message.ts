@@ -30,6 +30,7 @@ Message.init(
 export const associate = (db: dbType) => {
     db.Message.belongsTo(db.User);
     db.Message.belongsTo(db.Chat);
+    db.Message.hasOne(db.Chat, { as: "LastMessage" });
 };
 
 export default Message;

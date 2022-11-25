@@ -6,6 +6,7 @@ import asyncHandler from "../middlewares/asyncHandler";
 import isAuthenticated from "../middlewares/isAuthenticated";
 import Chat from "../models/chat";
 import Message from "../models/message";
+import User from "../models/user";
 
 const messageRouter = Router();
 
@@ -48,13 +49,24 @@ messageRouter.post(
 
         const Io = io.getIo();
 
-        const c = await Io.fetchSockets()
-        console.log(c.length)
+        const chat = await Chat.findByPk(id);
+        console.log("Settign!!!!!!!!!!!!!!")
+        console.log("Settign!!!!!!!!!!!!!!")
+        await chat?.setLastMessage(newMessage);
+        console.log("Settign!!!!!!!!!!!!!!")
+        console.log("Settign!!!!!!!!!!!!!!")
+        const user = await chat
+            ?.getParticipants()
+            .then((users) => users.find((user) => user.id !== me!.id));
 
-        Io.sockets.to(`Room 3`).emit("receive", {
-            action: "add",
-            message: newMessage,
-        });
+        if (user) {
+            {
+                Io.to(user!.socketId as string).emit("receive", {
+                    action: "addMessage",
+                    message: newMessage,
+                });
+            }
+        }
 
         res.json({
             message: newMessage,

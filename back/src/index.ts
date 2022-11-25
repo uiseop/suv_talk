@@ -63,14 +63,33 @@ sequelize
         const httpServer = createServer(app);
         io.init(httpServer);
         const Io = io.getIo();
+
+        Io.close();
         Io.on("connection", async (socket) => {
-            const { id } = parse(socket.request.headers.cookie as string);
-            try {
-                const user = await User.findByPk(id);
-                await user?.update({ socketId: socket.id });
-            } catch (err) {
-                console.log(err);
-            }
+            socket.on("Signin", async (data) => {
+                console.log("#####################");
+                console.log("#####################");
+                console.log("#####################");
+                console.log("#####################");
+                console.log("this is sign in data", data);
+                const user = await User.findByPk(data.id);
+                user?.update({ socketId: socket.id });
+            });
+
+            socket.on("SignOut", async (data) => {
+                console.log("#####################");
+                console.log("#####################");
+                console.log("this is sign out data", data);
+                const user = await User.findByPk(data.id);
+                user?.update({ socketId: null });
+            });
+
+            const sockets = await Io.fetchSockets();
+            console.log(sockets.map((socket) => socket.id));
+
+            socket.on("disconnect", () => {
+                console.log("bye");
+            });
         });
         httpServer.listen("8000", () => {
             console.log(`

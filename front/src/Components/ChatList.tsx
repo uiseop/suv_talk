@@ -6,6 +6,7 @@ interface IChat {
     id: number;
     chatName: string;
     updatedAt: string;
+    lastContent: string;
 }
 
 const ChatList = ({ chat }: { chat: IChat }) => {
@@ -19,7 +20,7 @@ const ChatList = ({ chat }: { chat: IChat }) => {
             <ImageWrapper></ImageWrapper>
             <ChatDescWrapper>
                 <h2>{chat.chatName}</h2>
-                <p>채팅채팅</p>
+                {chat.lastContent ? <p>{chat.lastContent}</p> : ""}
             </ChatDescWrapper>
         </ChatWrapper>
     );

@@ -32,6 +32,7 @@ interface IChat {
     id: number;
     chatName: string;
     updatedAt: string;
+    lastContent: string;
 }
 
 interface UserState {
@@ -49,6 +50,7 @@ export const ChatListsContext = createContext({
     chatLists: [] as IChat[],
     getChatLists: () => {},
     deleteOneChatList: (chatId: number) => {},
+    updateChatLists: (message: IMessage) => {},
 });
 
 export const MessageContext = createContext({

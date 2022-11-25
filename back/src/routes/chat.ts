@@ -61,7 +61,7 @@ chatRouter.post(
         const channel = await me?.createChannel({
             chatName:
                 me.id !== user.id
-                    ? `${me.nickname}이 만든 채팅`
+                    ? `${me.nickname}, ${user.nickname}`
                     : "나와의 채팅",
         });
 

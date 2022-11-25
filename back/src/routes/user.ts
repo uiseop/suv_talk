@@ -2,11 +2,12 @@ import { Server } from "socket.io";
 import { Request, Router } from "express";
 import User from "../models/user";
 import io from "../../util/socket";
+import Message from "../models/message";
 
 const userRouter = Router();
 
 userRouter.post("/join", (req: Request, res, next) => {
-    const Io = io.getIo()
+    const Io = io.getIo();
     if (req.user) {
         return res.status(301).json({ message: "이미 로그인 되어있음" });
     }
@@ -59,11 +60,16 @@ userRouter.get("/all", (req: Request, res, next) => {
 
 userRouter.get("/chats", (req: Request, res, next) => {
     const user = req.user;
-    user!.getChannels().then((channels) => {
-        res.json({
-            chatItems: channels,
+    user!
+        .getChannels()
+        .then((channels) => {
+            return channels;
+        })
+        .then((channels) => {
+            res.json({
+                chatItems: channels,
+            });
         });
-    });
 });
 
 userRouter.delete("/", (req: Request, res, next) => {

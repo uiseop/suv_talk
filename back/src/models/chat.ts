@@ -1,12 +1,15 @@
 import {
     BelongsToManyAddAssociationMixin,
     BelongsToManyGetAssociationsMixin,
+    BelongsToSetAssociationMixin,
     DataTypes,
+    HasOneSetAssociationMixin,
     Model,
 } from "sequelize";
 import sequelize from "../../util/database";
 import { dbType } from ".";
 import User from "./user";
+import Message from "./message";
 
 class Chat extends Model {
     public readonly id!: number;
@@ -15,9 +18,11 @@ class Chat extends Model {
     public readonly updatedAt!: Date;
 
     public readonly Participants?: User[];
+    public readonly LastMessageId?: Message;
 
     public addParticipant!: BelongsToManyAddAssociationMixin<User, number>;
     public getParticipants!: BelongsToManyGetAssociationsMixin<User>;
+    public setLastMessage!: BelongsToSetAssociationMixin<Message, number>;
 }
 
 Chat.init(
@@ -44,6 +49,7 @@ export const associate = (db: dbType) => {
         foreignKey: "channelId",
     });
     db.Chat.hasMany(db.Message);
+    db.Chat.belongsTo(db.Message, { as: "LastMessage" });
 };
 
 export default Chat;

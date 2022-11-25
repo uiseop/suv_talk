@@ -5,13 +5,6 @@ import { ChatListsContext } from "../App";
 import ChatList from "../Components/ChatList";
 import Title from "../Components/Title";
 
-interface IChat {
-    createdAt: string;
-    id: number;
-    chatName: string;
-    updatedAt: string;
-}
-
 const Chattings = () => {
     const { chatLists, getChatLists } = useContext(ChatListsContext);
     
@@ -24,7 +17,7 @@ const Chattings = () => {
         <>
             <Title>채팅</Title>
             <ChatsWrapper>
-                {chatLists.length > 0 ? (
+                {chatLists.length > 10 ? (
                     chatLists.map((chatting) => {
                         return <ChatList chat={chatting} key={chatting.id} />;
                     })
