@@ -1,6 +1,6 @@
 import { Router } from "express";
 import asyncHandler from "../middlewares/asyncHandler";
-import User from "../models/User";
+import User, { DocumentResult } from "../models/User";
 const userRouter = Router();
 
 userRouter.post(
@@ -54,10 +54,15 @@ userRouter.delete(
     "/:id",
     asyncHandler(async (req, res, next) => {
         const { id } = req.params;
-        const { userId } = req.body;
-        console.log(id, userId)
-        if (id === userId) {
-            await User.findByIdAndDelete(userId);
+        const { userId, isAdmin } = req.body;
+        console.log(id, userId);
+        if (id === userId || isAdmin) {
+            const isExist = await User.findByIdAndDelete(userId);
+            if (!isExist) {
+                res.status(400).json({
+                    msg: "존재하지 않는 회원입니다.",
+                });
+            }
             res.status(200).json({
                 msg: "탈퇴 완료되었습니다",
             });
@@ -70,6 +75,24 @@ userRouter.delete(
 );
 
 // get User
+userRouter.get(
+    "/:id",
+    asyncHandler(async (req, res, next) => {
+        const { id } = req.params;
+        const user = await User.findById(id);
+        const { updatedAt, ...others } = user!._doc;
+        if (user) {
+            res.status(200).json({
+                msg: "유저를 찾았습니다",
+                others,
+            });
+        } else {
+            res.status(400).json({
+                msg: "존재하지 않는 회원입니다.",
+            });
+        }
+    })
+);
 
 // follow a User
 

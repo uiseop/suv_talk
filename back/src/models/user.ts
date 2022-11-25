@@ -1,4 +1,20 @@
-import { model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
+
+export interface DocumentResult<T> extends Document {
+    _doc: T;
+}
+
+interface IUser extends DocumentResult<IUser> {
+    id: string;
+    username: string;
+    profileImage: string;
+    coverImage: string;
+    follwers: IUser[];
+    followings: IUser[];
+    isAdmin: boolean;
+    createdAt: Date,
+    updatedAt: Date
+}
 
 const UserSchema = new Schema(
     {
@@ -26,8 +42,12 @@ const UserSchema = new Schema(
             type: Array,
             default: [],
         },
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );
 
-export default model("User", UserSchema);
+export default model<IUser>("User", UserSchema);
