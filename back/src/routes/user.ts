@@ -95,7 +95,62 @@ userRouter.get(
 );
 
 // follow a User
+userRouter.put(
+    "/:id/follow",
+    asyncHandler(async (req, res, next) => {
+        const { id } = req.params;
+        const { userId } = req.body;
+        console.log("heelo?");
+        if (id === userId) {
+            return res.status(403).json({
+                msg: "자기 자신을 팔로우할 수 없습니다.",
+            });
+        }
+        const followUser = await User.findById(id);
+        const user = await User.findById(userId);
+        const follows = user?.followings;
+        if (!followUser) {
+            return res.status(400).json({
+                msg: "존재하지 않는 회원입니다",
+            });
+        } else if (follows?.find((uid) => uid === id)) {
+            return res.status(403).json({
+                msg: "이미 팔로우한 회원입니다.",
+            });
+        }
+        await user!.updateOne({ $push: { followings: id } });
+        await followUser!.updateOne({ $push: { followers: userId } });
+        res.status(200).json({
+            msg: "팔로우 성공",
+        });
+    })
+);
 
 // unfollow a User
+userRouter.put(
+    "/:id/unfollow",
+    asyncHandler(async (req, res, next) => {
+        const { id } = req.params;
+        const { userId } = req.body;
+        console.log("byebye");
+        if (id === userId) {
+            return res.status(403).json({
+                msg: "자기 자신을 팔로우 취소할 수 없습니다",
+            });
+        }
+        const followUser = await User.findById(id);
+        const currentUser = await User.findById(userId);
+        if (!currentUser?.followings.find((uid) => uid === id) || !followUser) {
+            return res.status(403).json({
+                msg: "해당 유저는 팔로우 목록에 없습니다",
+            });
+        }
+        await currentUser!.updateOne({ $pull: { followings: id } });
+        await followUser!.updateOne({ $pull: { followers: userId } });
+        res.status(200).json({
+            msg: "팔로우 취소 성공",
+        });
+    })
+);
 
 export default userRouter;

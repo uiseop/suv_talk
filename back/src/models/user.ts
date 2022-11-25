@@ -9,8 +9,8 @@ interface IUser extends DocumentResult<IUser> {
     username: string;
     profileImage: string;
     coverImage: string;
-    follwers: IUser[];
-    followings: IUser[];
+    followers: string[];
+    followings: string[];
     isAdmin: boolean;
     createdAt: Date,
     updatedAt: Date
