@@ -1,50 +1,29 @@
-import { dbType } from ".";
-import {
-    BelongsToManyAddAssociationMixin,
-    BelongsToManyCreateAssociationMixin,
-    BelongsToManyGetAssociationsMixin,
-    DataTypes,
-    Model,
-} from "sequelize";
-import sequelize from "../../util/database";
-import Chat from "./chat";
+import { model, Schema } from "mongoose";
 
-class User extends Model {
-    public readonly id!: number;
-    public nickname!: string;
-    public socketId!: string | null;
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
-
-    public readonly Channels?: Chat[];
-
-    public addChannel!: BelongsToManyAddAssociationMixin<Chat, number>;
-    public getChannels!: BelongsToManyGetAssociationsMixin<Chat>;
-    public createChannel!: BelongsToManyCreateAssociationMixin<Chat>;
-}
-
-User.init(
+const UserSchema = new Schema(
     {
-        nickname: {
-            type: DataTypes.STRING,
-            allowNull: false,
+        username: {
+            type: String,
+            require: true,
         },
-        socketId: {
-            type: DataTypes.STRING,
-            allowNull: true,
-            defaultValue: null,
+        profileImage: {
+            type: String,
+            default: "",
+        },
+        coverImage: {
+            type: String,
+            default: "",
+        },
+        followers: {
+            type: Array,
+            default: [],
+        },
+        followings: {
+            type: Array,
+            default: [],
         },
     },
-    { sequelize }
+    { timestamps: true }
 );
 
-export const associate = (db: dbType) => {
-    db.User.belongsToMany(db.Chat, {
-        through: "Channel",
-        as: "Channels",
-        foreignKey: "participantId",
-    });
-    db.User.hasMany(db.Message);
-};
-
-export default User;
+export default model("User", UserSchema);

@@ -8,7 +8,7 @@ import {
 } from "sequelize";
 import sequelize from "../../util/database";
 import { dbType } from ".";
-import User from "./user";
+import User from "./user_mysql";
 import Message from "./message";
 
 class Chat extends Model {

@@ -3,7 +3,7 @@ import { Request, Router } from "express";
 import asyncHandler from "../middlewares/asyncHandler";
 import isAuthenticated from "../middlewares/isAuthenticated";
 import Chat from "../models/chat";
-import User from "../models/user";
+import User from "../models/user_mysql";
 import io from "../../util/socket";
 
 const chatRouter = Router();

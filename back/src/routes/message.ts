@@ -6,7 +6,7 @@ import asyncHandler from "../middlewares/asyncHandler";
 import isAuthenticated from "../middlewares/isAuthenticated";
 import Chat from "../models/chat";
 import Message from "../models/message";
-import User from "../models/user";
+import User from "../models/user_mysql";
 
 const messageRouter = Router();
 
