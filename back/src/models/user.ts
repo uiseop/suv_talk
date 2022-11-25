@@ -6,6 +6,10 @@ const UserSchema = new Schema(
             type: String,
             require: true,
         },
+        desc: {
+            type: String,
+            max: 50,
+        },
         profileImage: {
             type: String,
             default: "",
