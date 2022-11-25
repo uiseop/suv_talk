@@ -58,7 +58,7 @@ messageRouter.post(
 
         if (user) {
             const fetches = await Io.fetchSockets();
-            console.log(fetches.length, Io.to(user!.socketId as string));
+            console.log(fetches.length);
             Io.to(user!.socketId as string).emit("receive", {
                 action: "addMessage",
                 message: newMessage,

@@ -102,7 +102,7 @@ const Chat = () => {
         axios.post(`/message/${chatId}`, { content: input }).then((res) => {
             const { data: message } = res;
             console.log(message);
-            // pushMessage(message.message);
+            pushMessage(message.message);
         });
         setInput("");
     };

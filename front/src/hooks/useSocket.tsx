@@ -3,11 +3,17 @@ import { io, Socket } from "socket.io-client";
 
 const useSocket = () => {
     const webSocketUrl = "ws://localhost:8000";
-    const [socket, setSocket] = useState<Socket | null>(null);
+    const socket = useRef<Socket | null>(null);
 
     useEffect(() => {
         console.log("hello?");
-        setSocket(io(webSocketUrl));
+        socket.current = io(webSocketUrl);
+    }, []);
+
+    useEffect(() => {
+        socket.current!.on("connection", (socket) => {
+            console.log("hello It's connected");
+        });
     }, []);
 
     return socket;

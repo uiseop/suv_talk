@@ -24,9 +24,10 @@ const Items = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const navigate = useNavigate();
     const socket = useContext(SocketContext);
-
+    
+    console.log(users)
     socket?.on("signup", (data) => {
-        console.log(data, '지금 다시 한번 내게 말해')
+        console.log(data, "지금 다시 한번 내게 말해");
         if (data.action === "create") {
             addUser(data.user);
         }
@@ -54,7 +55,9 @@ const Items = () => {
     };
 
     const addUser = (user: IUser) => {
+        console.log("추가한다잉?");
         const updatedUsers = [...users];
+        console.log(updatedUsers)
         updatedUsers.push(user);
         setUsers(updatedUsers);
     };

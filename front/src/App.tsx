@@ -73,7 +73,7 @@ const App = () => {
             <UserContext.Provider value={user}>
                 <ChatListsContext.Provider value={chatLists}>
                     <MessageContext.Provider value={messages}>
-                        <SocketContext.Provider value={socket}>
+                        <SocketContext.Provider value={socket.current}>
                             <CookiesProvider>
                                 <ChakraProvider theme={theme}>
                                     <Router />
