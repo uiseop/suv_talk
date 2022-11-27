@@ -42,7 +42,7 @@ export default Share;
 const ShareContainer = styled("div")({
     width: "100%",
     borderRadius: "10px",
-    "-webkit-box-shadow": "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+    WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
     boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
 });
 
