@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useCallback, useContext, useReducer } from "react";
-import { UserContext } from "../App";
 
 enum ChatListActionType {
     GET = "GET",
@@ -53,7 +52,6 @@ const reducer = (state: ChatListState, action: ChatListAction) => {
 
 const useChatLists = () => {
     const [chatLists, dispatch] = useReducer(reducer, initialState);
-    const { user } = useContext(UserContext)
 
     const getChatLists = useCallback(() => {
         axios
@@ -69,15 +67,15 @@ const useChatLists = () => {
             .catch((err) => {
                 return console.log(err);
             });
-    }, [user]);
+    }, []);
 
     const updateChatLists = useCallback((message: IMessage) => {
         dispatch({ type: ChatListActionType.UPDATE, message });
-    }, [user]);
+    }, []);
 
     const deleteOneChatList = useCallback((chatId: number) => {
         dispatch({ type: ChatListActionType.DELETE, chatId });
-    }, [user]);
+    }, []);
 
     return { chatLists, getChatLists, deleteOneChatList, updateChatLists };
 };
