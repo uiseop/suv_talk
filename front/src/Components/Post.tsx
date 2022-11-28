@@ -2,6 +2,7 @@ import { MoreVert } from "@mui/icons-material";
 import { styled } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import timeago from "../util/timeago";
 
 interface IPost {
     createdAt: string;
@@ -27,7 +28,8 @@ interface IUser {
 
 const Post = ({ post }: { post: IPost }) => {
     const [user, setUser] = useState<IUser>();
-    const [like, setLike] = useState(post.likes.length)
+    const [like, setLike] = useState(post.likes.length);
+    const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -38,6 +40,16 @@ const Post = ({ post }: { post: IPost }) => {
         };
         fetchUser();
     }, []);
+
+    const handleLike = async () => {
+        try {
+            await axios.put(`/post/${post._id}/like`, {
+                userId: user!._id,
+            });
+            setLike(isLiked ? like - 1 : like + 1);
+            setIsLiked((cur) => !cur);
+        } catch (error) {}
+    };
     return (
         <PostContainer>
             <PostWrapper>
@@ -45,11 +57,12 @@ const Post = ({ post }: { post: IPost }) => {
                     <PostTopLeft>
                         <PostProfileImg
                             src={
-                                user?.coverImage || "/assets/person/noAvatar.png"
+                                user?.coverImage ||
+                                "/assets/person/noAvatar.png"
                             }
                         />
                         <PostUsername>{user?.username}</PostUsername>
-                        <PostDate>{post.createdAt}</PostDate>
+                        <PostDate>{timeago(post.createdAt)}</PostDate>
                     </PostTopLeft>
                     <div>
                         <MoreVert />
@@ -61,8 +74,11 @@ const Post = ({ post }: { post: IPost }) => {
                 </PostCenter>
                 <PostBottom>
                     <PostBottomLeft>
-                        <LikeIcon src="/assets/like.png" />
-                        <LikeIcon src="/assets/heart.png" />
+                        <LikeIcon onClick={handleLike} src="/assets/like.png" />
+                        <LikeIcon
+                            onClick={handleLike}
+                            src="/assets/heart.png"
+                        />
                         <PostLikeCounter>
                             {like}명의 사람들이 좋아합니다
                         </PostLikeCounter>
