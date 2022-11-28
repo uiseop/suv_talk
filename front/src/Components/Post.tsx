@@ -2,6 +2,7 @@ import { MoreVert } from "@mui/icons-material";
 import { styled } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import timeago from "../util/timeago";
 
 interface IPost {
@@ -55,12 +56,14 @@ const Post = ({ post }: { post: IPost }) => {
             <PostWrapper>
                 <PostTop>
                     <PostTopLeft>
-                        <PostProfileImg
-                            src={
-                                user?.coverImage ||
-                                "/assets/person/noAvatar.png"
-                            }
-                        />
+                        <Link to={`/profile/${user?.username}`}>
+                            <PostProfileImg
+                                src={
+                                    user?.coverImage ||
+                                    "/assets/person/noAvatar.png"
+                                }
+                            />
+                        </Link>
                         <PostUsername>{user?.username}</PostUsername>
                         <PostDate>{timeago(post.createdAt)}</PostDate>
                     </PostTopLeft>
