@@ -95,18 +95,17 @@ postRouter.get(
 postRouter.get(
     "/timeline/all",
     asyncHandler(async (req, res, next) => {
-        const { limit = 10, lastIndex = 0, userId } = req.body;
+        const { limit = 10, lastIndex = 0, userId } = req.query;
         const currentUser = await User.findById(userId);
+        
+        console.log(req.query)
         const posts = await Post.find({
             userId: [userId, ...currentUser!.followings],
         })
             .sort({ createdAt: "desc" })
-            .skip(lastIndex)
-            .limit(limit);
-        // const userPosts = await Post.find({ userId });
-        // const friendPosts = await Promise.all(
-        //     currentUser!.followings.map((fid) => Post.find({ userId: fid }))
-        // );
+            .skip(Number(lastIndex))
+            .limit(Number(limit));
+
         res.status(200).json({
             msg: "전체 게시물 조회 성공!",
             posts,
@@ -118,15 +117,14 @@ postRouter.get(
 postRouter.get(
     "/timeline/:userId",
     asyncHandler(async (req, res, next) => {
-        const { limit = 10, lastIndex = 0 } = req.body;
-        const { userId } = req.params;
+        const { limit = 10, lastIndex = 0, userId } = req.query;
         const currentUser = await User.findById(userId);
         const posts = await Post.find({
             userId,
         })
             .sort({ createdAt: "desc" })
-            .skip(lastIndex)
-            .limit(limit);
+            .skip(Number(lastIndex))
+            .limit(Number(limit));
         res.status(200).json({
             msg: "유저 게시물 조회 성공!",
             posts,

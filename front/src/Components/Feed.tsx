@@ -21,9 +21,10 @@ const Feed = () => {
         const fetchPosts = async () => {
             const {
                 data: { posts },
-            } = await axios.get("/post/timeline/6380be224c46ee0b15e7f394");
+            } = await axios.get("/post/timeline/all", {
+                params: { userId: "6380be224c46ee0b15e7f394" },
+            });
             setPosts(posts);
-            console.log(posts)
         };
         fetchPosts();
     }, []);

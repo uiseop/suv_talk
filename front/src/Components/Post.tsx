@@ -39,7 +39,7 @@ const Post = ({ post }: { post: IPost }) => {
             setUser(others);
         };
         fetchUser();
-    }, []);
+    }, [post.userId]);
 
     const handleLike = async () => {
         try {
