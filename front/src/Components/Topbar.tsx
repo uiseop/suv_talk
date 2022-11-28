@@ -38,7 +38,7 @@ const Topbar = () => {
                     </TopbarIconItem>
                 </TopbarIcons>
                 <TopbarImg
-                    src="/assets/person/내얼굴.png"
+                    src="/assets/person/me.png"
                     alt="person"
                     className="topbarImg"
                 />

@@ -1,29 +1,71 @@
 import { MoreVert } from "@mui/icons-material";
 import { styled } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const Post = () => {
+interface IPost {
+    createdAt: string;
+    desc: string;
+    likes: string[];
+    updatedAt: string;
+    userId: string;
+    __v: number;
+    _id: string;
+}
+
+interface IUser {
+    coverImage: string;
+    createdAt: string;
+    followers: string[];
+    followings: string[];
+    isAdmin: boolean;
+    profileImage: string;
+    username: string;
+    __v: number;
+    _id: string;
+}
+
+const Post = ({ post }: { post: IPost }) => {
+    const [user, setUser] = useState<IUser>();
+    const [like, setLike] = useState(post.likes.length)
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const {
+                data: { others },
+            } = await axios.get(`/user/${post.userId}`);
+            setUser(others);
+        };
+        fetchUser();
+    }, []);
     return (
         <PostContainer>
             <PostWrapper>
                 <PostTop>
                     <PostTopLeft>
-                        <PostProfileImg src="/assets/person/noAvatar.png" />
-                        <PostUsername>Suv</PostUsername>
-                        <PostDate>{new Date().toDateString()}</PostDate>
+                        <PostProfileImg
+                            src={
+                                user?.coverImage || "/assets/person/noAvatar.png"
+                            }
+                        />
+                        <PostUsername>{user?.username}</PostUsername>
+                        <PostDate>{post.createdAt}</PostDate>
                     </PostTopLeft>
                     <div>
                         <MoreVert />
                     </div>
                 </PostTop>
                 <PostCenter>
-                    <span>Hello</span>
+                    <span>{post.desc}</span>
                     <PostImg alt="post Image" />
                 </PostCenter>
                 <PostBottom>
                     <PostBottomLeft>
                         <LikeIcon src="/assets/like.png" />
                         <LikeIcon src="/assets/heart.png" />
-                        <PostLikeCounter>100명의 사람들이 좋아합니다</PostLikeCounter>
+                        <PostLikeCounter>
+                            {like}명의 사람들이 좋아합니다
+                        </PostLikeCounter>
                     </PostBottomLeft>
                     <div>
                         <PostCommentText>30개의 댓글</PostCommentText>

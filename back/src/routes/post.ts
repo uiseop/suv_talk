@@ -114,4 +114,24 @@ postRouter.get(
     })
 );
 
+// get userId's posts
+postRouter.get(
+    "/timeline/:userId",
+    asyncHandler(async (req, res, next) => {
+        const { limit = 10, lastIndex = 0 } = req.body;
+        const { userId } = req.params;
+        const currentUser = await User.findById(userId);
+        const posts = await Post.find({
+            userId,
+        })
+            .sort({ createdAt: "desc" })
+            .skip(lastIndex)
+            .limit(limit);
+        res.status(200).json({
+            msg: "유저 게시물 조회 성공!",
+            posts,
+        });
+    })
+);
+
 export default postRouter;
