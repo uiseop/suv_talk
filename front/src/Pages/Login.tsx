@@ -1,12 +1,17 @@
 import { styled } from "@mui/material";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useContext, useRef } from "react";
+import { IUserContext } from "../@types/user";
 import { loginCall } from "../api";
+import { UserContext } from "../Context/UserContext";
 
 const Login = () => {
     const username = useRef<HTMLInputElement>(null);
+    const { user, isFetching, error, dispatch } = useContext(
+        UserContext
+    ) as IUserContext;
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        loginCall(username, )
+        loginCall(username.current!.value, dispatch);
     };
     return (
         <LoginContainer>
@@ -19,14 +24,14 @@ const Login = () => {
                     </LoginDesc>
                 </LoginLeft>
                 <LoginRight>
-                    <LoginForm>
+                    <LoginForm onSubmit={handleSubmit}>
                         <LoginInput
                             placeholder="닉네임을 입력해주세요"
                             required
                             ref={username}
                         />
+                        <LoginButton type="submit">방문하기</LoginButton>
                     </LoginForm>
-                    <LoginButton>방문하기</LoginButton>
                 </LoginRight>
             </LoginWrapper>
         </LoginContainer>
@@ -77,6 +82,7 @@ const LoginForm = styled("form")({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
+    gap: "10px",
 });
 
 const LoginInput = styled("input")({

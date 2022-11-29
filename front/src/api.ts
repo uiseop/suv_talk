@@ -8,11 +8,9 @@ export const loginCall = async (
 ) => {
     dispatch(LoginStart());
     try {
-        const {
-            data: { user },
-        } = await axios.post("/user/signin", { username });
-        console.log(user, "haha");
-        dispatch(LoginSuccess(user));
+        const { data } = await axios.post("/user/signin", { username });
+        console.log(data, "haha");
+        dispatch(LoginSuccess(data.user));
     } catch (error) {
         let message;
         if (error instanceof Error) message = error.message;

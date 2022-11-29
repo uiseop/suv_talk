@@ -22,21 +22,15 @@ export interface IUserContext {
     dispatch: React.Dispatch<UserAction>;
 }
 
-export enum UserActionType {
-    LOGINSTART = "LOGIN_START",
-    LOGINSUCCESS = "LOGIN_SUCCESS",
-    LOGINFAILURE = "LOGIN_FAILURE",
-}
-
 export type UserAction =
     | {
-          type: UserActionType.LOGINSTART;
+          type: "LOGIN_START";
       }
     | {
-          type: UserActionType.LOGINSUCCESS;
+          type: "LOGIN_SUCCESS";
           payload: IUser;
       }
     | {
-          type: UserActionType.LOGINFAILURE;
+          type: "LOGIN_FAILURE";
           payload: string;
       };

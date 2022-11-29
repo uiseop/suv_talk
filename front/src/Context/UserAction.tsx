@@ -1,15 +1,15 @@
-import { IUser, UserAction, UserActionType } from "../@types/user";
+import { IUser, UserAction } from "../@types/user";
 
 export const LoginStart = (): UserAction => ({
-    type: UserActionType.LOGINSTART,
+    type: "LOGIN_START",
 });
 
 export const LoginSuccess = (user: IUser): UserAction => ({
-    type: UserActionType.LOGINSUCCESS,
+    type: "LOGIN_SUCCESS",
     payload: user,
 });
 
 export const LoginFailure = (error: string): UserAction => ({
-    type: UserActionType.LOGINFAILURE,
+    type: "LOGIN_FAILURE",
     payload: error,
 });
