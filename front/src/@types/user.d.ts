@@ -15,6 +15,12 @@ export interface UserState {
     isFetching: boolean;
     error: boolean | string;
 }
+export interface IUserContext {
+    user: IUser | null;
+    isFetching: boolean;
+    error: boolean | string;
+    dispatch: React.Dispatch<UserAction>;
+}
 
 export enum UserActionType {
     LOGINSTART = "LOGIN_START",

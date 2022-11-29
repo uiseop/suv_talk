@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import { Props } from "../@types";
-import { UserState } from "../@types/user";
+import { IUserContext, UserState } from "../@types/user";
 import UserReducer from "./UserReducer";
 
 const INITIAL_STATE: UserState = {
@@ -9,11 +9,9 @@ const INITIAL_STATE: UserState = {
     error: false,
 };
 
-export const UserContext = createContext(INITIAL_STATE);
+export const UserContext = createContext<IUserContext | null>(null);
 
-export const UserContextProvider: React.FC<Props> = ({
-    children,
-}) => {
+export const UserContextProvider: React.FC<Props> = ({ children }) => {
     const [state, dispatch] = useReducer(UserReducer, INITIAL_STATE);
 
     return (
@@ -22,6 +20,7 @@ export const UserContextProvider: React.FC<Props> = ({
                 user: state.user,
                 isFetching: state.isFetching,
                 error: state.error,
+                dispatch,
             }}
         >
             {children}
