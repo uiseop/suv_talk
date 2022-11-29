@@ -4,7 +4,19 @@ import { IUserContext, UserState } from "../@types/user";
 import UserReducer from "./UserReducer";
 
 const INITIAL_STATE: UserState = {
-    user: null,
+    // user: null,
+    user: {
+        coverImage: "",
+        createdAt: "2022-11-29T15:29:18.469Z",
+        followers: [],
+        followings: [],
+        isAdmin: false,
+        profileImage: "",
+        username: "test",
+        desc: "",
+        __v: 0,
+        _id: "6386254e529422e72ebe6cee",
+    },
     isFetching: false,
     error: false,
 };
