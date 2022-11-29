@@ -7,13 +7,14 @@ export interface DocumentResult<T> extends Document {
 interface IUser extends DocumentResult<IUser> {
     id: string;
     username: string;
+    desc: string;
     profileImage: string;
     coverImage: string;
     followers: string[];
     followings: string[];
     isAdmin: boolean;
-    createdAt: Date,
-    updatedAt: Date
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const UserSchema = new Schema(

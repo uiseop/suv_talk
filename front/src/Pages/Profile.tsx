@@ -1,10 +1,14 @@
 import { styled } from "@mui/material";
+import { useContext } from "react";
+import { IUserContext } from "../@types/user";
 import Feed from "../Components/Feed";
 import Rightbar from "../Components/Rightbar";
 import Sidebar from "../Components/Sidebar";
 import Topbar from "../Components/Topbar";
+import { UserContext } from "../Context/UserContext";
 
 const Profile = () => {
+    const { user } = useContext(UserContext) as IUserContext;
     return (
         <>
             <Topbar />
@@ -23,8 +27,12 @@ const Profile = () => {
                             />
                         </ProfileCover>
                         <ProfileInfo>
-                            <ProfileInfoName>유저 아이디</ProfileInfoName>
-                            <ProfileInfoDesc>유저 설명</ProfileInfoDesc>
+                            <ProfileInfoName>{user!.username}</ProfileInfoName>
+                            <ProfileInfoDesc>
+                                {user!.desc
+                                    ? user!.desc
+                                    : "자기 자신을 소개해보세요"}
+                            </ProfileInfoDesc>
                         </ProfileInfo>
                     </div>
                     <ProfileRightBottom>

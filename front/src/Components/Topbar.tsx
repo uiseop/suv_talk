@@ -44,15 +44,17 @@ const Topbar = () => {
                         <TopbarIconBadge>3</TopbarIconBadge>
                     </TopbarIconItem>
                 </TopbarIcons>
-                <TopbarImg
-                    src={
-                        user?.profileImage
-                            ? user.profileImage
-                            : "/assets/person/noAvatar.png"
-                    }
-                    alt="Profile Image"
-                    className="topbarImg"
-                />
+                <Link to={`/profile/${user!.username}`}>
+                    <TopbarImg
+                        src={
+                            user?.profileImage
+                                ? user.profileImage
+                                : "/assets/person/noAvatar.png"
+                        }
+                        alt="Profile Image"
+                        className="topbarImg"
+                    />
+                </Link>
             </TopbarRight>
         </TopbarContainer>
     );

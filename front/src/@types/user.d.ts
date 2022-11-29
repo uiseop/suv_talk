@@ -6,6 +6,7 @@ export interface IUser {
     isAdmin: false;
     profileImage: string;
     username: string;
+    desc: string;
     __v: 0;
     _id: string;
 }
