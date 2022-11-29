@@ -1,11 +1,18 @@
 import { Chat, Notifications, Person, Search } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { IUserContext } from "../@types/user";
+import { UserContext } from "../Context/UserContext";
 
 const Topbar = () => {
+    const { user } = useContext(UserContext) as IUserContext;
     return (
         <TopbarContainer>
             <TopbarLeft>
-                <Logo>Suv:DEV</Logo>
+                <Link to={"/"} style={{ textDecoration: "none" }}>
+                    <Logo>Suv:DEV</Logo>
+                </Link>
             </TopbarLeft>
 
             <TopbarCenter>
@@ -38,8 +45,12 @@ const Topbar = () => {
                     </TopbarIconItem>
                 </TopbarIcons>
                 <TopbarImg
-                    src="/assets/person/me.png"
-                    alt="person"
+                    src={
+                        user?.profileImage
+                            ? user.profileImage
+                            : "/assets/person/noAvatar.png"
+                    }
+                    alt="Profile Image"
                     className="topbarImg"
                 />
             </TopbarRight>
@@ -81,7 +92,7 @@ const Searchbar = styled("div")({
     borderRadius: "30px",
     display: "flex",
     alignItems: "center",
-    padding: "0 10px"
+    padding: "0 10px",
 });
 
 const SearchIcon = styled(Search)({
