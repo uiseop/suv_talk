@@ -1,6 +1,11 @@
 import { styled } from "@mui/material";
+import { FormEvent, useRef } from "react";
 
 const Login = () => {
+    const username = useRef<HTMLInputElement>(null);
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+    };
     return (
         <LoginContainer>
             <LoginWrapper>
@@ -16,6 +21,7 @@ const Login = () => {
                         <LoginInput
                             placeholder="닉네임을 입력해주세요"
                             required
+                            ref={username}
                         />
                     </LoginForm>
                     <LoginButton>방문하기</LoginButton>

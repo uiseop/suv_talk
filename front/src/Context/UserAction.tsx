@@ -1,8 +1,7 @@
 import { IUser, UserAction, UserActionType } from "../@types/user";
 
-export const LoginStart = (userName: string): UserAction => ({
+export const LoginStart = (): UserAction => ({
     type: UserActionType.LOGINSTART,
-    payload: userName,
 });
 
 export const LoginSuccess = (user: IUser): UserAction => ({

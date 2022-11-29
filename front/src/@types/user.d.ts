@@ -25,7 +25,6 @@ export enum UserActionType {
 export type UserAction =
     | {
           type: UserActionType.LOGINSTART;
-          payload: string;
       }
     | {
           type: UserActionType.LOGINSUCCESS;
