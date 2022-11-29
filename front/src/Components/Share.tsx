@@ -1,16 +1,29 @@
 import { Cancel, PermMedia } from "@mui/icons-material";
 import { styled } from "@mui/material";
+import { useContext, useRef, useState } from "react";
+import { IUserContext } from "../@types/user";
+import { UserContext } from "../Context/UserContext";
 
 const Share = () => {
+    const { user } = useContext(UserContext) as IUserContext;
+    const [file, setFile] = useState(null);
+    const desc = useRef<HTMLTextAreaElement>(null);
     return (
         <ShareContainer>
             <ShareWrapper>
                 <ShareTop>
                     <ShareProfileImg
-                        src="/assets/person/noAvatar.png"
+                        src={
+                            user!.profileImage
+                                ? user!.profileImage
+                                : "/assets/person/noAvatar.png"
+                        }
                         alt="default image"
                     />
-                    <ShareInput placeholder="What's in your mind?" />
+                    <ShareInput
+                        ref={desc}
+                        placeholder={`오늘은 어떤 꿈을 꾸셨나요 ${user?.username}님?`}
+                    />
                 </ShareTop>
                 <ShareHr />
                 <ShareImageContaier>
@@ -63,9 +76,10 @@ const ShareProfileImg = styled("img")({
     marginRight: "10px",
 });
 
-const ShareInput = styled("input")({
+const ShareInput = styled("textarea")({
     border: "none",
     width: "80%",
+    resize: "none",
 
     "&:focus": {
         outline: "none",
