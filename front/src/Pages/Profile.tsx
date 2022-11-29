@@ -1,15 +1,17 @@
 import { styled } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IUser } from "../@types/user";
+import { IUser, IUserContext } from "../@types/user";
 import Feed from "../Components/Feed";
 import Rightbar from "../Components/Rightbar";
 import Sidebar from "../Components/Sidebar";
 import Topbar from "../Components/Topbar";
+import { UserContext } from "../Context/UserContext";
 
 const Profile = () => {
     const [user, setUser] = useState<IUser>();
+    const { user: CurrentUser } = useContext(UserContext) as IUserContext;
     const username = useParams().username;
 
     useEffect(() => {
@@ -21,7 +23,11 @@ const Profile = () => {
             });
             setUser(data.user);
         };
-        fetchUser();
+        if (username !== CurrentUser?.username) {
+            fetchUser();
+        } else {
+            setUser(CurrentUser as IUser);
+        }
     }, [username]);
     return (
         <>
