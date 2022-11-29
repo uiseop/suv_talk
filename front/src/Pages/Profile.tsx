@@ -11,7 +11,7 @@ import { UserContext } from "../Context/UserContext";
 
 const Profile = () => {
     const [user, setUser] = useState<IUser>();
-    const { user: CurrentUser } = useContext(UserContext) as IUserContext;
+    const { user: currentUser } = useContext(UserContext) as IUserContext;
     const username = useParams().username;
 
     useEffect(() => {
@@ -23,10 +23,10 @@ const Profile = () => {
             });
             setUser(data.user);
         };
-        if (username !== CurrentUser?.username) {
+        if (username !== currentUser?.username) {
             fetchUser();
         } else {
-            setUser(CurrentUser as IUser);
+            setUser(currentUser as IUser);
         }
     }, [username]);
     return (

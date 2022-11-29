@@ -1,36 +1,22 @@
 import { MoreVert } from "@mui/icons-material";
 import { styled } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IPost } from "../@types/post";
+import { IUser, IUserContext } from "../@types/user";
+import { UserContext } from "../Context/UserContext";
 import timeago from "../util/timeago";
-
-interface IPost {
-    createdAt: string;
-    desc: string;
-    likes: string[];
-    updatedAt: string;
-    userId: string;
-    __v: number;
-    _id: string;
-}
-
-interface IUser {
-    coverImage: string;
-    createdAt: string;
-    followers: string[];
-    followings: string[];
-    isAdmin: boolean;
-    profileImage: string;
-    username: string;
-    __v: number;
-    _id: string;
-}
 
 const Post = ({ post }: { post: IPost }) => {
     const [user, setUser] = useState<IUser>();
     const [like, setLike] = useState(post.likes.length);
     const [isLiked, setIsLiked] = useState(false);
+    const { user: currentUser } = useContext(UserContext) as IUserContext;
+
+    useEffect(() => {
+        setIsLiked(post.likes.includes(currentUser!._id));
+    }, [currentUser!._id, post.likes]);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -49,7 +35,7 @@ const Post = ({ post }: { post: IPost }) => {
     const handleLike = async () => {
         try {
             await axios.put(`/post/${post._id}/like`, {
-                userId: user!._id,
+                userId: currentUser!._id,
             });
             setLike(isLiked ? like - 1 : like + 1);
             setIsLiked((cur) => !cur);

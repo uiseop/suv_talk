@@ -1,18 +1,9 @@
 import { styled } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { IPost } from "../@types/post";
 import Post from "./Post";
 import Share from "./Share";
-
-interface IPost {
-    createdAt: string;
-    desc: string;
-    likes: string[];
-    updatedAt: string;
-    userId: string;
-    __v: number;
-    _id: string;
-}
 
 const Feed = () => {
     const [posts, setPosts] = useState<IPost[]>([]);
