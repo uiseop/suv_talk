@@ -1,7 +1,9 @@
-import { createContext, useReducer } from "react";
+import React, { createContext, useReducer } from "react";
+import { Props } from "../@types";
+import { UserState } from "../@types/user";
 import UserReducer from "./UserReducer";
 
-const INITIAL_STATE = {
+const INITIAL_STATE: UserState = {
     user: null,
     isFetching: false,
     error: false,
@@ -9,7 +11,9 @@ const INITIAL_STATE = {
 
 export const UserContext = createContext(INITIAL_STATE);
 
-export const UserContextProvider = ({ children }) => {
+export const UserContextProvider: React.FC<Props> = ({
+    children,
+}) => {
     const [state, dispatch] = useReducer(UserReducer, INITIAL_STATE);
 
     return (

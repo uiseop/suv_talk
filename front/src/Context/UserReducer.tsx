@@ -1,4 +1,6 @@
-const UserReducer = (state, action) => {
+import { UserState, UserAction } from "../@types/user";
+
+const UserReducer = (state: UserState, action: UserAction) => {
     switch (action.type) {
         case "LOGIN_START":
             return {
