@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { CircularProgress, styled } from "@mui/material";
 import { FormEvent, useContext, useRef } from "react";
 import { IUserContext } from "../@types/user";
 import { loginCall } from "../api";
@@ -30,7 +30,13 @@ const Login = () => {
                             required
                             ref={username}
                         />
-                        <LoginButton type="submit">방문하기</LoginButton>
+                        <LoginButton type="submit" disabled={isFetching}>
+                            {isFetching ? (
+                                <CircularProgress color="inherit" size={"20px"} />
+                            ) : (
+                                "방문하기"
+                            )}
+                        </LoginButton>
                     </LoginForm>
                 </LoginRight>
             </LoginWrapper>
