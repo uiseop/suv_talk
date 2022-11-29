@@ -35,9 +35,13 @@ const Post = ({ post }: { post: IPost }) => {
     useEffect(() => {
         const fetchUser = async () => {
             const {
-                data: { others },
-            } = await axios.get(`/user/${post.userId}`);
-            setUser(others);
+                data: { user },
+            } = await axios.get(`/user`, {
+                params: {
+                    id: post.userId,
+                },
+            });
+            setUser(user);
         };
         fetchUser();
     }, [post.userId]);

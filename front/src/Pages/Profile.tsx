@@ -1,14 +1,28 @@
 import { styled } from "@mui/material";
-import { useContext } from "react";
-import { IUserContext } from "../@types/user";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { IUser } from "../@types/user";
 import Feed from "../Components/Feed";
 import Rightbar from "../Components/Rightbar";
 import Sidebar from "../Components/Sidebar";
 import Topbar from "../Components/Topbar";
-import { UserContext } from "../Context/UserContext";
 
 const Profile = () => {
-    const { user } = useContext(UserContext) as IUserContext;
+    const [user, setUser] = useState<IUser>();
+    const username = useParams().username;
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data } = await axios.get(`/user`, {
+                params: {
+                    username,
+                },
+            });
+            setUser(data.user);
+        };
+        fetchUser();
+    }, [username]);
     return (
         <>
             <Topbar />
@@ -18,19 +32,27 @@ const Profile = () => {
                     <div>
                         <ProfileCover>
                             <ProfileCoverImg
-                                src="/assets/person/noCover.png"
+                                src={
+                                    user?.coverImage
+                                        ? user.coverImage
+                                        : "/assets/person/noCover.png"
+                                }
                                 alt="cover image"
                             />
                             <ProfileUserImg
-                                src="/assets/person/noAvatar.png"
+                                src={
+                                    user?.profileImage
+                                        ? user.profileImage
+                                        : "/assets/person/noAvatar.png"
+                                }
                                 alt="default image"
                             />
                         </ProfileCover>
                         <ProfileInfo>
-                            <ProfileInfoName>{user!.username}</ProfileInfoName>
+                            <ProfileInfoName>{user?.username}</ProfileInfoName>
                             <ProfileInfoDesc>
-                                {user!.desc
-                                    ? user!.desc
+                                {user?.desc
+                                    ? user.desc
                                     : "자기 자신을 소개해보세요"}
                             </ProfileInfoDesc>
                         </ProfileInfo>

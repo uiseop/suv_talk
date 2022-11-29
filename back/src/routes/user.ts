@@ -76,15 +76,20 @@ userRouter.delete(
 
 // get User
 userRouter.get(
-    "/:id",
+    "/",
     asyncHandler(async (req, res, next) => {
-        const { id } = req.params;
-        const user = await User.findById(id);
-        const { updatedAt, ...others } = user!._doc;
-        if (user) {
+        const { id, username } = req.query;
+        let currentUser;
+        if (id) {
+            currentUser = await User.findById(id);
+        } else {
+            currentUser = await User.findOne({ username });
+        }
+        const { updatedAt, ...others } = currentUser!._doc;
+        if (currentUser) {
             res.status(200).json({
                 msg: "유저를 찾았습니다",
-                others,
+                user: others,
             });
         } else {
             res.status(400).json({
