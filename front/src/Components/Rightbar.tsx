@@ -1,12 +1,9 @@
 import { styled } from "@mui/material";
-import { useLocation } from "react-router-dom";
 import { IUser } from "../@types/user";
 import Online from "./Online";
 import ProfileRightbar from "./ProfileRightbar";
 
 const Rightbar = ({ user }: { user?: IUser }) => {
-    const { pathname } = useLocation();
-
     const HomeRightbar = () => {
         return (
             <>
@@ -26,15 +23,10 @@ const Rightbar = ({ user }: { user?: IUser }) => {
         );
     };
 
-    
     return (
         <RightbarContainer>
             <RightbarWrapper>
-                {pathname.includes("profile") ? (
-                    <ProfileRightbar user={user!} />
-                ) : (
-                    <HomeRightbar />
-                )}
+                {user ? <ProfileRightbar user={user} /> : <HomeRightbar />}
             </RightbarWrapper>
         </RightbarContainer>
     );
@@ -83,4 +75,3 @@ const RightbarFriendList = styled("ul")({
     margin: 0,
     listStyle: "none",
 });
-

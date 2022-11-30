@@ -34,6 +34,14 @@ export type UserAction =
     | {
           type: "LOGIN_FAILURE";
           payload: string;
+      }
+    | {
+          type: "FOLLOW";
+          payload: string;
+      }
+    | {
+          type: "UNFOLLOW";
+          payload: string;
       };
 
 export interface IFriend {

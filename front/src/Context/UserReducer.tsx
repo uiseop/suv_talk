@@ -20,6 +20,27 @@ const UserReducer = (state: UserState, action: UserAction) => {
                 isFetching: false,
                 error: action.payload,
             };
+        case "FOLLOW":
+            return {
+                ...state,
+                user: {
+                    ...state.user!,
+                    followings: [
+                        ...state.user!.followings,
+                        action.payload,
+                    ] as string[],
+                },
+            };
+        case "UNFOLLOW":
+            return {
+                ...state,
+                user: {
+                    ...state.user!,
+                    followings: state.user?.followings.filter(
+                        (followingId) => followingId !== action.payload
+                    ) as string[],
+                },
+            };
 
         default:
             return state;

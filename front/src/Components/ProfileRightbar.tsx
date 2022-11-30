@@ -3,16 +3,19 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IFriend, IUser, IUserContext } from "../@types/user";
 import { backInstance } from "../axios";
+import { Follow, UnFollow } from "../Context/UserAction";
 import { UserContext } from "../Context/UserContext";
 
 const ProfileRightbar = ({ user }: { user: IUser }) => {
     const { user: currentUser, dispatch } = useContext(
         UserContext
     ) as IUserContext;
-    const [isFollowed, setIsFollowed] = useState(
-        currentUser!.followings.includes(user._id)
-    );
+    const [isFollowed, setIsFollowed] = useState(false);
     const [friends, setFriends] = useState<IFriend[]>([]);
+
+    useEffect(() => {
+        setIsFollowed(currentUser!.followings.includes(user._id));
+    }, [user._id]);
 
     useEffect(() => {
         const getFreinds = async () => {
@@ -20,7 +23,6 @@ const ProfileRightbar = ({ user }: { user: IUser }) => {
                 const {
                     data: { friendList },
                 } = await backInstance.get(`/user/friends/${user?._id}`);
-                console.log(friendList);
                 setFriends(friendList);
             } catch (error) {
                 console.log(error);
@@ -29,10 +31,27 @@ const ProfileRightbar = ({ user }: { user: IUser }) => {
         getFreinds();
     }, [user]);
 
+    const clickHandler = async () => {
+        try {
+            if (isFollowed) {
+                await backInstance.put(`/user/${user._id}/unfollow`, {
+                    userId: currentUser!._id,
+                });
+                dispatch(UnFollow(user._id));
+            } else {
+                await backInstance.put(`/user/${user._id}/follow`, {
+                    userId: currentUser!._id,
+                });
+                dispatch(Follow(user._id));
+            }
+            setIsFollowed((cur) => !cur);
+        } catch (error) {}
+    };
+
     return (
         <>
             {user?._id !== currentUser?._id ? (
-                <RightbarFollowButton>
+                <RightbarFollowButton onClick={clickHandler}>
                     {isFollowed ? "Unfollow" : "Follow"}
                 </RightbarFollowButton>
             ) : (
@@ -54,10 +73,11 @@ const ProfileRightbar = ({ user }: { user: IUser }) => {
             <RightbarFollowings>
                 {friends.map((friend) => (
                     <Link
+                        key={friend.id}
                         to={`/profile/${friend.username}`}
                         style={{ textDecoration: "none", color: "inherit" }}
                     >
-                        <RightbarFollowing key={friend.id}>
+                        <RightbarFollowing>
                             <RightbarFollowingImg
                                 src={
                                     friend.profileImage ||

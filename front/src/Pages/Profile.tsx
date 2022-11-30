@@ -28,6 +28,7 @@ const Profile = () => {
         } else {
             setUser(currentUser as IUser);
         }
+        console.log(username);
     }, [username]);
     return (
         <>
