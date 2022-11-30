@@ -1,10 +1,10 @@
 import { MoreVert } from "@mui/icons-material";
 import { styled } from "@mui/material";
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IPost } from "../@types/post";
 import { IUser, IUserContext } from "../@types/user";
+import { backInstance } from "../axios";
 import { UserContext } from "../Context/UserContext";
 import timeago from "../util/timeago";
 
@@ -22,7 +22,7 @@ const Post = ({ post }: { post: IPost }) => {
         const fetchUser = async () => {
             const {
                 data: { user },
-            } = await axios.get(`/user`, {
+            } = await backInstance.get(`/user`, {
                 params: {
                     id: post.userId,
                 },
@@ -34,7 +34,7 @@ const Post = ({ post }: { post: IPost }) => {
 
     const handleLike = async () => {
         try {
-            await axios.put(`/post/${post._id}/like`, {
+            await backInstance.put(`/post/${post._id}/like`, {
                 userId: currentUser!._id,
             });
             setLike(isLiked ? like - 1 : like + 1);

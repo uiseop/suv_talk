@@ -1,8 +1,8 @@
 import { styled } from "@mui/material";
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IUser, IUserContext } from "../@types/user";
+import { backInstance } from "../axios";
 import Feed from "../Components/Feed";
 import Rightbar from "../Components/Rightbar";
 import Sidebar from "../Components/Sidebar";
@@ -16,7 +16,7 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const { data } = await axios.get(`/user`, {
+            const { data } = await backInstance.get(`/user`, {
                 params: {
                     username,
                 },

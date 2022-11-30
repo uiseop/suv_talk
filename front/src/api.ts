@@ -1,6 +1,6 @@
+import { backInstance } from "./axios";
 import { LoginFailure, LoginStart, LoginSuccess } from "./Context/UserAction";
 import { UserAction } from "./@types/user";
-import axios from "axios";
 
 export const loginCall = async (
     username: string,
@@ -8,7 +8,7 @@ export const loginCall = async (
 ) => {
     dispatch(LoginStart());
     try {
-        const { data } = await axios.post("/user/signin", { username });
+        const { data } = await backInstance.post("/user/signin", { username });
         console.log(data, "haha");
         dispatch(LoginSuccess(data.user));
     } catch (error) {
