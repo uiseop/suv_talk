@@ -10,12 +10,12 @@ import timeago from "../util/timeago";
 
 const Post = ({ post }: { post: IPost }) => {
     const [user, setUser] = useState<IUser>();
-    const [like, setLike] = useState(post.likes.length);
+    const [like, setLike] = useState(post.likes!.length);
     const [isLiked, setIsLiked] = useState(false);
     const { user: currentUser } = useContext(UserContext) as IUserContext;
 
     useEffect(() => {
-        setIsLiked(post.likes.includes(currentUser!._id));
+        setIsLiked(post.likes!.includes(currentUser!._id));
     }, [currentUser!._id, post.likes]);
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const Post = ({ post }: { post: IPost }) => {
                             />
                         </Link>
                         <PostUsername>{user?.username}</PostUsername>
-                        <PostDate>{timeago(post.createdAt)}</PostDate>
+                        <PostDate>{timeago(post.createdAt!)}</PostDate>
                     </PostTopLeft>
                     <div>
                         <MoreVert />

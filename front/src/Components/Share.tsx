@@ -1,8 +1,10 @@
 import { Cancel, PermMedia } from "@mui/icons-material";
 import { styled } from "@mui/material";
 import React, { useContext, useRef, useState } from "react";
+import { IPost } from "../@types/post";
 import { IUserContext } from "../@types/user";
 import { client } from "../api";
+import { backInstance } from "../axios";
 import { UserContext } from "../Context/UserContext";
 
 const Share = () => {
@@ -17,16 +19,36 @@ const Share = () => {
         const selectedFiles = Object.values(e.target.files as FileList).filter(
             (_, idx) => idx < 5
         );
-        console.log(selectedFiles);
-        console.log(selectedFiles.map((file) => `${file.name}: @${file.name}`));
         setFiles(selectedFiles);
     };
 
     const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        client.uploadFileGroup(files).then((res) => {
-            console.log(res);
-        });
+        if (!desc.current?.value && files.length === 0) {
+            alert("내용을 입력해 주세요");
+            return;
+        }
+        client
+            .uploadFileGroup(files)
+            .then((uploadedFiles) => {
+                const newPost: IPost = {
+                    userId: user!._id,
+                    desc: desc.current!.value,
+                    images: uploadedFiles.files.map(
+                        (file) => file.cdnUrl
+                    ) as string[],
+                };
+                return newPost;
+            })
+            .then((post) => {
+                backInstance.post("/post", post);
+            })
+            .then(() => {
+                window.location.reload()
+            })
+            .catch((error) => {
+                console.log("something is wrong", error);
+            });
     };
     return (
         <ShareContainer>

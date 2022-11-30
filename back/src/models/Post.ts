@@ -8,7 +8,7 @@ interface IPost extends DocumentResult<IPost> {
     id: string;
     userId: string;
     desc: string;
-    image: string;
+    images: string[];
     likes: string[];
 }
 
@@ -22,8 +22,9 @@ const PostSchema = new Schema(
             type: String,
             required: true,
         },
-        image: {
-            type: String,
+        images: {
+            type: Array,
+            default: [],
         },
         likes: {
             type: Array,
