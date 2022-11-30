@@ -15,13 +15,13 @@ const Feed = ({ username }: { username?: string }) => {
         const fetchPosts = async () => {
             const {
                 data: { posts },
-            } = await backInstance.get("/post/timeline/all", {
-                params: { userId: user!._id },
-            });
+            } = username
+                ? await backInstance.get(`/post/profile/${username}`)
+                : await backInstance.get(`post/timeline/${user?._id}`);
             setPosts(posts);
         };
         fetchPosts();
-    }, [user!._id]);
+    }, [user!._id, username]);
     return (
         <FeedContainer>
             <FeedWrapper>

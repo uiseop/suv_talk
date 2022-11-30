@@ -93,12 +93,13 @@ postRouter.get(
 
 // get all posts -> pagination by timeline
 postRouter.get(
-    "/timeline/all",
+    "/timeline/:userId",
     asyncHandler(async (req, res, next) => {
-        const { limit = 10, lastIndex = 0, userId } = req.query;
+        const { limit = 10, lastIndex = 0 } = req.query;
+        const { userId } = req.params;
         const currentUser = await User.findById(userId);
-        
-        console.log(req.query)
+
+        console.log(req.query);
         const posts = await Post.find({
             userId: [userId, ...currentUser!.followings],
         })
@@ -115,12 +116,15 @@ postRouter.get(
 
 // get userId's posts
 postRouter.get(
-    "/timeline/:userId",
+    "/profile/:username",
     asyncHandler(async (req, res, next) => {
-        const { limit = 10, lastIndex = 0, userId } = req.query;
-        const currentUser = await User.findById(userId);
+        const { limit = 10, lastIndex = 0 } = req.query;
+        const { username } = req.params;
+        console.log(username, "hahahahahahah");
+        const currentUser = await User.findOne({ username });
+        console.log(currentUser, "haaaaaaaaa");
         const posts = await Post.find({
-            userId,
+            userId: currentUser?.id,
         })
             .sort({ createdAt: "desc" })
             .skip(Number(lastIndex))
