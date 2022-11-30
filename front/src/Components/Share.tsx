@@ -1,13 +1,23 @@
 import { Cancel, PermMedia } from "@mui/icons-material";
 import { styled } from "@mui/material";
-import { useContext, useRef, useState } from "react";
+import React, { ChangeEvent, useContext, useRef, useState } from "react";
 import { IUserContext } from "../@types/user";
 import { UserContext } from "../Context/UserContext";
 
 const Share = () => {
     const { user } = useContext(UserContext) as IUserContext;
-    const [file, setFile] = useState(null);
+    const [files, setFiles] = useState<File[]>([]);
     const desc = useRef<HTMLTextAreaElement>(null);
+
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files!.length > 5) {
+            alert("파일은 최대 5개까지 저장 가능합니다");
+        }
+        const selectedFiles = Object.values(e.target.files as FileList).filter(
+            (_, idx) => idx < 5
+        );
+        setFiles(selectedFiles);
+    };
     return (
         <ShareContainer>
             <ShareWrapper>
@@ -26,24 +36,33 @@ const Share = () => {
                     />
                 </ShareTop>
                 <ShareHr />
-                <ShareImageContaier>
-                    <ShareImage alt="공유 이미지" />
-                    <ShareCancelImg />
-                </ShareImageContaier>
+                {files
+                    ? files.map((file) => (
+                          <ShareImageContaier>
+                              <ShareImage
+                                  src={URL.createObjectURL(file)}
+                                  alt="공유 이미지"
+                              />
+                              <ShareCancelImg />
+                          </ShareImageContaier>
+                      ))
+                    : ""}
                 <ShareForm>
                     <ShareOptions>
                         <ShareOption htmlFor="file">
                             <PermMedia htmlColor="tomato" sx={shareIcon} />
-                            <ShareOptionText>Photo or Video</ShareOptionText>
+                            <ShareOptionText>사진 추가</ShareOptionText>
                             <input
                                 style={{ display: "none" }}
                                 type="file"
                                 id="file"
                                 accept=".png, .jpeg, .jpg"
+                                multiple
+                                onChange={onChangeHandler}
                             />
                         </ShareOption>
                     </ShareOptions>
-                    <ShareButton type="submit">Share</ShareButton>
+                    <ShareButton type="submit">공유하기</ShareButton>
                 </ShareForm>
             </ShareWrapper>
         </ShareContainer>
@@ -144,5 +163,5 @@ const ShareCancelImg = styled(Cancel)({
     top: 0,
     right: "20px",
     cursor: "pointer",
-    opacity: 0.7,
+    // opacity: 0.7,
 });
