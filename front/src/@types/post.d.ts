@@ -2,7 +2,7 @@ export interface IPost {
     createdAt?: string;
     desc: string;
     likes?: string[];
-    images: string[];
+    images?: string[];
     updatedAt?: string;
     userId: string;
     __v?: number;

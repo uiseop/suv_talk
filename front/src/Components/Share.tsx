@@ -28,6 +28,20 @@ const Share = () => {
             alert("내용을 입력해 주세요");
             return;
         }
+        if (files.length === 0) {
+            const newPost: IPost = {
+                userId: user!._id,
+                desc: desc.current!.value,
+            };
+            return backInstance
+                .post("/post", newPost)
+                .then(() => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.log("Something is wrong", error);
+                });
+        }
         client
             .uploadFileGroup(files)
             .then((uploadedFiles) => {
@@ -44,7 +58,7 @@ const Share = () => {
                 backInstance.post("/post", post);
             })
             .then(() => {
-                window.location.reload()
+                window.location.reload();
             })
             .catch((error) => {
                 console.log("something is wrong", error);

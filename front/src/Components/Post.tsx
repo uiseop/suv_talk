@@ -63,8 +63,8 @@ const Post = ({ post }: { post: IPost }) => {
                 </PostTop>
                 <PostCenter>
                     <span>{post.desc}</span>
-                    {post.images.length > 0 ? (
-                        <PostImg src={post.images[0]} alt="post Image" />
+                    {post.images!.length > 0 ? (
+                        <PostImg src={post.images![0]} alt="post Image" />
                     ) : (
                         ""
                     )}
