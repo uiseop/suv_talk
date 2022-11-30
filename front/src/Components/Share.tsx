@@ -55,7 +55,7 @@ const Share = () => {
                 return newPost;
             })
             .then((post) => {
-                backInstance.post("/post", post);
+                return backInstance.post("/post", post);
             })
             .then(() => {
                 window.location.reload();
