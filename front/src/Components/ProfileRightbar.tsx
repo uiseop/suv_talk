@@ -1,3 +1,4 @@
+import { Add, Remove } from "@mui/icons-material";
 import { styled } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -52,6 +53,7 @@ const ProfileRightbar = ({ user }: { user: IUser }) => {
         <>
             {user?._id !== currentUser?._id ? (
                 <RightbarFollowButton onClick={clickHandler}>
+                    {isFollowed ? <Remove /> : <Add />}
                     {isFollowed ? "Unfollow" : "Follow"}
                 </RightbarFollowButton>
             ) : (
@@ -147,7 +149,7 @@ const RightbarFollowButton = styled("button")({
     backgroundColor: "#1872f2",
     color: "white",
     borderRadius: "5px",
-    padding: "5px 10px",
+    padding: "5px 10px 5px 6px",
     display: "flex",
     alignItems: "center",
     fontSize: "16px",
