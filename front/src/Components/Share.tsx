@@ -1,7 +1,8 @@
 import { Cancel, PermMedia } from "@mui/icons-material";
 import { styled } from "@mui/material";
-import React, { ChangeEvent, useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { IUserContext } from "../@types/user";
+import { client } from "../api";
 import { UserContext } from "../Context/UserContext";
 
 const Share = () => {
@@ -9,14 +10,23 @@ const Share = () => {
     const [files, setFiles] = useState<File[]>([]);
     const desc = useRef<HTMLTextAreaElement>(null);
 
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files!.length > 5) {
             alert("파일은 최대 5개까지 저장 가능합니다");
         }
         const selectedFiles = Object.values(e.target.files as FileList).filter(
             (_, idx) => idx < 5
         );
+        console.log(selectedFiles);
+        console.log(selectedFiles.map((file) => `${file.name}: @${file.name}`));
         setFiles(selectedFiles);
+    };
+
+    const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        client.uploadFileGroup(files).then((res) => {
+            console.log(res);
+        });
     };
     return (
         <ShareContainer>
@@ -38,7 +48,7 @@ const Share = () => {
                 <ShareHr />
                 {files
                     ? files.map((file) => (
-                          <ShareImageContaier>
+                          <ShareImageContaier key={file.lastModified}>
                               <ShareImage
                                   src={URL.createObjectURL(file)}
                                   alt="공유 이미지"
@@ -47,7 +57,7 @@ const Share = () => {
                           </ShareImageContaier>
                       ))
                     : ""}
-                <ShareForm>
+                <ShareForm onSubmit={submitHandler}>
                     <ShareOptions>
                         <ShareOption htmlFor="file">
                             <PermMedia htmlColor="tomato" sx={shareIcon} />
@@ -58,7 +68,7 @@ const Share = () => {
                                 id="file"
                                 accept=".png, .jpeg, .jpg"
                                 multiple
-                                onChange={onChangeHandler}
+                                onChange={changeHandler}
                             />
                         </ShareOption>
                     </ShareOptions>

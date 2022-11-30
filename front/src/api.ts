@@ -1,6 +1,7 @@
 import { backInstance } from "./axios";
 import { LoginFailure, LoginStart, LoginSuccess } from "./Context/UserAction";
 import { UserAction } from "./@types/user";
+import { UploadClient } from "@uploadcare/upload-client";
 
 export const loginCall = async (
     username: string,
@@ -18,3 +19,7 @@ export const loginCall = async (
         dispatch(LoginFailure(message));
     }
 };
+
+export const client = new UploadClient({
+    publicKey: process.env.REACT_APP_UPLOADCARE_PUBLIC_KEY,
+});
