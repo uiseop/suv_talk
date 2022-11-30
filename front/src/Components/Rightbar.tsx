@@ -1,14 +1,24 @@
 import { styled } from "@mui/material";
+import { useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { IUser, IUserContext } from "../@types/user";
+import { UserContext } from "../Context/UserContext";
 import Online from "./Online";
 
-const Rightbar = () => {
+const Rightbar = ({ user }: { user?: IUser }) => {
+    const { pathname } = useLocation();
+    const { user: currentUser, dispatch } = useContext(
+        UserContext
+    ) as IUserContext;
+
     const HomeRightbar = () => {
         return (
             <>
                 <BirthdayConatiner>
                     <BirthdayImg src="/assets/gift.png" alt="gift" />
                     <BirthdayText>
-                        <b>행복한 유저</b>와 <b>3명의 다른 친구들</b>이 오늘 생일입니다.
+                        <b>행복한 유저</b>와 <b>3명의 다른 친구들</b>이 오늘
+                        생일입니다.
                     </BirthdayText>
                 </BirthdayConatiner>
                 <RightbarAd src="/assets/logo_main.svg" alt="ad" />
@@ -23,7 +33,12 @@ const Rightbar = () => {
     const ProfileRightbar = () => {
         return (
             <>
-                <RightbarFollowButton>Follow</RightbarFollowButton>
+                {user?._id !== currentUser?._id ? (
+                    <RightbarFollowButton>Follow</RightbarFollowButton>
+                ) : (
+                    ""
+                )}
+
                 <RightbarTitle>User Information</RightbarTitle>
                 <RightbarInfo>
                     <RightbarInfoItem>
@@ -51,7 +66,11 @@ const Rightbar = () => {
     return (
         <RightbarContainer>
             <RightbarWrapper>
-                <HomeRightbar />
+                {pathname.includes("profile") ? (
+                    <ProfileRightbar />
+                ) : (
+                    <HomeRightbar />
+                )}
             </RightbarWrapper>
         </RightbarContainer>
     );
