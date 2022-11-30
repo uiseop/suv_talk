@@ -1,15 +1,11 @@
 import { styled } from "@mui/material";
-import { useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { IUser, IUserContext } from "../@types/user";
-import { UserContext } from "../Context/UserContext";
+import { useLocation } from "react-router-dom";
+import { IUser } from "../@types/user";
 import Online from "./Online";
+import ProfileRightbar from "./ProfileRightbar";
 
 const Rightbar = ({ user }: { user?: IUser }) => {
     const { pathname } = useLocation();
-    const { user: currentUser, dispatch } = useContext(
-        UserContext
-    ) as IUserContext;
 
     const HomeRightbar = () => {
         return (
@@ -30,44 +26,12 @@ const Rightbar = ({ user }: { user?: IUser }) => {
         );
     };
 
-    const ProfileRightbar = () => {
-        return (
-            <>
-                {user?._id !== currentUser?._id ? (
-                    <RightbarFollowButton>Follow</RightbarFollowButton>
-                ) : (
-                    ""
-                )}
-
-                <RightbarTitle>User Information</RightbarTitle>
-                <RightbarInfo>
-                    <RightbarInfoItem>
-                        <RightbarInfoKey>City:</RightbarInfoKey>
-                        <RightbarInfoValue>서울</RightbarInfoValue>
-                    </RightbarInfoItem>
-                    <RightbarInfoItem>
-                        <RightbarInfoKey>From:</RightbarInfoKey>
-                        <RightbarInfoValue>동대문</RightbarInfoValue>
-                    </RightbarInfoItem>
-                </RightbarInfo>
-                <RightbarTitle>User Friends</RightbarTitle>
-                <RightbarFollowings>
-                    <RightbarFollowing>
-                        <RightbarFollowingImg
-                            src="/assets/person/noAvatar.png"
-                            alt="팔로워 이미지"
-                        />
-                        <span>팔로워 이름</span>
-                    </RightbarFollowing>
-                </RightbarFollowings>
-            </>
-        );
-    };
+    
     return (
         <RightbarContainer>
             <RightbarWrapper>
                 {pathname.includes("profile") ? (
-                    <ProfileRightbar />
+                    <ProfileRightbar user={user!} />
                 ) : (
                     <HomeRightbar />
                 )}
@@ -120,59 +84,3 @@ const RightbarFriendList = styled("ul")({
     listStyle: "none",
 });
 
-const RightbarInfo = styled("div")({
-    marginBottom: "30px",
-});
-
-const RightbarInfoItem = styled("div")({
-    marginBottom: "10px",
-});
-
-const RightbarInfoKey = styled("span")({
-    fontWeight: 500,
-    marginRight: "15px",
-    color: "#555",
-});
-
-const RightbarInfoValue = styled("span")({
-    fontWeight: 300,
-});
-
-const RightbarFollowings = styled("div")({
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-});
-
-const RightbarFollowing = styled("div")({
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: "20px",
-    cursor: "pointer",
-});
-
-const RightbarFollowingImg = styled("img")({
-    width: "100px",
-    height: "100px",
-    objectFit: "cover",
-    borderRadius: "5px",
-});
-
-const RightbarFollowButton = styled("button")({
-    marginTop: "30px",
-    marginBottom: "10px",
-    border: "none",
-    backgroundColor: "#1872f2",
-    color: "white",
-    borderRadius: "5px",
-    padding: "5px 10px",
-    display: "flex",
-    alignItems: "center",
-    fontSize: "16px",
-    fontWeight: 500,
-    cursor: "pointer",
-
-    "&:focus": {
-        outline: "none",
-    },
-});

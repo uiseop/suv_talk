@@ -1,6 +1,6 @@
 import { Router } from "express";
 import asyncHandler from "../middlewares/asyncHandler";
-import User, { DocumentResult } from "../models/User";
+import User, { DocumentResult, IUser } from "../models/User";
 const userRouter = Router();
 
 userRouter.post(
@@ -155,6 +155,31 @@ userRouter.put(
         res.status(200).json({
             msg: "팔로우 취소 성공",
         });
+    })
+);
+
+userRouter.get(
+    "/friends/:userId",
+    asyncHandler(async (req, res, next) => {
+        try {
+            const { userId } = req.params;
+            const user = await User.findById(userId);
+            const friends = await Promise.all(
+                user!.followings.map((friendId) => {
+                    return User.findById(friendId);
+                })
+            );
+            let friendList = friends.map((friend) => {
+                const { id, username, profileImage } = friend as IUser;
+                return { id, username, profileImage };
+            });
+            res.status(200).json({
+                msg: "유저 팔로잉 목록 가져오기 성공",
+                friendList,
+            });
+        } catch (error) {
+            res.status(500).json(error);
+        }
     })
 );
 

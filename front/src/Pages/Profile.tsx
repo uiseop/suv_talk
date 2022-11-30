@@ -64,8 +64,8 @@ const Profile = () => {
                         </ProfileInfo>
                     </div>
                     <ProfileRightBottom>
-                        <Feed />
-                        <Rightbar user={user} />
+                        <Feed username={username} />
+                        {user ? <Rightbar user={user} /> : ""}
                     </ProfileRightBottom>
                 </ProfileRight>
             </ProfileContainer>

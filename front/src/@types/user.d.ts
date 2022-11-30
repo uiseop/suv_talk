@@ -35,3 +35,9 @@ export type UserAction =
           type: "LOGIN_FAILURE";
           payload: string;
       };
+
+export interface IFriend {
+    id: string;
+    profileImage: string;
+    username: string;
+}

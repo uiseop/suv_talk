@@ -4,7 +4,7 @@ export interface DocumentResult<T> extends Document {
     _doc: T;
 }
 
-interface IUser extends DocumentResult<IUser> {
+export interface IUser extends DocumentResult<IUser> {
     id: string;
     username: string;
     desc: string;

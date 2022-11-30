@@ -7,7 +7,7 @@ import { UserContext } from "../Context/UserContext";
 import Post from "./Post";
 import Share from "./Share";
 
-const Feed = () => {
+const Feed = ({ username }: { username?: string }) => {
     const { user } = useContext(UserContext) as IUserContext;
     const [posts, setPosts] = useState<IPost[]>([]);
 
@@ -25,7 +25,7 @@ const Feed = () => {
     return (
         <FeedContainer>
             <FeedWrapper>
-                <Share />
+                {!username || username === user?.username ? <Share /> : ""}
                 {posts.map((post) => (
                     <Post key={post._id} post={post} />
                 ))}
